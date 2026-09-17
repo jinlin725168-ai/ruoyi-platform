@@ -1,5 +1,10 @@
 {
-  "module_roots": ["backend/ruoyi-modules", "frontend/src", "frontend/public", "sql/biz"],
+  "module_roots": [
+    "backend/ruoyi-modules",
+    "frontend/src",
+    "frontend/public",
+    "sql/biz"
+  ],
   "integration_paths": [
     "backend/pom.xml",
     "backend/ruoyi-admin/pom.xml",
@@ -12,6 +17,22 @@
     "frontend/pnpm-lock.yaml"
   ],
   "test_commands": [
-    ["mvn", "-q", "-o", "-f", "backend/pom.xml", "-Dmaven.test.skip=false", "-DskipTests=false", "-pl", "ruoyi-admin", "-am", "test"]
+    [
+      "mvn",
+      "-q",
+      "-o",
+      "-f",
+      "backend/pom.xml",
+      "-Dmaven.test.skip=false",
+      "-DskipTests=false",
+      "-pl",
+      "ruoyi-admin",
+      "-am",
+      "test"
+    ]
+  ],
+  "candidate_allow": [
+    "frontend/.env.development",
+    "frontend/.env.production"
   ]
 }

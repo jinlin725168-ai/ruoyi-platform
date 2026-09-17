@@ -49,6 +49,7 @@
     "vxe-table": "4.21.9"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/node": "^26.1.1",
     "@types/nprogress": "0.2.3",
     "@unocss/preset-attributify": "66.10.1",

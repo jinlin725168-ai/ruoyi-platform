@@ -27,10 +27,12 @@ export default defineConfig(({ mode, command }) => {
     server: {
       host: '0.0.0.0',
       port: Number(env.VITE_APP_PORT),
-      open: true,
+      // 冒烟执行器以 CI=1 运行，不弹浏览器
+      open: !process.env.CI,
       proxy: {
         [env.VITE_APP_BASE_API]: {
-          target: 'http://localhost:8080',
+          // 冒烟执行器通过 VITE_PROXY_TARGET 指向临时后端
+          target: process.env.VITE_PROXY_TARGET || 'http://localhost:8080',
           changeOrigin: true,
           ws: true,
           rewrite: path => path.replace(new RegExp('^' + env.VITE_APP_BASE_API), '')

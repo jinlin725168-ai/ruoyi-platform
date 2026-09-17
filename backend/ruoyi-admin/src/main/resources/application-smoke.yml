@@ -1,0 +1,27 @@
+# StoryLoop 冒烟运行档：与 dev 叠加使用（--spring.profiles.active=dev,smoke）。
+# 接口加密关闭：/auth/login 等带 @ApiEncrypt 的接口否则要求 RSA+AES 加密体；
+# UI 冒烟由执行器向 vite 注入 VITE_APP_ENCRYPT=false 与之配套。
+# 端口、数据库 URL、Redis 库索引由冒烟执行器 acceptance/tools/ruoyi_smoke.py 通过命令行参数注入。
+captcha:
+  enable: false
+
+api-decrypt:
+  enabled: false
+
+spring.boot.admin.client:
+  enabled: false
+
+snail-job:
+  enabled: false
+
+message:
+  enabled: false
+
+springdoc:
+  api-docs:
+    enabled: false
+
+logging:
+  level:
+    org.dromara: warn
+    org.springframework: warn
