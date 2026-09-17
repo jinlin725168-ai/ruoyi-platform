@@ -98,6 +98,12 @@
             <artifactId>ruoyi-demo</artifactId>
         </dependency>
 
+        <!--  biz 业务模块（StoryLoop 迭代落点）  -->
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-biz</artifactId>
+        </dependency>
+
         <!--  工作流模块  -->
         <dependency>
             <groupId>org.dromara</groupId>
