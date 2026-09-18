@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Lion Li
  */
+// upstream sync-test: touched a foundation file
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     public static final String SEPARATOR = ",";

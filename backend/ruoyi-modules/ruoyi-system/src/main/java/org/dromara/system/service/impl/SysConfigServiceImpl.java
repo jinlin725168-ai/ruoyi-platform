@@ -39,6 +39,7 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 @Service
+// upstream sync-test: touched a module-root file
 public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 
     private final SysConfigMapper configMapper;
