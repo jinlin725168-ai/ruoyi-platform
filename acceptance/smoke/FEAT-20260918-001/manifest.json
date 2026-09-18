@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "FEAT-20260918-001-supplier-core",
+      "criteria": [
+        "A1",
+        "A2",
+        "A4",
+        "A5",
+        "A6",
+        "A25",
+        "A7",
+        "A8",
+        "A9",
+        "A10",
+        "A11",
+        "A26",
+        "A27",
+        "A28",
+        "A29",
+        "A12",
+        "A13",
+        "A14",
+        "A30",
+        "A31",
+        "A15",
+        "A16",
+        "A17",
+        "A32",
+        "A33",
+        "A18",
+        "A19",
+        "A34",
+        "A20",
+        "A22",
+        "A35",
+        "A24"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+        "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+      ],
+      "timeout_seconds": 2400
+    }
+  ]
+}
