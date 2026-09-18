@@ -1170,5 +1170,6 @@
       ],
       "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
     }
-  ]
+  ],
+  "merge_commit": "7b96a87492445184dda1368ca62c6126a2d2470a"
 }
