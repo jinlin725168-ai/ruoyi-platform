@@ -62,7 +62,8 @@
 
 ## 实现（implement 角色）
 
-- 不在工作区内构建：编译或测试请用
-  `python3 /home/jinlin/work/storyloop/examples/tools/scratch_build.py --reuse ruoyi -- mvn -q -o -f backend/pom.xml -pl ruoyi-admin -am compile`。
-- 不运行 git，不创建 `target/`、`node_modules/`、`dist/`、`logs/` 等被忽略的文件。
+- 可以直接在仓库里编译或测试：`mvn -q -o -f backend/pom.xml -pl ruoyi-admin -am compile`。
+  `target/`、`node_modules/`、`dist/`、`logs/`、`__pycache__/` 已声明为 scratch 目录，不会被判越界；
+  其他被忽略的文件一律不要产生。
+- git 只允许只读命令（status/diff/log/show）；不要 add、commit、stash 或切换分支。
 - 实现完成后自检：编译通过、SQL 语法正确、菜单权限串与 `@SaCheckPermission` 一致、前端 api 路径与后端 `@RequestMapping` 一致。

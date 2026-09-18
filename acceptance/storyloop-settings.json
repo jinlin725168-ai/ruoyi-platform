@@ -34,5 +34,13 @@
   "candidate_allow": [
     "frontend/.env.development",
     "frontend/.env.production"
+  ],
+  "scratch_paths": [
+    "target",
+    "node_modules",
+    "dist",
+    "logs",
+    "__pycache__",
+    ".flattened-pom.xml"
   ]
 }
