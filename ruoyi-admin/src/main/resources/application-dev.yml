@@ -151,7 +151,7 @@ spring.data:
     # 地址
     host: localhost
     # 端口，默认为6379
-    port: 6379
+    port: 6379 # upstream sync-test moved this comment
     # 数据库索引
     database: 0
     # redis 密码必须配置
