@@ -1,0 +1,1174 @@
+{
+  "version": 1,
+  "status": "PASSED",
+  "change_id": "FEAT-20260918-001",
+  "generated_at": "2026-09-18T03:43:58.895493Z",
+  "requirement": {
+    "goal": "在『业务管理』目录下提供供应商管理功能。有权限的用户可以维护供应商档案，包括供应商编码、名称、联系人、联系电话、启用/停用状态和备注。用户可以按名称和状态分页查询，也可以新增、修改、删除供应商并导出 Excel。列表、新增、修改、删除、导出分别受按钮级权限控制。后端接口和前端页面都要交付。",
+    "approval": {
+      "revision": 3,
+      "contract_digest": "e5d268a189f12acfabbca95859ad91602bfd0ba45745931684650cd87a1087fb",
+      "approved_by": "user",
+      "approved_at": "2026-09-18T02:35:57.592112Z"
+    },
+    "revision": 3
+  },
+  "implementation_commit": "019f1620b8f491198a335aa1c1786502319c7e64",
+  "regression": {
+    "status": "PASSED",
+    "results": [
+      {
+        "id": "REGRESSION-001",
+        "criteria": [],
+        "command": [
+          "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+          "-q",
+          "-o",
+          "-f",
+          "backend/pom.xml",
+          "-Dmaven.test.skip=false",
+          "-DskipTests=false",
+          "-pl",
+          "ruoyi-admin",
+          "-am",
+          "test"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "timed_out": false,
+        "stdout": "@BeforeEach ==================\n@AfterEach ==================\n",
+        "stderr": ""
+      }
+    ],
+    "candidate_sha256": "580ad3d392d53a5d6a3a379a174e6a673e438cda88f0a75830bf1a0677b6c75f"
+  },
+  "review": {
+    "verdict": "pass",
+    "summary": "I checked the untracked implementation files against approved contract revision 3 and did not find any problems. Backend: the controller at /biz/supplier checks biz:supplier:list for the list, query for detail, add, edit, remove and export. Every one of these permission strings matches a button row in sql/biz/FEAT-20260918-001.sql. The add and edit endpoints carry @Log and @RepeatSubmit, and the delete and export endpoints carry @Log. Name search uses a partial (contains) match and status uses an exact match. The same filter builds both the paged list and the unpaged export. Deletion is logical: del_flag uses @TableLogic, so deleted suppliers are excluded from the list, the detail view, export and the code uniqueness check. The uniqueness check therefore only looks at undeleted suppliers, which means the code of a deleted supplier can be reused, as decided in Q12. Code is required when adding. Name is required when adding and when editing. Contact and phone are optional, with no format check. Status is restricted to 0 or 1 and defaults to 0 on insert. On update the submitted code is set to null before saving, so the code cannot be changed. No data-permission annotation is applied, so there is no per-department isolation. The export object maps the status column through the sys_normal_disable dictionary and has headers for code, name, contact, phone, status and remark. SQL: the table is created with if-not-exists and the menus are deleted and re-inserted, so the script can be run repeatedly. It includes the required audit columns and del_flag, and uses menu IDs from the 1770… range: a top-level 业务管理 directory (type M), the 供应商管理 menu (type C, component biz/supplier/index) and five button permissions (type F). Frontend: the API paths match the backend. The page has name and status search fields, a paged table showing the total count, and an add/edit dialog in which the code field is disabled when editing. Buttons are gated with v-hasPermi, deletion asks for confirmation, export downloads through the shared download helper, and there is no status toggle in the list. Evidence: the smoke run passed for 32 of the 33 acceptance criteria (25 Python tests and 6 Playwright tests). A21 is manual and was not run. The Maven regression tests passed and the boundary check found no violations. I did not rerun compilation or the frontend type check myself; I relied on the regression and smoke evidence.",
+    "findings": [],
+    "questions": []
+  },
+  "traceability": [
+    {
+      "story": {
+        "id": "S1",
+        "title": "『业务管理』目录与供应商管理菜单",
+        "as_a": "系统管理员",
+        "want": "在系统菜单中看到一个新的『业务管理』目录，其下有『供应商管理』菜单和对应的按钮权限",
+        "so_that": "我可以通过角色把供应商管理的访问权和各项操作权分配给不同用户"
+      },
+      "criterion": {
+        "id": "A1",
+        "given": "系统已完成初始化，管理员 admin 已登录",
+        "when": "管理员查看菜单管理列表",
+        "then": "列表中有顶级目录『业务管理』，其下有菜单『供应商管理』，该菜单下有查询、新增、修改、删除、导出五个按钮权限",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "『业务管理』目录与供应商管理菜单",
+        "as_a": "系统管理员",
+        "want": "在系统菜单中看到一个新的『业务管理』目录，其下有『供应商管理』菜单和对应的按钮权限",
+        "so_that": "我可以通过角色把供应商管理的访问权和各项操作权分配给不同用户"
+      },
+      "criterion": {
+        "id": "A2",
+        "given": "管理员 admin 已登录前端",
+        "when": "管理员展开左侧导航的『业务管理』",
+        "then": "导航中出现『供应商管理』，点击后打开供应商列表页面",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商名称和状态分页查询供应商列表",
+        "so_that": "我能快速找到要查看或维护的供应商"
+      },
+      "criterion": {
+        "id": "A4",
+        "given": "系统中有多条供应商记录，用户拥有供应商列表权限",
+        "when": "用户不带任何条件请求第 1 页供应商列表",
+        "then": "返回成功，结果含当前页记录和总条数，每条记录包含编码、名称、联系人、联系电话、状态、备注",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商名称和状态分页查询供应商列表",
+        "so_that": "我能快速找到要查看或维护的供应商"
+      },
+      "criterion": {
+        "id": "A5",
+        "given": "系统中有一条启用（状态 0）的供应商和一条停用（状态 1）的供应商",
+        "when": "用户以状态为停用作为条件查询",
+        "then": "结果只包含停用的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商名称和状态分页查询供应商列表",
+        "so_that": "我能快速找到要查看或维护的供应商"
+      },
+      "criterion": {
+        "id": "A6",
+        "given": "系统中有一条名称已知的供应商",
+        "when": "用户以该供应商的完整名称作为名称条件查询",
+        "then": "结果包含该供应商，且不包含名称不匹配的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商名称和状态分页查询供应商列表",
+        "so_that": "我能快速找到要查看或维护的供应商"
+      },
+      "criterion": {
+        "id": "A25",
+        "given": "系统中有一条名称已知的供应商，以及一条名称不包含某段文字的供应商",
+        "when": "用户只用该已知名称中间的一段文字（不是完整名称）作为名称条件查询",
+        "then": "结果包含名称已知的供应商，且不包含名称里没有这段文字的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商名称和状态分页查询供应商列表",
+        "so_that": "我能快速找到要查看或维护的供应商"
+      },
+      "criterion": {
+        "id": "A7",
+        "given": "用户未登录",
+        "when": "用户请求供应商列表",
+        "then": "请求被拒绝，并提示未登录",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商名称和状态分页查询供应商列表",
+        "so_that": "我能快速找到要查看或维护的供应商"
+      },
+      "criterion": {
+        "id": "A8",
+        "given": "管理员已登录前端",
+        "when": "管理员打开供应商管理页面，输入名称条件后点击搜索",
+        "then": "表格只显示符合条件的供应商，并显示分页控件",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A9",
+        "given": "用户拥有供应商新增权限，系统中还没有编码为 X 的供应商",
+        "when": "用户提交一个编码为 X 且信息完整有效的供应商",
+        "then": "返回成功，之后按该名称查询能查到这条新供应商，各字段与提交的一致",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A10",
+        "given": "系统中已有编码为 X 的供应商",
+        "when": "用户再提交一个编码同为 X 的供应商",
+        "then": "新增失败，并提示编码重复，系统中编码为 X 的供应商仍只有一条",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A11",
+        "given": "用户拥有供应商新增权限",
+        "when": "用户提交一个没有名称的供应商",
+        "then": "新增失败，并提示名称必填",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A26",
+        "given": "用户拥有供应商新增权限",
+        "when": "用户提交一个有名称但没有编码的供应商",
+        "then": "新增失败，并提示编码必填，系统中没有新增这条供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A27",
+        "given": "系统中已有一条名称为 N 的供应商",
+        "when": "用户提交一个名称同为 N、编码不同的供应商",
+        "then": "返回成功，按名称 N 查询能查到两条供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A28",
+        "given": "用户拥有供应商新增权限",
+        "when": "用户提交一个只填了编码和名称、不填联系人、联系电话和状态的供应商",
+        "then": "返回成功，再查询该供应商时联系人和联系电话为空，状态为启用（0）",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A29",
+        "given": "用户拥有供应商新增权限",
+        "when": "用户提交一个联系电话为任意非号码格式文字的供应商",
+        "then": "返回成功，再查询该供应商时联系电话与提交的一致",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "新增供应商",
+        "as_a": "有供应商新增权限的业务人员",
+        "want": "录入一个新的供应商档案",
+        "so_that": "系统里有这个供应商的基础信息，后续业务可以使用"
+      },
+      "criterion": {
+        "id": "A12",
+        "given": "管理员已登录前端，打开了供应商管理页面",
+        "when": "管理员点击新增，填写表单并确认",
+        "then": "弹窗关闭，页面提示操作成功，列表中出现新增的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "修改供应商",
+        "as_a": "有供应商修改权限的业务人员",
+        "want": "修改已有供应商的档案信息，包括启用或停用",
+        "so_that": "供应商信息变化或合作状态变化时，系统数据能保持准确"
+      },
+      "criterion": {
+        "id": "A13",
+        "given": "系统中有一条启用状态的供应商，用户拥有修改权限",
+        "when": "用户把该供应商的联系人改成新值，并把状态改为停用后提交",
+        "then": "返回成功，再查询该供应商时联系人为新值，状态为停用（1）",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "修改供应商",
+        "as_a": "有供应商修改权限的业务人员",
+        "want": "修改已有供应商的档案信息，包括启用或停用",
+        "so_that": "供应商信息变化或合作状态变化时，系统数据能保持准确"
+      },
+      "criterion": {
+        "id": "A14",
+        "given": "系统中有一条供应商，用户拥有修改权限",
+        "when": "用户打开该供应商的详情",
+        "then": "返回该供应商的完整档案信息",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "修改供应商",
+        "as_a": "有供应商修改权限的业务人员",
+        "want": "修改已有供应商的档案信息，包括启用或停用",
+        "so_that": "供应商信息变化或合作状态变化时，系统数据能保持准确"
+      },
+      "criterion": {
+        "id": "A30",
+        "given": "系统中有一条编码为 X 的供应商，用户拥有修改权限",
+        "when": "用户提交修改，把该供应商的编码改为另一个值 Y",
+        "then": "再查询该供应商时编码仍为 X，系统中没有编码为 Y 的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "修改供应商",
+        "as_a": "有供应商修改权限的业务人员",
+        "want": "修改已有供应商的档案信息，包括启用或停用",
+        "so_that": "供应商信息变化或合作状态变化时，系统数据能保持准确"
+      },
+      "criterion": {
+        "id": "A31",
+        "given": "系统中有一条供应商，用户拥有修改权限",
+        "when": "用户提交修改，把该供应商的名称清空",
+        "then": "修改失败，并提示名称必填，再查询该供应商时名称仍为原值",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "修改供应商",
+        "as_a": "有供应商修改权限的业务人员",
+        "want": "修改已有供应商的档案信息，包括启用或停用",
+        "so_that": "供应商信息变化或合作状态变化时，系统数据能保持准确"
+      },
+      "criterion": {
+        "id": "A15",
+        "given": "管理员已登录前端，列表中有一条供应商",
+        "when": "管理员点击该行的修改，改动名称后确认",
+        "then": "弹窗关闭，页面提示操作成功，列表中这一行显示新名称",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除供应商",
+        "as_a": "有供应商删除权限的业务人员",
+        "want": "删除不再需要的供应商档案",
+        "so_that": "供应商列表只保留有效数据"
+      },
+      "criterion": {
+        "id": "A16",
+        "given": "系统中有一条供应商，用户拥有删除权限",
+        "when": "用户删除该供应商",
+        "then": "返回成功，之后查询列表时不再出现该供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除供应商",
+        "as_a": "有供应商删除权限的业务人员",
+        "want": "删除不再需要的供应商档案",
+        "so_that": "供应商列表只保留有效数据"
+      },
+      "criterion": {
+        "id": "A17",
+        "given": "系统中有两条供应商",
+        "when": "用户一次性删除这两条供应商",
+        "then": "返回成功，之后查询列表时这两条都不再出现",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除供应商",
+        "as_a": "有供应商删除权限的业务人员",
+        "want": "删除不再需要的供应商档案",
+        "so_that": "供应商列表只保留有效数据"
+      },
+      "criterion": {
+        "id": "A32",
+        "given": "系统中有一条启用状态的供应商，用户拥有删除权限",
+        "when": "用户删除该供应商",
+        "then": "返回成功，之后查询列表时不再出现该供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除供应商",
+        "as_a": "有供应商删除权限的业务人员",
+        "want": "删除不再需要的供应商档案",
+        "so_that": "供应商列表只保留有效数据"
+      },
+      "criterion": {
+        "id": "A33",
+        "given": "系统中有一条已被删除的供应商",
+        "when": "用户按该供应商的主键请求详情",
+        "then": "不再返回该供应商的档案信息",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除供应商",
+        "as_a": "有供应商删除权限的业务人员",
+        "want": "删除不再需要的供应商档案",
+        "so_that": "供应商列表只保留有效数据"
+      },
+      "criterion": {
+        "id": "A18",
+        "given": "管理员已登录前端，列表中有一条供应商",
+        "when": "管理员点击该行的删除，并在确认框中确认",
+        "then": "页面提示删除成功，该供应商从列表中消失",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据导出为 Excel 文件",
+        "so_that": "我可以离线查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A19",
+        "given": "系统中至少有一条供应商，用户拥有导出权限",
+        "when": "用户请求导出供应商",
+        "then": "返回一个非空的 Excel 文件，表头包含供应商编码、名称、联系人、联系电话、状态、备注",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据导出为 Excel 文件",
+        "so_that": "我可以离线查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A34",
+        "given": "系统中符合某一状态条件的供应商数量超过列表默认的一页条数",
+        "when": "用户以该状态为条件请求导出",
+        "then": "导出文件的数据行数等于按同一条件查询得到的总条数，且每一行的状态都是该状态",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据导出为 Excel 文件",
+        "so_that": "我可以离线查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A20",
+        "given": "管理员已登录前端，打开了供应商管理页面",
+        "when": "管理员点击导出",
+        "then": "浏览器下载一个 Excel 文件",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据导出为 Excel 文件",
+        "so_that": "我可以离线查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A21",
+        "given": "已导出一个 Excel 文件，系统中有一条已知的供应商",
+        "when": "用户用 Excel 打开该文件",
+        "then": "文件中该供应商各列的值与系统一致，状态显示为正常或停用",
+        "kind": "manual"
+      },
+      "tests": [
+        {
+          "id": "human",
+          "command": [
+            "human"
+          ],
+          "timeout_seconds": 0,
+          "result": {
+            "status": "ACCEPTED",
+            "returncode": 0,
+            "timed_out": false
+          },
+          "note": "用户手动核对：Excel 导出各列与系统一致，状态显示为正常/停用",
+          "accepted_at": "2026-09-18T03:43:57+00:00"
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "通过角色分别授予供应商的列表、新增、修改、删除、导出权限",
+        "so_that": "不同岗位的人只能进行各自被授权的操作"
+      },
+      "criterion": {
+        "id": "A22",
+        "given": "通过系统的角色和用户接口创建了一个只分配供应商列表权限的角色，以及属于该角色的测试用户，该用户已登录；系统中已有一条供应商",
+        "when": "该用户分别调用新增、修改、删除、导出接口",
+        "then": "每次调用都被拒绝，并提示没有权限，供应商数据没有变化",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "通过角色分别授予供应商的列表、新增、修改、删除、导出权限",
+        "so_that": "不同岗位的人只能进行各自被授权的操作"
+      },
+      "criterion": {
+        "id": "A35",
+        "given": "管理员 admin 新增了一条供应商；另有一个只拥有供应商列表权限、与 admin 不在同一部门的测试用户已登录",
+        "when": "该测试用户查询供应商列表",
+        "then": "返回成功，结果中包含 admin 新增的那条供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "通过角色分别授予供应商的列表、新增、修改、删除、导出权限",
+        "so_that": "不同岗位的人只能进行各自被授权的操作"
+      },
+      "criterion": {
+        "id": "A24",
+        "given": "管理员 admin 已登录",
+        "when": "管理员依次执行查询、新增、修改、删除、导出",
+        "then": "每项操作都成功",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260918-001-supplier-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260918-001/test_supplier.py",
+            "acceptance/smoke/FEAT-20260918-001/supplier.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "14b241be59bb2e7070499f77bae5e63924a7f6e2e89634876613726e7f172a8b"
+    }
+  ]
+}
