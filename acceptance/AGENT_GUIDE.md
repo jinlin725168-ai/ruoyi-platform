@@ -62,8 +62,11 @@
 
 ## 实现（implement 角色）
 
-- 可以直接在仓库里编译或测试：`mvn -q -o -f backend/pom.xml -pl ruoyi-admin -am compile`。
-  `target/`、`node_modules/`、`dist/`、`logs/`、`__pycache__/` 已声明为 scratch 目录，不会被判越界；
-  其他被忽略的文件一律不要产生。
+- 可以直接在仓库里编译或测试：`mvn -q -o -f backend/pom.xml -pl ruoyi-admin -am compile`；
+  前端类型检查：`pnpm --dir frontend exec vue-tsc --noEmit`。
+- `target/`、`node_modules/`、`dist/`、`logs/`、`__pycache__/` 和各模块的 `.flattened-pom.xml`
+  已声明为 scratch，构建产生它们不会被判越界；其他被忽略的文件一律不要产生。
 - git 只允许只读命令（status/diff/log/show）；不要 add、commit、stash 或切换分支。
+- questions 只用于真实的产品歧义。工具、权限、环境类问题不要提问：按本指南处理，
+  某项检查无法执行就跳过并在 summary 里说明，让外部冒烟和回归去验证。
 - 实现完成后自检：编译通过、SQL 语法正确、菜单权限串与 `@SaCheckPermission` 一致、前端 api 路径与后端 `@RequestMapping` 一致。

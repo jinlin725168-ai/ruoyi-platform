@@ -34,4 +34,14 @@ git subtree pull --prefix=frontend /home/jinlin/work/RuoYi/plus-ui         6.X-V
 docker compose -f infra/docker-compose.yml up -d
 ```
 
-`backend/ruoyi-admin/src/main/resources/application-dev.yml` 已指向 3307/6380。
+`backend/ruoyi-admin/src/main/resources/application-dev.yml` 已指向 3307/6380，后端本地端口 8081（8080 被本机其他项目占用）。
+
+本地手动验证：
+
+```bash
+mvn -q -o -f backend/pom.xml -DskipTests -pl ruoyi-admin -am package
+java -jar backend/ruoyi-admin/target/ruoyi-admin.jar            # 8081
+VITE_PROXY_TARGET=http://127.0.0.1:8081 pnpm --dir frontend dev  # 5173
+```
+
+注意不要在仓库根目录运行会写日志的进程之外的东西：`logs/` 已忽略，其他未跟踪文件会改变 StoryLoop 的候选指纹。
