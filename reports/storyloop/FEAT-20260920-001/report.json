@@ -1,0 +1,1280 @@
+{
+  "version": 1,
+  "status": "PASSED",
+  "change_id": "FEAT-20260920-001",
+  "generated_at": "2026-09-20T09:47:50.713048Z",
+  "requirement": {
+    "goal": "在 ruoyi-platform 的『业务管理』目录下提供采购单（主子表）管理能力：采购员可以在一个页面内录入采购单主信息与多条物料明细，单号由系统自动生成，系统自动计算明细金额与合计金额，草稿单据可修改、删除并提交；提交后单据冻结为终态，列表支持按单号/供应商/状态/下单日期范围分页查询、查看详情与导出 Excel，全部操作受菜单与按钮级权限控制，后端接口与前端页面同时交付。",
+    "approval": {
+      "revision": 2,
+      "contract_digest": "f1f7bd7dd3eead821e670d75ebdc83845c987a01d86203c3ba4099b106233da3",
+      "approved_by": "user",
+      "approved_at": "2026-09-20T07:02:29.542543Z"
+    },
+    "revision": 2
+  },
+  "implementation_commit": "8aaa6b356e7b260ca63ec68b2c3a8a3d02db7658",
+  "regression": {
+    "status": "PASSED",
+    "results": [
+      {
+        "id": "REGRESSION-001",
+        "criteria": [],
+        "command": [
+          "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+          "-q",
+          "-o",
+          "-f",
+          "backend/pom.xml",
+          "-Dmaven.test.skip=false",
+          "-DskipTests=false",
+          "-pl",
+          "ruoyi-admin",
+          "-am",
+          "test"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "timed_out": false,
+        "stdout": "@BeforeEach ==================\n@AfterEach ==================\n",
+        "stderr": ""
+      }
+    ],
+    "candidate_sha256": "1b1eb7c1725a7a251e9becab635017c30f818e5f15a73fd88b45104c1720aedd"
+  },
+  "review": {
+    "verdict": "pass",
+    "summary": "独立复核了 FEAT-20260920-001 采购单管理（主子表）的真实实现，对照 revision 2 已批准契约的 8 个故事、35 条验收项逐条核对了后端（controller/service/bo/vo/domain/mapper/mapper.xml）、SQL（建表+字典+菜单按钮）、前端（api/types/index.vue）与验收冒烟用例，未发现与故事规则不符之处。要点：单号由 PO+yyyyMMdd+4 位流水生成（唯一索引兜底并重试取号），请求传入的单号/明细金额/合计金额/状态一律被忽略并由服务端重算（S2/S3 A6 A32）；新增与修改均校验供应商必须为启用状态，而详情与提交不校验供应商状态（S3 A34 / S6 A35，与 Q5 决策一致）；数量为大于 0 的正整数、单价大于 0 且最多 2 位小数由 @DecimalMin/@Digits 与服务端 intValueExact 双重保证（A33）；修改/删除/提交前统一经 loadDraft 拒绝已提交单据，提交为终态（A12 A18 A21 A22）；列表按单号模糊、供应商、状态、下单日期起止过滤且默认下单日期倒序+创建时间倒序，无数据权限隔离；导出复用同一 wrapper 且不分页、仅主表一行一单、中文表头并用 biz_purchase_order_status 字典把状态转成『草稿/已提交』（A25 A27）；六个接口的 @SaCheckPermission 与 sql/biz/FEAT-20260920-001.sql 中 1770000000000000010–016 的菜单/按钮权限串一一对应，提交使用独立的 biz:purchaseOrder:submit（A24），菜单挂在已有『业务管理』目录（1770000000000000000）下、component 与前端路径 biz/purchaseOrder/index 一致，menu_id 与 FEAT-20260918-001 使用的 …000–006 段无冲突；前端 api 路径与后端 @RequestMapping(\"/biz/purchaseOrder\") 一致，弹窗单号只读且仅修改时展示，明细行可动态增删并实时显示行金额与合计，按钮均带 v-hasPermi 且已提交行的修改/删除/提交按钮禁用。落地范围与 boundary 报告的 18 个文件一致，全部位于 module_roots 之内，未触碰底座。回归（mvn -pl ruoyi-admin -am test，含 ruoyi-biz 编译）与冒烟（25 条后端用例 + 9 条 Playwright 用例，覆盖除 manual 的 A27 外全部 34 条验收项）均为 PASS，冒烟用例通过字段别名探针实现、不绑定具体实现命名，功能缺失时会失败。本次复核未修改任何文件；`git status` 因权限被拒未能执行，故未复核工作区是否存在额外未跟踪文件，该项以 boundary 报告与外部验收结果为准。",
+    "findings": [],
+    "questions": []
+  },
+  "traceability": [
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "按单号、供应商、状态和下单日期范围组合条件分页查询采购单列表",
+        "so_that": "我能快速定位到需要跟进的单据"
+      },
+      "criterion": {
+        "id": "A1",
+        "given": "系统中已存在若干采购单，其中仅有一张单号包含片段『X9』",
+        "when": "以单号片段『X9』发起分页查询",
+        "then": "返回结果只包含该单号匹配的单据，总条数为 1",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "按单号、供应商、状态和下单日期范围组合条件分页查询采购单列表",
+        "so_that": "我能快速定位到需要跟进的单据"
+      },
+      "criterion": {
+        "id": "A2",
+        "given": "系统中存在下单日期分别在查询范围内和范围外的采购单",
+        "when": "以下单日期起止范围发起查询",
+        "then": "返回结果只包含下单日期落在该范围内（含起止当天）的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "按单号、供应商、状态和下单日期范围组合条件分页查询采购单列表",
+        "so_that": "我能快速定位到需要跟进的单据"
+      },
+      "criterion": {
+        "id": "A3",
+        "given": "系统中同时存在草稿与已提交状态的采购单",
+        "when": "以状态=草稿发起查询",
+        "then": "返回结果中全部单据的状态均为草稿",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "按单号、供应商、状态和下单日期范围组合条件分页查询采购单列表",
+        "so_that": "我能快速定位到需要跟进的单据"
+      },
+      "criterion": {
+        "id": "A4",
+        "given": "以 admin 登录并进入采购单管理页面",
+        "when": "在查询区填写单号并点击查询",
+        "then": "表格只展示匹配的单据，且展示单号、供应商、下单日期、状态、合计金额列",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A5",
+        "given": "存在一个启用状态的供应商",
+        "when": "提交一张包含该供应商与两条明细的新增请求",
+        "then": "保存成功，查询详情可看到两条明细，且状态为草稿",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A6",
+        "given": "新增请求的明细为『数量 2 单价 10』和『数量 3 单价 5』，并故意传入错误的金额与合计金额",
+        "when": "保存该采购单",
+        "then": "系统以计算值为准，两条明细金额分别为 20 和 15，主表合计金额为 35",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A7",
+        "given": "存在一个停用状态的供应商",
+        "when": "提交使用该停用供应商的新增请求",
+        "then": "保存失败并返回可读的错误提示，系统中不产生该采购单",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A8",
+        "given": "一个不含任何明细的新增请求",
+        "when": "提交保存",
+        "then": "保存失败并返回明细不能为空的提示",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A9",
+        "given": "以 admin 登录并打开采购单新增弹窗",
+        "when": "选择供应商、填写下单日期并添加两行明细后保存",
+        "then": "弹窗关闭、列表中出现该新单据，状态显示为草稿且合计金额等于两行金额之和",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A10",
+        "given": "供应商档案中同时存在启用与停用的供应商",
+        "when": "在新增弹窗中展开供应商下拉框",
+        "then": "下拉候选中只出现启用状态的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A32",
+        "given": "一个携带了自定义单号且下单日期为指定日期的新增请求",
+        "when": "提交保存并查询该单据详情",
+        "then": "保存成功，单据单号为系统生成的『PO+下单日期+流水号』格式且不等于请求中传入的值",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "新增采购单及其明细",
+        "as_a": "采购员",
+        "want": "在一个表单里同时录入采购单主信息和多条物料明细并一次保存",
+        "so_that": "我不必分两步操作就能完整记录一次采购需求"
+      },
+      "criterion": {
+        "id": "A33",
+        "given": "三个新增请求，明细分别为数量 0、数量 1.5、单价 0",
+        "when": "依次提交这三个请求",
+        "then": "三次调用都失败并返回可读的校验提示，系统中不产生对应采购单",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "修改草稿采购单",
+        "as_a": "采购员",
+        "want": "修改仍处于草稿状态的采购单主信息和明细",
+        "so_that": "我能在正式提交前纠正录入错误或调整采购内容"
+      },
+      "criterion": {
+        "id": "A11",
+        "given": "一张草稿采购单含两条明细",
+        "when": "提交修改请求：删除一条明细、修改另一条明细的数量、并新增一条明细",
+        "then": "保存成功，详情中明细为修改后的两条，合计金额等于这两条金额之和",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "修改草稿采购单",
+        "as_a": "采购员",
+        "want": "修改仍处于草稿状态的采购单主信息和明细",
+        "so_that": "我能在正式提交前纠正录入错误或调整采购内容"
+      },
+      "criterion": {
+        "id": "A12",
+        "given": "一张已提交状态的采购单",
+        "when": "提交修改请求",
+        "then": "修改失败并返回已提交不可修改的提示，单据内容保持不变",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "修改草稿采购单",
+        "as_a": "采购员",
+        "want": "修改仍处于草稿状态的采购单主信息和明细",
+        "so_that": "我能在正式提交前纠正录入错误或调整采购内容"
+      },
+      "criterion": {
+        "id": "A13",
+        "given": "一张草稿采购单含多条明细",
+        "when": "在页面上点击该行的修改按钮",
+        "then": "表单回显该单据的供应商、下单日期、备注及全部明细行",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "修改草稿采购单",
+        "as_a": "采购员",
+        "want": "修改仍处于草稿状态的采购单主信息和明细",
+        "so_that": "我能在正式提交前纠正录入错误或调整采购内容"
+      },
+      "criterion": {
+        "id": "A14",
+        "given": "一张草稿采购单",
+        "when": "修改某条明细的单价并保存",
+        "then": "列表中该单据的合计金额更新为按新单价重算后的值",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S3",
+        "title": "修改草稿采购单",
+        "as_a": "采购员",
+        "want": "修改仍处于草稿状态的采购单主信息和明细",
+        "so_that": "我能在正式提交前纠正录入错误或调整采购内容"
+      },
+      "criterion": {
+        "id": "A34",
+        "given": "一张草稿采购单，其供应商随后在档案中被停用",
+        "when": "保持该停用供应商不变提交修改保存请求",
+        "then": "保存失败并返回需改选为启用状态供应商的可读提示，单据内容保持不变",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "查看采购单详情",
+        "as_a": "采购员",
+        "want": "查看一张采购单的完整主信息与全部明细",
+        "so_that": "我能在不进入编辑态的情况下核对单据内容"
+      },
+      "criterion": {
+        "id": "A15",
+        "given": "一张含三条明细的采购单",
+        "when": "按该单据 ID 查询详情",
+        "then": "返回主表字段与三条明细，合计金额等于三条明细金额之和",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S4",
+        "title": "查看采购单详情",
+        "as_a": "采购员",
+        "want": "查看一张采购单的完整主信息与全部明细",
+        "so_that": "我能在不进入编辑态的情况下核对单据内容"
+      },
+      "criterion": {
+        "id": "A16",
+        "given": "一个系统中不存在的采购单 ID",
+        "when": "按该 ID 查询详情",
+        "then": "接口返回失败且带有可读的错误提示",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除草稿采购单",
+        "as_a": "采购员",
+        "want": "删除不再需要的草稿采购单",
+        "so_that": "列表中不会残留无效单据干扰查询"
+      },
+      "criterion": {
+        "id": "A17",
+        "given": "一张草稿采购单",
+        "when": "调用删除接口删除该单据",
+        "then": "删除成功，再次查询列表与详情都查不到该单据及其明细",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除草稿采购单",
+        "as_a": "采购员",
+        "want": "删除不再需要的草稿采购单",
+        "so_that": "列表中不会残留无效单据干扰查询"
+      },
+      "criterion": {
+        "id": "A18",
+        "given": "一张已提交状态的采购单",
+        "when": "调用删除接口",
+        "then": "删除失败并返回已提交不可删除的提示，该单据仍可被查询到",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S5",
+        "title": "删除草稿采购单",
+        "as_a": "采购员",
+        "want": "删除不再需要的草稿采购单",
+        "so_that": "列表中不会残留无效单据干扰查询"
+      },
+      "criterion": {
+        "id": "A19",
+        "given": "页面列表中勾选了两张草稿采购单",
+        "when": "点击删除并确认",
+        "then": "两张单据同时从列表中消失，总条数相应减少",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "提交采购单",
+        "as_a": "采购员",
+        "want": "把确认无误的草稿采购单提交",
+        "so_that": "单据内容被冻结，后续环节可以据此开展采购"
+      },
+      "criterion": {
+        "id": "A20",
+        "given": "一张含明细的草稿采购单",
+        "when": "调用提交接口",
+        "then": "提交成功，详情中状态变为已提交",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "提交采购单",
+        "as_a": "采购员",
+        "want": "把确认无误的草稿采购单提交",
+        "so_that": "单据内容被冻结，后续环节可以据此开展采购"
+      },
+      "criterion": {
+        "id": "A21",
+        "given": "一张已提交的采购单",
+        "when": "再次调用提交接口",
+        "then": "提交失败并返回状态不允许提交的提示，状态保持为已提交",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "提交采购单",
+        "as_a": "采购员",
+        "want": "把确认无误的草稿采购单提交",
+        "so_that": "单据内容被冻结，后续环节可以据此开展采购"
+      },
+      "criterion": {
+        "id": "A22",
+        "given": "一张刚被提交的采购单",
+        "when": "依次调用修改接口与删除接口",
+        "then": "两次调用都失败并返回可读提示，单据内容与状态均未变化",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "提交采购单",
+        "as_a": "采购员",
+        "want": "把确认无误的草稿采购单提交",
+        "so_that": "单据内容被冻结，后续环节可以据此开展采购"
+      },
+      "criterion": {
+        "id": "A23",
+        "given": "页面列表中一张草稿采购单",
+        "when": "点击该行的提交按钮并确认",
+        "then": "列表中该行状态变为已提交，且该行的修改与删除按钮不可用",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "提交采购单",
+        "as_a": "采购员",
+        "want": "把确认无误的草稿采购单提交",
+        "so_that": "单据内容被冻结，后续环节可以据此开展采购"
+      },
+      "criterion": {
+        "id": "A24",
+        "given": "一个未被授予提交权限的登录用户",
+        "when": "调用采购单提交接口",
+        "then": "接口返回无权限，单据状态保持为草稿",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "提交采购单",
+        "as_a": "采购员",
+        "want": "把确认无误的草稿采购单提交",
+        "so_that": "单据内容被冻结，后续环节可以据此开展采购"
+      },
+      "criterion": {
+        "id": "A35",
+        "given": "一张草稿采购单，其供应商随后在档案中被停用",
+        "when": "查询该单据详情并调用提交接口",
+        "then": "详情正常返回完整主表与明细，提交成功且状态变为已提交",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "把当前查询条件下的采购单导出为 Excel",
+        "so_that": "我能在表格里做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A25",
+        "given": "系统中存在草稿与已提交的采购单",
+        "when": "以状态=已提交调用导出接口",
+        "then": "接口返回成功且响应为 Excel 文件内容（非空二进制）",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "把当前查询条件下的采购单导出为 Excel",
+        "so_that": "我能在表格里做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A26",
+        "given": "一个未被授予导出权限的登录用户",
+        "when": "调用导出接口",
+        "then": "接口返回无权限，不产生任何文件内容",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "把当前查询条件下的采购单导出为 Excel",
+        "so_that": "我能在表格里做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A27",
+        "given": "按查询条件导出得到的 Excel 文件",
+        "when": "用 Excel 打开该文件",
+        "then": "列标题为中文业务名称，状态显示为『草稿』或『已提交』，每张采购单占一行且带合计金额，数据行与页面查询结果一致",
+        "kind": "manual"
+      },
+      "tests": [
+        {
+          "id": "human",
+          "command": [
+            "human"
+          ],
+          "timeout_seconds": 0,
+          "result": {
+            "status": "ACCEPTED",
+            "returncode": 0,
+            "timed_out": false
+          },
+          "note": "用户手动核对：导出 Excel 列标题为中文，状态显示草稿/已提交，数据行与页面查询结果一致",
+          "accepted_at": "2026-09-20T09:47:49+00:00"
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S8",
+        "title": "菜单与按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "把采购单管理挂在『业务管理』目录下并按按钮粒度授权",
+        "so_that": "不同角色只能看到并执行被授权的操作"
+      },
+      "criterion": {
+        "id": "A28",
+        "given": "以 admin 登录系统",
+        "when": "打开左侧菜单",
+        "then": "『业务管理』目录下出现『采购单管理』菜单，点击可进入采购单列表页",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S8",
+        "title": "菜单与按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "把采购单管理挂在『业务管理』目录下并按按钮粒度授权",
+        "so_that": "不同角色只能看到并执行被授权的操作"
+      },
+      "criterion": {
+        "id": "A29",
+        "given": "未登录（不携带有效凭证）",
+        "when": "调用采购单列表接口",
+        "then": "接口返回未登录错误，不返回业务数据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S8",
+        "title": "菜单与按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "把采购单管理挂在『业务管理』目录下并按按钮粒度授权",
+        "so_that": "不同角色只能看到并执行被授权的操作"
+      },
+      "criterion": {
+        "id": "A30",
+        "given": "一个只被授予查询权限的登录用户",
+        "when": "依次调用新增、修改、删除接口",
+        "then": "三次调用都返回无权限，而列表查询可正常返回数据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    },
+    {
+      "story": {
+        "id": "S8",
+        "title": "菜单与按钮级权限控制",
+        "as_a": "系统管理员",
+        "want": "把采购单管理挂在『业务管理』目录下并按按钮粒度授权",
+        "so_that": "不同角色只能看到并执行被授权的操作"
+      },
+      "criterion": {
+        "id": "A31",
+        "given": "一个只被授予查询权限的用户登录前端",
+        "when": "打开采购单列表页",
+        "then": "页面可见列表数据，但新增、修改、删除、提交、导出按钮均不展示",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260920-001-purchase-order-core",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/FEAT-20260920-001/test_purchase_order.py",
+            "acceptance/smoke/FEAT-20260920-001/purchase_order.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "962c573c5a169f3243de3bf9d102d6b1b6384d8ca8aa13306917fc34dd1976aa"
+    }
+  ],
+  "telemetry": {
+    "calls": 11,
+    "failed": 0,
+    "agent_ms": 4427754,
+    "cost_usd": 32.4878,
+    "by_role": {
+      "product": {
+        "calls": 2,
+        "failed": 0,
+        "agent_ms": 187547,
+        "cost_usd": 0.7417,
+        "turns": 6
+      },
+      "smoke": {
+        "calls": 2,
+        "failed": 0,
+        "agent_ms": 2016943,
+        "cost_usd": 9.0542,
+        "turns": 56
+      },
+      "implement": {
+        "calls": 5,
+        "failed": 0,
+        "agent_ms": 1857250,
+        "cost_usd": 18.6261,
+        "turns": 264
+      },
+      "review": {
+        "calls": 2,
+        "failed": 0,
+        "agent_ms": 366014,
+        "cost_usd": 4.0658,
+        "turns": 58
+      }
+    },
+    "attempts": 4,
+    "loop_ms": 9920428
+  }
+}
