@@ -41,6 +41,8 @@
     "dist",
     "logs",
     "__pycache__",
-    ".flattened-pom.xml"
+    ".flattened-pom.xml",
+    "frontend/src/types/auto-imports.d.ts",
+    "frontend/src/types/components.d.ts"
   ]
 }
