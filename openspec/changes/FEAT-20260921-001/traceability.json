@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "criteria": [
+    {
+      "criterion_id": "A36",
+      "story_id": "S8",
+      "tests": []
+    },
+    {
+      "criterion_id": "A37",
+      "story_id": "S8",
+      "tests": []
+    },
+    {
+      "criterion_id": "A55",
+      "story_id": "S8",
+      "tests": []
+    },
+    {
+      "criterion_id": "A9",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A10",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A11",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A26",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A27",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A28",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A29",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A38",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A50",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A12",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A39",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A40",
+      "story_id": "S3",
+      "tests": []
+    },
+    {
+      "criterion_id": "A4",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A5",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A6",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A25",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A41",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A42",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A51",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A58",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A7",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A8",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A43",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A44",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A52",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A56",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A59",
+      "story_id": "S2",
+      "tests": []
+    },
+    {
+      "criterion_id": "A13",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A14",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A30",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A31",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A45",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A46",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A53",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A47",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A15",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A48",
+      "story_id": "S4",
+      "tests": []
+    },
+    {
+      "criterion_id": "A19",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A34",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A49",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A54",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A57",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A60",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A20",
+      "story_id": "S6",
+      "tests": []
+    },
+    {
+      "criterion_id": "A21",
+      "story_id": "S6",
+      "tests": []
+    }
+  ]
+}
