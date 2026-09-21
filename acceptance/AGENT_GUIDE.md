@@ -51,6 +51,7 @@
 
 ## 验收（smoke 角色）
 
+- `acceptance/ui/<capability>/` 里是对着真实页面探索得到的测试计划（plan.md）和已验证的 Playwright 回归用例：写 UI 冒烟用例时复用其中的定位器、文案和流程。这些回归用例会和你的用例一起跑，不要重复它们。
 - 后端用例：Python `unittest` 文件，`from ruoyi_client import Client`，`Client().login()` 后调用接口；
   RuoYi 返回 `{code, msg, data}`，成功 `code == 200`，未登录 401，无权限 403，业务失败 500。
 - 前端用例：Playwright `*.spec.ts`，`import { test, expect } from '@playwright/test'`，登录页在 `/login`，

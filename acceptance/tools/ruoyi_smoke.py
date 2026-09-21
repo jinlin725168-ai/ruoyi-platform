@@ -39,6 +39,98 @@ from smoke_harness import (  # noqa: E402
 BASE_SQL = ["ry_vue.sql", "ry_workflow.sql"]
 
 
+class Stack:
+    """Build the candidate in scratch, boot a throwaway backend (and optionally vite); reusable."""
+
+    def __init__(self, root: Path, scratch_name: str = "ruoyi-smoke", mysql_container: str = "ruoyi-mysql",
+                 mysql_user: str = "root", mysql_password: str = "root", mysql_host_port: int = 3307,
+                 redis_db: int = 15, boot_timeout: int = 180):
+        self.root, self.scratch_name, self.boot_timeout = root, scratch_name, boot_timeout
+        self.mysql = _Mysql(mysql_container, mysql_user, mysql_password)
+        self.mysql_host_port, self.redis_db = mysql_host_port, redis_db
+        self.scratch: Path | None = None
+        self.database: str | None = None
+        self.server = self.vite = None
+        self.port = self.ui_port = None
+
+    def build(self) -> int | None:
+        """Sync + package; returns an exit code on environment failure, else None."""
+        try:
+            self.scratch = sync_scratch(self.root, self.scratch_name)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            return env_error(f"scratch sync failed: {exc}")
+        log = self.scratch / "smoke-build.log"
+        with log.open("w", encoding="utf-8") as handle:
+            build = subprocess.run(
+                ["mvn", "-q", "-o", "-f", "backend/pom.xml", "-DskipTests", "-pl", "ruoyi-admin",
+                 "-am", "package"], cwd=self.scratch, stdout=handle, stderr=subprocess.STDOUT)
+        if build.returncode != 0:
+            return env_error("backend build failed", log)
+        if not (self.scratch / "backend/ruoyi-admin/target/ruoyi-admin.jar").is_file():
+            return env_error("ruoyi-admin.jar not produced", log)
+        return None
+
+    def start_backend(self) -> int | None:
+        self.database = f"ry_smoke_{os.getpid()}"
+        try:
+            self.mysql.run(f"CREATE DATABASE `{self.database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci")
+            for name in BASE_SQL:
+                self.mysql.import_file(self.database, self.root / "backend/script/sql" / name)
+            for path in sorted((self.root / "sql/biz").glob("*.sql")):
+                self.mysql.import_file(self.database, path)
+        except subprocess.CalledProcessError as exc:
+            self.mysql.drop(self.database)
+            return env_error(f"database setup failed: {exc.stderr.decode('utf-8', 'replace')[-2000:]}")
+        self.port = free_port()
+        url = (f"jdbc:mysql://localhost:{self.mysql_host_port}/{self.database}?useUnicode=true&characterEncoding=utf8"
+               "&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true"
+               "&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true")
+        log = self.scratch / "smoke-server.log"
+        self.server = subprocess.Popen(
+            ["java", "-jar", str(self.scratch / "backend/ruoyi-admin/target/ruoyi-admin.jar"),
+             "--spring.profiles.active=dev,smoke", f"--server.port={self.port}",
+             f"--spring.datasource.dynamic.datasource.master.url={url}",
+             f"--spring.data.redis.database={self.redis_db}"],
+            cwd=self.scratch, stdout=log.open("w", encoding="utf-8"), stderr=subprocess.STDOUT,
+            start_new_session=True)
+        if not wait_http(self.server, f"http://127.0.0.1:{self.port}/auth/tenant/list", self.boot_timeout):
+            return env_error("backend did not become ready", log)
+        return None
+
+    def start_frontend(self) -> int | None:
+        frontend = self.scratch / "frontend"
+        env = dict(os.environ)
+        env["CI"] = "1"
+        log = self.scratch / "smoke-frontend.log"
+        with log.open("w", encoding="utf-8") as handle:
+            install = subprocess.run(["pnpm", "install", "--offline", "--frozen-lockfile"], cwd=frontend,
+                                     stdout=handle, stderr=subprocess.STDOUT, env=env)
+        if install.returncode != 0:
+            return env_error("frontend dependency install failed", log)
+        link = self.scratch / "node_modules"
+        if not link.exists():
+            link.symlink_to(frontend / "node_modules", target_is_directory=True)
+        self.ui_port = free_port()
+        env.update({"VITE_PROXY_TARGET": f"http://127.0.0.1:{self.port}", "VITE_APP_ENCRYPT": "false",
+                    "VITE_APP_MESSAGE_ENABLED": "false"})
+        vite_log = self.scratch / "smoke-vite.log"
+        self.vite = subprocess.Popen(
+            [str(frontend / "node_modules/.bin/vite"), "--mode", "development", "--host", "127.0.0.1",
+             "--port", str(self.ui_port), "--strictPort"],
+            cwd=frontend, stdout=vite_log.open("w", encoding="utf-8"), stderr=subprocess.STDOUT,
+            env=env, start_new_session=True)
+        if not wait_http(self.vite, f"http://127.0.0.1:{self.ui_port}/", self.boot_timeout):
+            return env_error("vite dev server did not become ready", vite_log)
+        return None
+
+    def stop(self) -> None:
+        for process in (self.vite, self.server):
+            if process is not None:
+                stop(process)
+        if self.database:
+            self.mysql.drop(self.database)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("cases", nargs="+", help="case files relative to the repo root")
@@ -63,100 +155,42 @@ def main() -> int:
         if not shutil.which(tool):
             return env_error(f"{tool} is not on PATH")
 
+    stack = Stack(root, args.scratch, args.mysql_container, args.mysql_user, args.mysql_password,
+                  args.mysql_host_port, args.redis_db, args.boot_timeout)
     try:
-        scratch = sync_scratch(root, args.scratch)
-    except (OSError, subprocess.CalledProcessError) as exc:
-        return env_error(f"scratch sync failed: {exc}")
-    log = scratch / "smoke-build.log"
-    with log.open("w", encoding="utf-8") as handle:
-        build = subprocess.run(
-            ["mvn", "-q", "-o", "-f", "backend/pom.xml", "-DskipTests", "-pl", "ruoyi-admin",
-             "-am", "package"], cwd=scratch, stdout=handle, stderr=subprocess.STDOUT)
-    if build.returncode != 0:
-        return env_error("backend build failed", log)
-    jar = scratch / "backend/ruoyi-admin/target/ruoyi-admin.jar"
-    if not jar.is_file():
-        return env_error("ruoyi-admin.jar not produced", log)
-
-    database = f"ry_smoke_{os.getpid()}"
-    mysql = _Mysql(args.mysql_container, args.mysql_user, args.mysql_password)
-    try:
-        mysql.run(f"CREATE DATABASE `{database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci")
-        for name in BASE_SQL:
-            mysql.import_file(database, root / "backend/script/sql" / name)
-        for path in sorted((root / "sql/biz").glob("*.sql")):
-            mysql.import_file(database, path)
-    except subprocess.CalledProcessError as exc:
-        mysql.drop(database)
-        return env_error(f"database setup failed: {exc.stderr.decode('utf-8', 'replace')[-2000:]}")
-
-    port = free_port()
-    url = (f"jdbc:mysql://localhost:{args.mysql_host_port}/{database}?useUnicode=true&characterEncoding=utf8"
-           "&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true"
-           "&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true")
-    server_log = scratch / "smoke-server.log"
-    server = subprocess.Popen(
-        ["java", "-jar", str(jar), "--spring.profiles.active=dev,smoke", f"--server.port={port}",
-         f"--spring.datasource.dynamic.datasource.master.url={url}",
-         f"--spring.data.redis.database={args.redis_db}"],
-        cwd=scratch, stdout=server_log.open("w", encoding="utf-8"), stderr=subprocess.STDOUT,
-        start_new_session=True)
-    try:
-        if not wait_http(server, f"http://127.0.0.1:{port}/auth/tenant/list", args.boot_timeout):
-            return env_error("backend did not become ready", server_log)
-        env = {"SMOKE_BASE_URL": f"http://127.0.0.1:{port}",
+        code = stack.build() or stack.start_backend()
+        if code:
+            return code
+        env = {"SMOKE_BASE_URL": f"http://127.0.0.1:{stack.port}",
                "PYTHONPATH": str(root / "acceptance/tools"), "CI": "1"}
         failed = False
         if py_cases:
             failed = run_python_cases(py_cases, cwd=root, env=env) != 0
         if specs:
-            outcome = _run_ui(scratch, specs, port, env, args.boot_timeout)
-            if outcome == 2:
-                return 2
+            code = stack.start_frontend()
+            if code:
+                return code
+            # UI regression assets of every capability run alongside the change's own specs.
+            regression = sorted(str(p.relative_to(stack.scratch)) for p in (stack.scratch / "acceptance/ui").rglob("*.spec.ts")) \
+                if (stack.scratch / "acceptance/ui").is_dir() else []
+            outcome = run_playwright(stack, specs + [s for s in regression if s not in specs], env)
             failed = failed or outcome != 0
         return 1 if failed else 0
     finally:
-        stop(server)
-        mysql.drop(database)
+        stack.stop()
 
 
-def _run_ui(scratch: Path, specs: list[str], backend_port: int, env: dict, timeout: int) -> int:
-    """Serve the scratch frontend with vite and run the Playwright specs against it."""
-    frontend = scratch / "frontend"
-    full_env = dict(os.environ)
-    full_env.update(env)
-    log = scratch / "smoke-frontend.log"
-    with log.open("w", encoding="utf-8") as handle:
-        install = subprocess.run(["pnpm", "install", "--offline", "--frozen-lockfile"], cwd=frontend,
-                                 stdout=handle, stderr=subprocess.STDOUT, env=full_env)
-    if install.returncode != 0:
-        return env_error("frontend dependency install failed", log)
-    link = scratch / "node_modules"
-    if not link.exists():
-        link.symlink_to(frontend / "node_modules", target_is_directory=True)
-    ui_port = free_port()
-    ui_env = dict(full_env)
-    ui_env.update({"VITE_PROXY_TARGET": f"http://127.0.0.1:{backend_port}", "VITE_APP_ENCRYPT": "false",
-                   "VITE_APP_MESSAGE_ENABLED": "false"})
-    vite_log = scratch / "smoke-vite.log"
-    vite = subprocess.Popen(
-        [str(frontend / "node_modules/.bin/vite"), "--mode", "development", "--host", "127.0.0.1",
-         "--port", str(ui_port), "--strictPort"],
-        cwd=frontend, stdout=vite_log.open("w", encoding="utf-8"), stderr=subprocess.STDOUT,
-        env=ui_env, start_new_session=True)
-    try:
-        if not wait_http(vite, f"http://127.0.0.1:{ui_port}/", timeout):
-            return env_error("vite dev server did not become ready", vite_log)
-        output = scratch / "smoke-ui-output"
-        shutil.rmtree(output, ignore_errors=True)
-        pw_env = dict(ui_env)
-        pw_env.update({"SMOKE_UI_URL": f"http://127.0.0.1:{ui_port}", "SMOKE_OUTPUT_DIR": str(output)})
-        result = subprocess.run(
-            [str(frontend / "node_modules/.bin/playwright"), "test", "-c",
-             "acceptance/tools/playwright.config.ts", *specs], cwd=scratch, env=pw_env)
-        return 0 if result.returncode == 0 else 1
-    finally:
-        stop(vite)
+def run_playwright(stack: Stack, specs: list[str], env: dict) -> int:
+    """Run Playwright specs in the scratch copy against the stack's vite server."""
+    output = stack.scratch / "smoke-ui-output"
+    shutil.rmtree(output, ignore_errors=True)
+    pw_env = dict(os.environ)
+    pw_env.update(env)
+    pw_env.update({"SMOKE_UI_URL": f"http://127.0.0.1:{stack.ui_port}", "SMOKE_OUTPUT_DIR": str(output)})
+    result = subprocess.run(
+        [str(stack.scratch / "frontend/node_modules/.bin/playwright"), "test", "-c",
+         "acceptance/tools/playwright.config.ts", *specs], cwd=stack.scratch, env=pw_env)
+    return 0 if result.returncode == 0 else 1
 
 
 class _Mysql:
