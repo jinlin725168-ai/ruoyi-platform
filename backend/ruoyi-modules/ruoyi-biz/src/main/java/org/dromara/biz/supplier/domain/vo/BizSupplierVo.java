@@ -44,6 +44,17 @@ public class BizSupplierVo implements Serializable {
     private String supplierName;
 
     /**
+     * 供应商分类（字典值）
+     */
+    private String supplierCategory;
+
+    /**
+     * 供应商分类名称（分类为空或已不在字典中时为『未分类』）
+     */
+    @ExcelProperty(value = "供应商分类")
+    private String supplierCategoryLabel;
+
+    /**
      * 联系人
      */
     @ExcelProperty(value = "联系人")

@@ -12,6 +12,14 @@ export interface SupplierVO {
    */
   supplierName: string;
   /**
+   * 供应商分类（字典 biz_supplier_category 的值）
+   */
+  supplierCategory: string;
+  /**
+   * 供应商分类名称（分类为空或已不在字典中时为『未分类』）
+   */
+  supplierCategoryLabel: string;
+  /**
    * 联系人
    */
   contactName: string;
@@ -47,6 +55,10 @@ export interface SupplierForm extends BaseEntity {
    */
   supplierName?: string;
   /**
+   * 供应商分类（字典 biz_supplier_category 的值）
+   */
+  supplierCategory?: string;
+  /**
    * 联系人
    */
   contactName?: string;
@@ -73,4 +85,13 @@ export interface SupplierQuery extends PageQuery {
    * 状态
    */
   status?: string;
+  /**
+   * 供应商分类（字典值；SUPPLIER_CATEGORY_NONE 表示未分类）
+   */
+  supplierCategory?: string;
 }
+
+/**
+ * 『未分类』查询条件值：匹配分类为空或分类值已不在字典中的供应商
+ */
+export const SUPPLIER_CATEGORY_NONE = '__none__';

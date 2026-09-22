@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.dromara.biz.supplier.constant.SupplierConstants;
 import org.dromara.biz.supplier.domain.BizSupplier;
 import org.dromara.biz.supplier.domain.bo.BizSupplierBo;
 import org.dromara.biz.supplier.domain.vo.BizSupplierVo;
@@ -11,6 +12,7 @@ import org.dromara.biz.supplier.mapper.BizSupplierMapper;
 import org.dromara.biz.supplier.service.IBizSupplierService;
 import org.dromara.common.core.constant.SystemConstants;
 import org.dromara.common.core.domain.PageResult;
+import org.dromara.common.core.service.DictService;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 供应商Service业务层处理
@@ -30,6 +34,7 @@ import java.util.List;
 public class BizSupplierServiceImpl implements IBizSupplierService {
 
     private final BizSupplierMapper supplierMapper;
+    private final DictService dictService;
 
     /**
      * 查询供应商
@@ -39,7 +44,11 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
      */
     @Override
     public BizSupplierVo queryById(Long supplierId) {
-        return supplierMapper.selectVoById(supplierId);
+        BizSupplierVo vo = supplierMapper.selectVoById(supplierId);
+        if (vo != null) {
+            fillCategoryLabel(List.of(vo));
+        }
+        return vo;
     }
 
     /**
@@ -53,6 +62,7 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
     public PageResult<BizSupplierVo> queryPageList(BizSupplierBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<BizSupplier> lqw = buildQueryWrapper(bo);
         Page<BizSupplierVo> result = supplierMapper.selectVoPage(pageQuery.build(), lqw);
+        fillCategoryLabel(result.getRecords());
         return PageResult.build(result.getRecords(), result.getTotal());
     }
 
@@ -64,11 +74,27 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
      */
     @Override
     public List<BizSupplierVo> queryList(BizSupplierBo bo) {
-        return supplierMapper.selectVoList(buildQueryWrapper(bo));
+        List<BizSupplierVo> list = supplierMapper.selectVoList(buildQueryWrapper(bo));
+        fillCategoryLabel(list);
+        return list;
     }
 
     /**
-     * 构建供应商查询条件：名称模糊匹配、状态精确匹配
+     * 把分类值翻译为字典中的分类名称，分类为空或已不在字典中时为『未分类』
+     *
+     * @param list 供应商列表
+     */
+    private void fillCategoryLabel(List<BizSupplierVo> list) {
+        Map<String, String> labels = dictService.getAllDictByDictType(SupplierConstants.CATEGORY_DICT_TYPE);
+        for (BizSupplierVo vo : list) {
+            String label = StringUtils.isBlank(vo.getSupplierCategory()) ? null : labels.get(vo.getSupplierCategory());
+            vo.setSupplierCategoryLabel(StringUtils.isBlank(label) ? SupplierConstants.CATEGORY_NONE_LABEL : label);
+        }
+    }
+
+    /**
+     * 构建供应商查询条件：名称模糊匹配、状态精确匹配、分类精确匹配；
+     * 分类为『未分类』时匹配分类为空或分类值已不在字典中的供应商
      *
      * @param bo 查询条件
      * @return 查询条件包装器
@@ -77,6 +103,18 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
         LambdaQueryWrapper<BizSupplier> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getSupplierName()), BizSupplier::getSupplierName, bo.getSupplierName());
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), BizSupplier::getStatus, bo.getStatus());
+        String category = bo.getSupplierCategory();
+        if (SupplierConstants.CATEGORY_NONE.equals(category)) {
+            Set<String> valid = dictService.getAllDictByDictType(SupplierConstants.CATEGORY_DICT_TYPE).keySet();
+            // 字典已无任何值时，所有供应商都显示为『未分类』，因此不追加分类条件
+            if (!valid.isEmpty()) {
+                lqw.and(w -> w.isNull(BizSupplier::getSupplierCategory)
+                    .or().eq(BizSupplier::getSupplierCategory, "")
+                    .or().notIn(BizSupplier::getSupplierCategory, valid));
+            }
+        } else {
+            lqw.eq(StringUtils.isNotBlank(category), BizSupplier::getSupplierCategory, category);
+        }
         lqw.orderByDesc(BizSupplier::getSupplierId);
         return lqw;
     }
@@ -95,6 +133,19 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
         return !supplierMapper.exists(Wrappers.<BizSupplier>lambdaQuery()
             .eq(BizSupplier::getSupplierCode, bo.getSupplierCode())
             .ne(bo.getSupplierId() != null, BizSupplier::getSupplierId, bo.getSupplierId()));
+    }
+
+    /**
+     * 校验供应商分类是否为『供应商分类』字典中现有的值
+     *
+     * @param bo 供应商
+     * @return 是否有效
+     */
+    @Override
+    public boolean checkCategoryValid(BizSupplierBo bo) {
+        String category = bo.getSupplierCategory();
+        return StringUtils.isNotBlank(category)
+            && dictService.getAllDictByDictType(SupplierConstants.CATEGORY_DICT_TYPE).containsKey(category);
     }
 
     /**

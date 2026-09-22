@@ -24,6 +24,12 @@
               <el-option v-for="dict in sys_normal_disable" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
+          <el-form-item label="供应商分类" prop="supplierCategory">
+            <el-select v-model="queryParams.supplierCategory" placeholder="供应商分类" clearable>
+              <el-option v-for="dict in biz_supplier_category" :key="dict.value" :label="dict.label" :value="dict.value" />
+              <el-option label="未分类" :value="SUPPLIER_CATEGORY_NONE" />
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -74,6 +80,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="供应商编码" align="center" prop="supplierCode" />
         <el-table-column label="供应商名称" align="center" prop="supplierName" :show-overflow-tooltip="true" />
+        <el-table-column label="供应商分类" align="center" prop="supplierCategoryLabel" />
         <el-table-column label="联系人" align="center" prop="contactName" />
         <el-table-column label="联系电话" align="center" prop="contactPhone" />
         <el-table-column label="状态" align="center" prop="status">
@@ -129,6 +136,11 @@
         <el-form-item label="供应商名称" prop="supplierName">
           <el-input v-model="form.supplierName" placeholder="请输入供应商名称" maxlength="100" />
         </el-form-item>
+        <el-form-item label="供应商分类" prop="supplierCategory">
+          <el-select v-model="form.supplierCategory" placeholder="请选择供应商分类">
+            <el-option v-for="dict in biz_supplier_category" :key="dict.value" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="联系人" prop="contactName">
           <el-input v-model="form.contactName" placeholder="请输入联系人" maxlength="50" />
         </el-form-item>
@@ -158,7 +170,7 @@
 
 <script setup name="Supplier" lang="ts">
 import { addSupplier, delSupplier, getSupplier, listSupplier, updateSupplier } from '@/api/biz/supplier';
-import { SupplierForm, SupplierQuery, SupplierVO } from '@/api/biz/supplier/types';
+import { SUPPLIER_CATEGORY_NONE, SupplierForm, SupplierQuery, SupplierVO } from '@/api/biz/supplier/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
 import { useSearchReset } from '@/hooks/form/useSearchReset';
@@ -168,7 +180,7 @@ import modal from '@/plugins/modal';
 import { useDict } from '@/utils/dict';
 import { download as requestDownload } from '@/utils/request';
 
-const { sys_normal_disable } = toRefs<any>(useDict('sys_normal_disable'));
+const { sys_normal_disable, biz_supplier_category } = toRefs<any>(useDict('sys_normal_disable', 'biz_supplier_category'));
 
 const supplierList = ref<SupplierVO[]>([]);
 const buttonLoading = ref(false);
@@ -184,6 +196,7 @@ const initFormData: SupplierForm = {
   supplierId: undefined,
   supplierCode: '',
   supplierName: '',
+  supplierCategory: undefined,
   contactName: '',
   contactPhone: '',
   status: '0',
@@ -196,11 +209,13 @@ const data = reactive<PageData<SupplierForm, SupplierQuery>>({
     pageNum: 1,
     pageSize: 10,
     supplierName: undefined,
-    status: undefined
+    status: undefined,
+    supplierCategory: undefined
   },
   rules: {
     supplierCode: [{ required: true, message: '供应商编码不能为空', trigger: 'blur' }],
-    supplierName: [{ required: true, message: '供应商名称不能为空', trigger: 'blur' }]
+    supplierName: [{ required: true, message: '供应商名称不能为空', trigger: 'blur' }],
+    supplierCategory: [{ required: true, message: '供应商分类不能为空', trigger: 'change' }]
   }
 });
 
@@ -254,6 +269,10 @@ const handleUpdate = async (row?: Partial<SupplierVO>) => {
   const supplierId = row?.supplierId || ids.value[0];
   const res = await getSupplier(supplierId);
   Object.assign(form.value, res.data);
+  // 分类为空或已不在字典中（显示为『未分类』）时清空，要求重新选择
+  if (!biz_supplier_category.value.some((dict: DictDataOption) => dict.value === form.value.supplierCategory)) {
+    form.value.supplierCategory = undefined;
+  }
   showDialog('修改供应商');
 };
 

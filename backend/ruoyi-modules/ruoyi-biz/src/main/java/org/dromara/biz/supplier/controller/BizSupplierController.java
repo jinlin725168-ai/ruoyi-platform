@@ -80,6 +80,9 @@ public class BizSupplierController extends BaseController {
         if (!supplierService.checkCodeUnique(bo)) {
             return R.fail("新增供应商'" + bo.getSupplierCode() + "'失败，供应商编码已存在");
         }
+        if (!supplierService.checkCategoryValid(bo)) {
+            return R.fail("新增供应商'" + bo.getSupplierCode() + "'失败，供应商分类无效");
+        }
         return toAjax(supplierService.insertByBo(bo));
     }
 
@@ -91,6 +94,9 @@ public class BizSupplierController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody BizSupplierBo bo) {
+        if (!supplierService.checkCategoryValid(bo)) {
+            return R.fail("修改供应商'" + bo.getSupplierName() + "'失败，供应商分类无效");
+        }
         return toAjax(supplierService.updateByBo(bo));
     }
 
