@@ -51,7 +51,7 @@
 
 ## 验收（smoke 角色）
 
-- `acceptance/ui/<capability>/` 里是对着真实页面探索得到的测试计划（plan.md）和已验证的 Playwright 回归用例：写 UI 冒烟用例时复用其中的定位器、文案和流程。这些回归用例会和你的用例一起跑，不要重复它们。
+- `acceptance/ui/<capability>/` 里是对着真实页面探索得到的测试计划（plan.md）和已验证的 Playwright 回归用例：写 UI 冒烟用例时复用其中的定位器、文案和流程。它们不会进入冒烟，冒烟只跑本次变更的核心链路和不能坏的基础功能。
 - 后端用例：Python `unittest` 文件，`from ruoyi_client import Client`，`Client().login()` 后调用接口；
   RuoYi 返回 `{code, msg, data}`，成功 `code == 200`，未登录 401，无权限 403，业务失败 500。
 - 前端用例：Playwright `*.spec.ts`，`import { test, expect } from '@playwright/test'`，登录页在 `/login`，
@@ -67,7 +67,8 @@
   前端类型检查：`pnpm --dir frontend exec vue-tsc --noEmit`。
 - `target/`、`node_modules/`、`dist/`、`logs/`、`__pycache__/` 和各模块的 `.flattened-pom.xml`
   已声明为 scratch，构建产生它们不会被判越界；其他被忽略的文件一律不要产生。
-- git 只允许只读命令（status/diff/log/show）；不要 add、commit、stash 或切换分支。
+- git 只允许只读命令（status/diff/log/show），并且要原样单条执行（`git diff`、`git status`），
+  不要加 `-C`、`--no-pager` 或管道，否则会被权限规则拒绝；不要 add、commit、stash 或切换分支。
 - questions 只用于真实的产品歧义。工具、权限、环境类问题不要提问：按本指南处理，
   某项检查无法执行就跳过并在 summary 里说明，让外部冒烟和回归去验证。
 - 实现完成后自检：编译通过、SQL 语法正确、菜单权限串与 `@SaCheckPermission` 一致、前端 api 路径与后端 `@RequestMapping` 一致。

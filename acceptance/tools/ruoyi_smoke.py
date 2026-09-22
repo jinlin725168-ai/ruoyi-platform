@@ -170,10 +170,9 @@ def main() -> int:
             code = stack.start_frontend()
             if code:
                 return code
-            # UI regression assets of every capability run alongside the change's own specs.
-            regression = sorted(str(p.relative_to(stack.scratch)) for p in (stack.scratch / "acceptance/ui").rglob("*.spec.ts")) \
-                if (stack.scratch / "acceptance/ui").is_dir() else []
-            outcome = run_playwright(stack, specs + [s for s in regression if s not in specs], env)
+            # Only the change's own specs run here; acceptance/ui/** regression assets are
+            # documentation and on-demand regression, never part of the smoke gate.
+            outcome = run_playwright(stack, specs, env)
             failed = failed or outcome != 0
         return 1 if failed else 0
     finally:
