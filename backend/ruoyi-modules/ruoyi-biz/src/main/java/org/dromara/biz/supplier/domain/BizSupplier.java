@@ -40,6 +40,11 @@ public class BizSupplier extends BaseEntity {
     private String supplierName;
 
     /**
+     * 供应商分类（字典 biz_supplier_category 的值）
+     */
+    private String supplierCategory;
+
+    /**
      * 联系人
      */
     private String contactName;

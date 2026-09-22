@@ -14,97 +14,116 @@
     {
       "criterion_id": "A4",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A5",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A6",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A25",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A7",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A8",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A9",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A10",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A11",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A26",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A27",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A28",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A29",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A12",
       "story_id": "S3",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A13",
       "story_id": "S4",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A14",
       "story_id": "S4",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A30",
       "story_id": "S4",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A31",
       "story_id": "S4",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A15",
       "story_id": "S4",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A16",
@@ -134,22 +153,26 @@
     {
       "criterion_id": "A19",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A34",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A20",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A21",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260921-001"
     },
     {
       "criterion_id": "A22",

@@ -50,6 +50,14 @@ public interface IBizSupplierService {
     boolean checkCodeUnique(BizSupplierBo bo);
 
     /**
+     * 校验供应商分类是否为『供应商分类』字典中现有的值
+     *
+     * @param bo 供应商
+     * @return 是否有效
+     */
+    boolean checkCategoryValid(BizSupplierBo bo);
+
+    /**
      * 新增供应商
      *
      * @param bo 供应商

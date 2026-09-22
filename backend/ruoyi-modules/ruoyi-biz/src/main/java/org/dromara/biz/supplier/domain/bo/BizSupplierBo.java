@@ -47,6 +47,13 @@ public class BizSupplierBo implements Serializable {
     private String supplierName;
 
     /**
+     * 供应商分类（字典 biz_supplier_category 的值；查询时 __none__ 表示未分类）
+     */
+    @NotBlank(message = "供应商分类不能为空", groups = {AddGroup.class, EditGroup.class})
+    @Size(max = 100, message = "供应商分类长度不能超过100个字符", groups = {AddGroup.class, EditGroup.class})
+    private String supplierCategory;
+
+    /**
      * 联系人
      */
     @Size(max = 50, message = "联系人长度不能超过50个字符", groups = {AddGroup.class, EditGroup.class})
