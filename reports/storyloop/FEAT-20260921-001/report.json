@@ -1718,5 +1718,6 @@
     },
     "attempts": 2,
     "loop_ms": 70420843
-  }
+  },
+  "merge_commit": "a2ad28337aff4c228c86046bd82e416b0f3fe70f"
 }
