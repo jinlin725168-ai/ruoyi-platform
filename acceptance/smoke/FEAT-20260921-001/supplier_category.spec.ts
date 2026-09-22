@@ -2,6 +2,7 @@
 // 登录、菜单、查询区、表格和弹窗的定位器与文案沿用 acceptance/ui/supplier-management 的已验证计划和用例。
 // 测试数据经后端接口准备，分类字段名不绑定实现（候选别名）。接口要求分类必填，无法产生分类为空的历史供应商，
 // 因此经冒烟执行器使用的 MySQL 容器（ruoyi-mysql）把刚新增的供应商的分类列置空来模拟历史数据。
+// 准备数据时，雪花 ID 生成器偶发的 Clock moved backwards 属于环境时钟抖动，稍等后重试。
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 import { statSync } from 'node:fs';
@@ -34,6 +35,17 @@ async function api(method: string, path: string, token?: string, body?: unknown)
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   const res = await fetch(new URL(path, API), { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   return res.json();
+}
+
+async function post(path: string, token: string, body: unknown): Promise<any> {
+  for (let attempt = 0; ; attempt++) {
+    const result = await api('POST', path, token, body);
+    if (attempt < 5 && result.code !== 200 && String(result.msg ?? '').includes('Clock moved backwards')) {
+      await new Promise((resolve) => setTimeout(resolve, 1_000));
+      continue;
+    }
+    return result;
+  }
 }
 
 function rowsOf(payload: any): any[] {
@@ -71,7 +83,7 @@ async function createSupplier(code: string, name: string, category: string): Pro
   const { token } = await ctx();
   const body: Record<string, string> = { supplierCode: code, supplierName: name, contactName: '界面联系人', status: '0' };
   for (const alias of CATEGORY_ALIASES) body[alias] = category;
-  const result = await api('POST', BASE, token, body);
+  const result = await post(BASE, token, body);
   expect(result.code, JSON.stringify(result)).toBe(200);
 }
 
@@ -112,7 +124,7 @@ async function createWithDeletedCategory(code: string, name: string): Promise<vo
   const { token, dictType } = await ctx();
   const t = uid();
   const value = `smk${t}`;
-  const added = await api('POST', '/system/dict/data', token, {
+  const added = await post('/system/dict/data', token, {
     dictType, dictLabel: `临时分类${t}`, dictValue: value, dictSort: 99, listClass: 'default', isDefault: 'N'
   });
   expect(added.code, JSON.stringify(added)).toBe(200);
@@ -154,7 +166,8 @@ async function search(page: Page, opts: { name?: string; category?: string }): P
     page.waitForResponse((r) => r.url().includes(`${BASE}/list`)),
     form.getByRole('button', { name: '搜索' }).click()
   ]);
-  await expect(page.locator('.el-table .el-loading-mask')).toBeHidden();
+  // Element Plus 的遮罩过渡期间可能同时存在两个遮罩元素，只等可见的遮罩全部消失
+  await expect(page.locator('.el-table .el-loading-mask:visible')).toHaveCount(0, { timeout: 15_000 });
 }
 
 async function categoryColumn(page: Page): Promise<number> {
