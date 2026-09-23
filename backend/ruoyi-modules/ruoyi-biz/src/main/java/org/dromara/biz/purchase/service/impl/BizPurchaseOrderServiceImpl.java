@@ -14,6 +14,7 @@ import org.dromara.biz.purchase.domain.vo.BizPurchaseOrderVo;
 import org.dromara.biz.purchase.mapper.BizPurchaseOrderDetailMapper;
 import org.dromara.biz.purchase.mapper.BizPurchaseOrderMapper;
 import org.dromara.biz.purchase.service.IBizPurchaseOrderService;
+import org.dromara.biz.supplier.constant.SupplierConstants;
 import org.dromara.biz.supplier.domain.bo.BizSupplierBo;
 import org.dromara.biz.supplier.domain.vo.BizSupplierVo;
 import org.dromara.biz.supplier.service.IBizSupplierService;
@@ -33,8 +34,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 采购单Service业务层处理
@@ -119,6 +122,7 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
     public PageResult<BizPurchaseOrderVo> queryPageList(BizPurchaseOrderBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<BizPurchaseOrder> lqw = buildQueryWrapper(bo);
         Page<BizPurchaseOrderVo> result = purchaseOrderMapper.selectVoPage(pageQuery.build(), lqw);
+        fillSupplierCategoryLabel(result.getRecords());
         return PageResult.build(result.getRecords(), result.getTotal());
     }
 
@@ -131,11 +135,13 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
     @Override
     public List<BizPurchaseOrderExportVo> queryExportList(BizPurchaseOrderBo bo) {
         List<BizPurchaseOrderVo> list = purchaseOrderMapper.selectVoList(buildQueryWrapper(bo));
+        fillSupplierCategoryLabel(list);
         List<BizPurchaseOrderExportVo> exportList = new ArrayList<>(list.size());
         for (BizPurchaseOrderVo vo : list) {
             BizPurchaseOrderExportVo export = new BizPurchaseOrderExportVo();
             export.setOrderNo(vo.getOrderNo());
             export.setSupplierName(vo.getSupplierName());
+            export.setSupplierCategoryLabel(vo.getSupplierCategoryLabel());
             export.setOrderDate(vo.getOrderDate() == null ? null : vo.getOrderDate().toString());
             export.setStatus(vo.getStatus());
             export.setTotalAmount(vo.getTotalAmount());
@@ -158,7 +164,53 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
     }
 
     /**
-     * 构建采购单查询条件：单号模糊匹配，供应商、状态精确匹配，下单日期按区间过滤
+     * 按供应商档案上的当前分类（含已逻辑删除的供应商）填充供应商分类名称，
+     * 分类为空、已不在字典中或供应商记录已不存在时为『未分类』
+     *
+     * @param list 采购单列表
+     */
+    private void fillSupplierCategoryLabel(List<BizPurchaseOrderVo> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+        Set<Long> supplierIds = new HashSet<>();
+        for (BizPurchaseOrderVo vo : list) {
+            if (vo.getSupplierId() != null) {
+                supplierIds.add(vo.getSupplierId());
+            }
+        }
+        Map<Long, String> labels = supplierService.queryCategoryLabels(supplierIds);
+        for (BizPurchaseOrderVo vo : list) {
+            vo.setSupplierCategoryLabel(labels.getOrDefault(vo.getSupplierId(), SupplierConstants.CATEGORY_NONE_LABEL));
+        }
+    }
+
+    /**
+     * 按供应商分类过滤：取供应商档案上的当前分类（含已逻辑删除的供应商）。
+     * 『未分类』即排除分类为字典中现有值的供应商，因此分类为空、已失效或供应商记录已不存在的单据都会返回
+     *
+     * @param lqw      查询条件包装器
+     * @param category 供应商分类查询条件
+     */
+    private void applySupplierCategory(LambdaQueryWrapper<BizPurchaseOrder> lqw, String category) {
+        if (StringUtils.isBlank(category)) {
+            return;
+        }
+        if (SupplierConstants.CATEGORY_NONE.equals(category)) {
+            List<Long> categorized = supplierService.queryCategorizedSupplierIds();
+            lqw.notIn(!categorized.isEmpty(), BizPurchaseOrder::getSupplierId, categorized);
+            return;
+        }
+        List<Long> supplierIds = supplierService.querySupplierIdsByCategory(category);
+        if (supplierIds.isEmpty()) {
+            lqw.apply("1 = 0");
+        } else {
+            lqw.in(BizPurchaseOrder::getSupplierId, supplierIds);
+        }
+    }
+
+    /**
+     * 构建采购单查询条件：单号模糊匹配，供应商、状态、供应商分类精确匹配，下单日期按区间过滤
      *
      * @param bo 查询条件
      * @return 查询条件包装器
@@ -174,6 +226,7 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), BizPurchaseOrder::getStatus, bo.getStatus());
         lqw.ge(beginOrderDate != null, BizPurchaseOrder::getOrderDate, beginOrderDate);
         lqw.le(endOrderDate != null, BizPurchaseOrder::getOrderDate, endOrderDate);
+        applySupplierCategory(lqw, bo.getSupplierCategory());
         lqw.orderByDesc(BizPurchaseOrder::getOrderDate);
         lqw.orderByDesc(BizPurchaseOrder::getCreateTime);
         lqw.orderByDesc(BizPurchaseOrder::getOrderId);

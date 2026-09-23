@@ -38,6 +38,12 @@ public class BizPurchaseOrderExportVo implements Serializable {
     private String supplierName;
 
     /**
+     * 供应商分类名称（为空或已不在字典中时为『未分类』）
+     */
+    @ExcelProperty(value = "供应商分类")
+    private String supplierCategoryLabel;
+
+    /**
      * 下单日期（yyyy-MM-dd）
      */
     @ExcelProperty(value = "下单日期")

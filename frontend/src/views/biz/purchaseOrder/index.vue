@@ -22,6 +22,12 @@
               @keyup.enter="handleQuery"
             />
           </el-form-item>
+          <el-form-item label="供应商分类" prop="supplierCategory">
+            <el-select v-model="queryParams.supplierCategory" placeholder="供应商分类" clearable>
+              <el-option v-for="dict in biz_supplier_category" :key="dict.value" :label="dict.label" :value="dict.value" />
+              <el-option label="未分类" :value="SUPPLIER_CATEGORY_NONE" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-select v-model="queryParams.status" placeholder="单据状态" clearable>
               <el-option
@@ -100,6 +106,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="采购单号" align="center" prop="orderNo" width="180" />
         <el-table-column label="供应商" align="center" prop="supplierName" :show-overflow-tooltip="true" />
+        <el-table-column label="供应商分类" align="center" prop="supplierCategoryLabel" width="120" />
         <el-table-column label="下单日期" align="center" prop="orderDate" width="120" />
         <el-table-column label="状态" align="center" prop="status" width="100">
           <template #default="scope">
@@ -308,7 +315,7 @@ import {
   updatePurchaseOrder
 } from '@/api/biz/purchaseOrder';
 import { PurchaseOrderDetailForm, PurchaseOrderForm, PurchaseOrderQuery, PurchaseOrderVO } from '@/api/biz/purchaseOrder/types';
-import { SupplierVO } from '@/api/biz/supplier/types';
+import { SUPPLIER_CATEGORY_NONE, SupplierVO } from '@/api/biz/supplier/types';
 import { useLoading } from '@/hooks/async/useLoading';
 import { useDialogState } from '@/hooks/dialog/useDialogState';
 import { useFormDialog } from '@/hooks/dialog/useFormDialog';
@@ -323,7 +330,9 @@ import { download as requestDownload } from '@/utils/request';
 /** 草稿状态码值，与后端 biz_purchase_order_status 字典一致 */
 const STATUS_DRAFT = '0';
 
-const { biz_purchase_order_status } = toRefs<any>(useDict('biz_purchase_order_status'));
+const { biz_purchase_order_status, biz_supplier_category } = toRefs<any>(
+  useDict('biz_purchase_order_status', 'biz_supplier_category')
+);
 
 const purchaseOrderList = ref<PurchaseOrderVO[]>([]);
 const buttonLoading = ref(false);
@@ -362,6 +371,7 @@ const data = reactive<PageData<PurchaseOrderForm, PurchaseOrderQuery>>({
     pageSize: 10,
     orderNo: undefined,
     supplierName: undefined,
+    supplierCategory: undefined,
     status: undefined
   },
   rules: {

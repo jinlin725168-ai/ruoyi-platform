@@ -56,6 +56,11 @@ public class BizPurchaseOrderBo implements Serializable {
     private String supplierName;
 
     /**
+     * 供应商分类（查询条件；字典 biz_supplier_category 的值，__none__ 表示未分类，按供应商档案上的当前分类匹配）
+     */
+    private String supplierCategory;
+
+    /**
      * 下单日期
      */
     @NotNull(message = "下单日期不能为空", groups = {AddGroup.class, EditGroup.class})

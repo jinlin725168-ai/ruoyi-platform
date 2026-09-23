@@ -19,6 +19,7 @@ import org.dromara.common.mybatis.core.page.PageQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,6 +81,50 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
     }
 
     /**
+     * 按供应商ID查询分类名称（含已逻辑删除的供应商），分类为空或已不在字典中时为『未分类』
+     *
+     * @param supplierIds 供应商ID集合
+     * @return 供应商ID到分类名称的映射，查不到的供应商不在其中
+     */
+    @Override
+    public Map<Long, String> queryCategoryLabels(Collection<Long> supplierIds) {
+        if (supplierIds == null || supplierIds.isEmpty()) {
+            return Map.of();
+        }
+        Map<String, String> labels = dictService.getAllDictByDictType(SupplierConstants.CATEGORY_DICT_TYPE);
+        Map<Long, String> result = new HashMap<>(supplierIds.size());
+        for (BizSupplier supplier : supplierMapper.selectCategoriesIgnoreDeleted(supplierIds)) {
+            result.put(supplier.getSupplierId(), categoryLabel(labels, supplier.getSupplierCategory()));
+        }
+        return result;
+    }
+
+    /**
+     * 查询当前分类等于给定值的供应商ID（含已逻辑删除的供应商）
+     *
+     * @param category 分类值
+     * @return 供应商ID
+     */
+    @Override
+    public List<Long> querySupplierIdsByCategory(String category) {
+        return supplierMapper.selectIdsByCategoriesIgnoreDeleted(Set.of(category));
+    }
+
+    /**
+     * 查询分类为字典中现有值的供应商ID（含已逻辑删除的供应商）
+     *
+     * @return 供应商ID，字典已无任何值时为空
+     */
+    @Override
+    public List<Long> queryCategorizedSupplierIds() {
+        Set<String> valid = dictService.getAllDictByDictType(SupplierConstants.CATEGORY_DICT_TYPE).keySet();
+        if (valid.isEmpty()) {
+            return List.of();
+        }
+        return supplierMapper.selectIdsByCategoriesIgnoreDeleted(valid);
+    }
+
+    /**
      * 把分类值翻译为字典中的分类名称，分类为空或已不在字典中时为『未分类』
      *
      * @param list 供应商列表
@@ -87,9 +132,20 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
     private void fillCategoryLabel(List<BizSupplierVo> list) {
         Map<String, String> labels = dictService.getAllDictByDictType(SupplierConstants.CATEGORY_DICT_TYPE);
         for (BizSupplierVo vo : list) {
-            String label = StringUtils.isBlank(vo.getSupplierCategory()) ? null : labels.get(vo.getSupplierCategory());
-            vo.setSupplierCategoryLabel(StringUtils.isBlank(label) ? SupplierConstants.CATEGORY_NONE_LABEL : label);
+            vo.setSupplierCategoryLabel(categoryLabel(labels, vo.getSupplierCategory()));
         }
+    }
+
+    /**
+     * 分类值对应的字典名称，分类为空或已不在字典中时为『未分类』
+     *
+     * @param labels   字典值到名称的映射
+     * @param category 分类值
+     * @return 分类名称
+     */
+    private String categoryLabel(Map<String, String> labels, String category) {
+        String label = StringUtils.isBlank(category) ? null : labels.get(category);
+        return StringUtils.isBlank(label) ? SupplierConstants.CATEGORY_NONE_LABEL : label;
     }
 
     /**

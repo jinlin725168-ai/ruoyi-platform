@@ -3,4 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.dromara.biz.supplier.mapper.BizSupplierMapper">
+
+    <!-- 不过滤 del_flag：供应商被逻辑删除后，其采购单仍按该供应商记录上保留的分类展示 -->
+    <select id="selectCategoriesIgnoreDeleted" resultType="org.dromara.biz.supplier.domain.BizSupplier">
+        select supplier_id, supplier_category
+        from biz_supplier
+        where supplier_id in
+        <foreach collection="supplierIds" item="supplierId" open="(" separator="," close=")">
+            #{supplierId}
+        </foreach>
+    </select>
+
+    <!-- 不过滤 del_flag：供应商被逻辑删除后，其采购单仍按该供应商记录上保留的分类参与筛选 -->
+    <select id="selectIdsByCategoriesIgnoreDeleted" resultType="java.lang.Long">
+        select supplier_id
+        from biz_supplier
+        where supplier_category in
+        <foreach collection="categories" item="category" open="(" separator="," close=")">
+            #{category}
+        </foreach>
+    </select>
+
 </mapper>
