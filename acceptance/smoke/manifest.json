@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "system-purchase-order-supplier-category",
+      "description": "采购单核心链路：按单号片段和状态查询（基础功能）；列表显示供应商分类字典名称，分类为空或已失效时显示『未分类』；可按单个分类或『未分类』筛选；供应商分类修改后按新分类生效；供应商逻辑删除后仍按保留的分类显示和筛选；导出的 Excel 带『供应商分类』列，可按分类筛选，空分类导出为『未分类』；页面可按单号查询并按供应商分类筛选，表格显示供应商分类列（来自 FEAT-20260923-001）",
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/smoke/purchase-order/test_purchase_order_category.py",
+        "acceptance/smoke/purchase-order/purchase_order_category.spec.ts"
+      ],
+      "timeout_seconds": 2400
+    }
+  ]
+}
