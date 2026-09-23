@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "FEAT-20260923-001-purchase-order-supplier-category",
+      "criteria": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A36",
+        "A37",
+        "A38",
+        "A39",
+        "A40",
+        "A41",
+        "A42",
+        "A43",
+        "A44",
+        "A47",
+        "A48",
+        "A25",
+        "A26",
+        "A45",
+        "A46"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/smoke/FEAT-20260923-001/test_purchase_order_category.py",
+        "acceptance/smoke/FEAT-20260923-001/purchase_order_category.spec.ts"
+      ],
+      "timeout_seconds": 2400
+    }
+  ]
+}
