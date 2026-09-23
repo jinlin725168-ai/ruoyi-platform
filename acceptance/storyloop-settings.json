@@ -32,12 +32,40 @@
   ],
   "check_commands": [
     [
-      "pnpm",
-      "--dir",
-      "frontend",
-      "exec",
-      "vue-tsc",
-      "--noEmit"
+      "mvn",
+      "-q",
+      "-o",
+      "-f",
+      "backend/pom.xml",
+      "-pl",
+      "ruoyi-modules/ruoyi-biz",
+      "spotless:check"
+    ],
+    [
+      "mvn",
+      "-q",
+      "-o",
+      "-f",
+      "backend/pom.xml",
+      "-pl",
+      "ruoyi-modules/ruoyi-biz",
+      "checkstyle:check"
+    ],
+    [
+      "{python}",
+      "acceptance/tools/frontend_check.py"
+    ],
+    [
+      "gitleaks",
+      "detect",
+      "--no-git",
+      "--source",
+      ".",
+      "--config",
+      ".gitleaks.toml",
+      "--redact",
+      "--exit-code",
+      "1"
     ]
   ],
   "test_roots": [
@@ -53,13 +81,14 @@
   "integration_paths": [
     "backend/pom.xml",
     "backend/ruoyi-admin/pom.xml",
-    "backend/ruoyi-modules/pom.xml",
+    "backend/ruoyi-api/pom.xml",
     "backend/ruoyi-common/pom.xml",
     "backend/ruoyi-common/ruoyi-common-bom/pom.xml",
-    "backend/ruoyi-api/pom.xml",
+    "backend/ruoyi-modules/pom.xml",
+    "backend/ruoyi-modules/ruoyi-biz/pom.xml",
     "frontend/package.json",
-    "frontend/pnpm-workspace.yaml",
-    "frontend/pnpm-lock.yaml"
+    "frontend/pnpm-lock.yaml",
+    "frontend/pnpm-workspace.yaml"
   ],
   "candidate_allow": [
     "frontend/.env.development",

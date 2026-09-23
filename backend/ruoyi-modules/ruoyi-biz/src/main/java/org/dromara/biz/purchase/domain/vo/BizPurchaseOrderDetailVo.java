@@ -1,12 +1,13 @@
 package org.dromara.biz.purchase.domain.vo;
 
-import io.github.linpeilie.annotations.AutoMapper;
-import lombok.Data;
-import org.dromara.biz.purchase.domain.BizPurchaseOrderDetail;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import org.dromara.biz.purchase.domain.BizPurchaseOrderDetail;
+
+import io.github.linpeilie.annotations.AutoMapper;
+import lombok.Data;
 
 /**
  * 采购单明细视图对象 biz_purchase_order_detail

@@ -75,7 +75,10 @@
   - 单元测试（`*Test`，包 `org.dromara.biz.<feature>`，Mockito 隔离 Mapper，不起 Spring 上下文）由 surefire 跑；
   - 集成测试（`*IT`，包 `org.dromara.biz.<feature>.integration`，可起 Spring 上下文或真实数据库）由 failsafe 跑，
     命令 `mvn -q -o -f backend/pom.xml -Dmaven.test.skip=false -DskipTests=false -DskipITs=false -pl ruoyi-modules/ruoyi-biz failsafe:integration-test failsafe:verify`；
-  - 静态检查：`pnpm --dir frontend exec vue-tsc --noEmit`；
+  - 静态检查（每轮都跑，红了自己修）：`mvn -q -o -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz spotless:check`
+    （格式：未用 import、import 顺序、尾随空格、4 空格缩进；`spotless:apply` 一键修）、同模块的 `checkstyle:check`
+    （规则见 `backend/ruoyi-modules/checkstyle-biz.xml`：命名、无星号 import、必须加大括号、不吞异常等）、
+    `python3 acceptance/tools/frontend_check.py`（oxlint + vue-tsc）、gitleaks（不要把任何密钥、口令、token 写进代码或配置）；
   - 变更验收 `acceptance/changes/<change-id>/`（合同，你不能改）；项目级系统冒烟 `acceptance/smoke/`（你不能改，合并后由维护流程更新）。
 - 特征化（characterize 角色）：实现之前，为将被修改的既有类写只断言"必须不变"行为的单元测试（列表和字段会扩展的用 contains 断言），
   放在同一个单元测试包里，命名 `<Class>CharacterizationTest`，必须在当前代码上跑绿；只能写 `src/test` 下的文件。

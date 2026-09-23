@@ -121,6 +121,12 @@ class Stack:
             env=env, start_new_session=True)
         if not wait_http(self.vite, f"http://127.0.0.1:{self.ui_port}/", self.boot_timeout):
             return env_error("vite dev server did not become ready", vite_log)
+        # unplugin writes the auto-import declarations on start; keep a copy that survives the
+        # scratch sync (smoke-* is treated as build output) so frontend_check.py can type-check.
+        keep = self.scratch / "smoke-dts"
+        keep.mkdir(exist_ok=True)
+        for declaration in (frontend / "src/types").glob("*.d.ts"):
+            shutil.copy2(declaration, keep / declaration.name)
         return None
 
     def stop(self) -> None:

@@ -1,17 +1,19 @@
 package org.dromara.biz.purchase.domain.bo;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.math.BigDecimal;
+import lombok.Data;
 
 /**
  * 采购单明细业务对象 biz_purchase_order_detail

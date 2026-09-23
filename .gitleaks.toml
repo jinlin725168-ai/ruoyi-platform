@@ -1,0 +1,16 @@
+# gitleaks 配置：StoryLoop 检查层在隔离候选副本里运行（没有 .storyloop、target、dist）。
+# 允许列表只放上游自带的示例配置与公钥，业务代码（ruoyi-biz、frontend/src）不豁免。
+[extend]
+useDefault = true
+
+[allowlist]
+description = "上游示例值与本地控制面"
+paths = [
+  '''backend/ruoyi-admin/src/main/resources/application.*\.ya?ml''',
+  '''backend/ruoyi-modules/ruoyi-demo/.*''',
+  '''frontend/\.env\..*''',
+  '''\.storyloop/.*''',
+  '''.*/target/.*''',
+  '''frontend/dist/.*''',
+  '''frontend/node_modules/.*''',
+]

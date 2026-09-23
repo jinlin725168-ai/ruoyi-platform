@@ -1,13 +1,15 @@
 package org.dromara.biz.supplier.domain;
 
+import java.io.Serial;
+
+import org.dromara.common.mybatis.core.domain.BaseEntity;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
-
-import java.io.Serial;
 
 /**
  * 供应商对象 biz_supplier

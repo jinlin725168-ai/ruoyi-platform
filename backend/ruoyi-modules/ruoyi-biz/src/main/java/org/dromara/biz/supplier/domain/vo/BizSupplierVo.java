@@ -1,16 +1,17 @@
 package org.dromara.biz.supplier.domain.vo;
 
-import io.github.linpeilie.annotations.AutoMapper;
-import lombok.Data;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import org.apache.fesod.sheet.annotation.ExcelIgnoreUnannotated;
 import org.apache.fesod.sheet.annotation.ExcelProperty;
 import org.dromara.biz.supplier.domain.BizSupplier;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import io.github.linpeilie.annotations.AutoMapper;
+import lombok.Data;
 
 /**
  * 供应商视图对象 biz_supplier

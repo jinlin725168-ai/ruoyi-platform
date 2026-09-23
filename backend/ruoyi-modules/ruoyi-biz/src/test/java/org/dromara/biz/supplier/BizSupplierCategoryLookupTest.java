@@ -1,5 +1,15 @@
 package org.dromara.biz.supplier;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.dromara.biz.supplier.constant.SupplierConstants;
 import org.dromara.biz.supplier.domain.BizSupplier;
 import org.dromara.biz.supplier.mapper.BizSupplierMapper;
@@ -11,16 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * 供应商分类查询（供采购单按供应商分类展示与筛选，含已逻辑删除的供应商）

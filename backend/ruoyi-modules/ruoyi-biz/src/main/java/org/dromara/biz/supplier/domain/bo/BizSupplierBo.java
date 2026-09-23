@@ -1,17 +1,19 @@
 package org.dromara.biz.supplier.domain.bo;
 
-import io.github.linpeilie.annotations.AutoMapper;
+import java.io.Serial;
+import java.io.Serializable;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+
 import org.dromara.biz.supplier.domain.BizSupplier;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 
-import java.io.Serial;
-import java.io.Serializable;
+import io.github.linpeilie.annotations.AutoMapper;
+import lombok.Data;
 
 /**
  * 供应商业务对象 biz_supplier

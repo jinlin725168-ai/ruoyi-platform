@@ -1,15 +1,17 @@
 package org.dromara.biz.purchase.domain;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
-
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import org.dromara.common.mybatis.core.domain.BaseEntity;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 采购单对象 biz_purchase_order

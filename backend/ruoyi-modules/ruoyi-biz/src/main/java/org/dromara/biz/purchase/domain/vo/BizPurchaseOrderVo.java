@@ -1,16 +1,18 @@
 package org.dromara.biz.purchase.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.linpeilie.annotations.AutoMapper;
-import lombok.Data;
-import org.dromara.biz.purchase.domain.BizPurchaseOrder;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.dromara.biz.purchase.domain.BizPurchaseOrder;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.github.linpeilie.annotations.AutoMapper;
+import lombok.Data;
 
 /**
  * 采购单视图对象 biz_purchase_order
