@@ -71,4 +71,13 @@
   不要加 `-C`、`--no-pager` 或管道，否则会被权限规则拒绝；不要 add、commit、stash 或切换分支。
 - questions 只用于真实的产品歧义。工具、权限、环境类问题不要提问：按本指南处理，
   某项检查无法执行就跳过并在 summary 里说明，让外部冒烟和回归去验证。
+- 测试先行：每个行为先写单元测试，看到它因预期原因失败，再写最小实现让它通过，最后重构。
+  - 后端：`backend/ruoyi-modules/<module>/src/test/java/org/dromara/biz/<feature>/` 下的 JUnit 5 测试，Service 层用 Mockito 隔离 Mapper
+    （`spring-boot-starter-test` 已对所有业务模块可用，不要起 Spring 上下文）。测试类必须加 `@Tag("dev")`，
+    因为父 pom 的 surefire 只运行当前 profile 标签的测试，没有标签的类会被静默跳过。单跑一个类：
+    `mvn -q -o -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz -Dmaven.test.skip=false -DskipTests=false -Dtest=<Class> -Dsurefire.failIfNoSpecifiedTests=false test`
+    （父 pom 默认 `maven.test.skip=true`，两个开关都要传）。回归命令 `-pl ruoyi-admin -am test` 会一起跑业务模块的测试。
+  - 前端：只对纯函数和 api 封装写 vitest 用例，文件放在源码旁边命名为 `<name>.test.ts`，运行
+    `pnpm --dir frontend exec vitest run <file>`；仓库没有 @vue/test-utils，不写组件测试，页面行为交给冒烟。
+  - design 的 `## Tests First` 逐条记录测试名、实现前看到的失败、最终绿灯。
 - 实现完成后自检：编译通过、SQL 语法正确、菜单权限串与 `@SaCheckPermission` 一致、前端 api 路径与后端 `@RequestMapping` 一致。

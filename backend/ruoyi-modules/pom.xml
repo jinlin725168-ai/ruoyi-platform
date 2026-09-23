@@ -25,4 +25,13 @@
         <module>ruoyi-biz</module>
     </modules>
 
+    <!-- 每个业务模块都能写 JUnit 5 / Mockito 单元测试（StoryLoop implement 角色测试先行） -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>
