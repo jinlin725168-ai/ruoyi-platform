@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -149,7 +150,7 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
     }
 
     /**
-     * 构建供应商查询条件：名称模糊匹配、状态精确匹配、分类精确匹配；
+     * 构建供应商查询条件：名称去首尾空白后忽略大小写模糊匹配、状态精确匹配、分类精确匹配；
      * 分类为『未分类』时匹配分类为空或分类值已不在字典中的供应商
      *
      * @param bo 查询条件
@@ -157,7 +158,11 @@ public class BizSupplierServiceImpl implements IBizSupplierService {
      */
     private LambdaQueryWrapper<BizSupplier> buildQueryWrapper(BizSupplierBo bo) {
         LambdaQueryWrapper<BizSupplier> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getSupplierName()), BizSupplier::getSupplierName, bo.getSupplierName());
+        // 名称去掉首尾所有空白字符（含全角空格、制表符、换行）后忽略大小写模糊匹配，中间空白保留
+        String name = StringUtils.trim(bo.getSupplierName());
+        if (StringUtils.isNotEmpty(name)) {
+            lqw.apply("LOWER(supplier_name) LIKE {0}", "%" + name.toLowerCase(Locale.ROOT) + "%");
+        }
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), BizSupplier::getStatus, bo.getStatus());
         String category = bo.getSupplierCategory();
         if (SupplierConstants.CATEGORY_NONE.equals(category)) {
