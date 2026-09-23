@@ -766,5 +766,6 @@
     },
     "attempts": 1,
     "loop_ms": 6612227
-  }
+  },
+  "merge_commit": "54d9eccbc93275284af96b77fe3289cb1e2a3bc0"
 }
