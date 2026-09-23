@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "FEAT-20260923-002-supplier-name-search",
+      "criteria": [
+        "A4",
+        "A5",
+        "A6",
+        "A25",
+        "A61",
+        "A69",
+        "A70",
+        "A62",
+        "A63",
+        "A64",
+        "A65",
+        "A66",
+        "A71",
+        "A41",
+        "A42",
+        "A51",
+        "A58",
+        "A7",
+        "A8",
+        "A43",
+        "A44",
+        "A52",
+        "A56",
+        "A59",
+        "A19",
+        "A34",
+        "A49",
+        "A54",
+        "A57",
+        "A60",
+        "A67",
+        "A72",
+        "A68",
+        "A20"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/changes/FEAT-20260923-002/test_supplier_name_search.py",
+        "acceptance/changes/FEAT-20260923-002/supplier_name_search.spec.ts"
+      ],
+      "timeout_seconds": 2400
+    }
+  ]
+}
