@@ -79,77 +79,92 @@
     {
       "criterion_id": "A4",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A5",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A6",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A25",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A41",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A42",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A51",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A58",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A7",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A8",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A43",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A44",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A52",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A56",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A59",
       "story_id": "S2",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A13",
@@ -204,42 +219,50 @@
     {
       "criterion_id": "A19",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A34",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A49",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A54",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A57",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A60",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A20",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     },
     {
       "criterion_id": "A21",
       "story_id": "S6",
-      "tests": []
+      "tests": [],
+      "superseded_by": "FEAT-20260923-002"
     }
   ]
 }
