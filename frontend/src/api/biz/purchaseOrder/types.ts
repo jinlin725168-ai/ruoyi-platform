@@ -43,6 +43,10 @@ export interface PurchaseOrderVO {
    */
   supplierName: string;
   /**
+   * 供应商分类名称（取供应商档案上的当前分类，为空或已不在字典中时为『未分类』；仅列表返回）
+   */
+  supplierCategoryLabel?: string;
+  /**
    * 下单日期
    */
   orderDate: string;
@@ -127,6 +131,10 @@ export interface PurchaseOrderQuery extends PageQuery {
    * 供应商名称（模糊匹配）
    */
   supplierName?: string;
+  /**
+   * 供应商分类（字典值；SUPPLIER_CATEGORY_NONE 表示未分类）
+   */
+  supplierCategory?: string;
   /**
    * 单据状态
    */

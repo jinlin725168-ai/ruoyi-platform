@@ -46,6 +46,11 @@ public class BizPurchaseOrderVo implements Serializable {
     private String supplierName;
 
     /**
+     * 供应商分类名称（取供应商档案上的当前分类，为空或已不在字典中时为『未分类』；仅列表返回）
+     */
+    private String supplierCategoryLabel;
+
+    /**
      * 下单日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")

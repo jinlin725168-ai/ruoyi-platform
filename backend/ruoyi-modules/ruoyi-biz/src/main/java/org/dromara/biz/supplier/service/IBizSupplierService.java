@@ -7,6 +7,7 @@ import org.dromara.common.mybatis.core.page.PageQuery;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 供应商Service接口
@@ -40,6 +41,29 @@ public interface IBizSupplierService {
      * @return 供应商列表
      */
     List<BizSupplierVo> queryList(BizSupplierBo bo);
+
+    /**
+     * 按供应商ID查询分类名称（含已逻辑删除的供应商），分类为空或已不在字典中时为『未分类』
+     *
+     * @param supplierIds 供应商ID集合
+     * @return 供应商ID到分类名称的映射，查不到的供应商不在其中
+     */
+    Map<Long, String> queryCategoryLabels(Collection<Long> supplierIds);
+
+    /**
+     * 查询当前分类等于给定值的供应商ID（含已逻辑删除的供应商）
+     *
+     * @param category 分类值
+     * @return 供应商ID
+     */
+    List<Long> querySupplierIdsByCategory(String category);
+
+    /**
+     * 查询分类为字典中现有值的供应商ID（含已逻辑删除的供应商），其余供应商即为『未分类』
+     *
+     * @return 供应商ID
+     */
+    List<Long> queryCategorizedSupplierIds();
 
     /**
      * 校验供应商编码在未删除的供应商中是否唯一
