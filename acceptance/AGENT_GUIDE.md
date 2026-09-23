@@ -49,15 +49,15 @@
   按钮用 `v-hasPermi="['biz:<feature>:add']"` 等，字典用 `useDict`，提示用 `proxy?.$modal`。
 - 路由由后端 `sys_menu.component` 动态下发，不改 `frontend/src/router`。
 
-## 验收（smoke 角色）
+## 验收（acceptance 角色）
 
-- `acceptance/ui/<capability>/` 里是对着真实页面探索得到的测试计划（plan.md）和已验证的 Playwright 回归用例：写 UI 冒烟用例时复用其中的定位器、文案和流程。它们不会进入冒烟，冒烟只跑本次变更的核心链路和不能坏的基础功能。
+- `acceptance/ui/<capability>/` 里是早期对着真实页面探索得到的测试计划（plan.md）和 Playwright 用例：写浏览器验收用例时复用其中的定位器、文案和流程。它们不进任何门。变更验收套件放在 `acceptance/changes/<change-id>/`，只含本次变更的核心链路和不能坏的基础功能；项目级系统冒烟在 `acceptance/smoke/`，由维护流程（smoke-propose / smoke-apply）更新。
 - 后端用例：Python `unittest` 文件，`from ruoyi_client import Client`，`Client().login()` 后调用接口；
   RuoYi 返回 `{code, msg, data}`，成功 `code == 200`，未登录 401，无权限 403，业务失败 500。
 - 前端用例：Playwright `*.spec.ts`，`import { test, expect } from '@playwright/test'`，登录页在 `/login`，
   默认账号 `admin / admin123`；页面路径与菜单 `path` 一致。
 - manifest 命令统一为
-  `["{python}", "acceptance/tools/ruoyi_smoke.py", "<suite_root>/test_x.py", "<suite_root>/x.spec.ts"]`，
+  `["{python}", "acceptance/tools/ruoyi_smoke.py", "<suite_root>/test_x.py", "<suite_root>/x.spec.ts"]`（系统冒烟的 manifest 也用它，条目多一个 description），
   一个变更尽量只用一条命令（每条命令都会重新构建并启动后端）。`timeout_seconds` 至少 900。
 - 用例必须在功能缺失时失败，不得因环境错误伪装为失败。
 
@@ -71,7 +71,15 @@
   不要加 `-C`、`--no-pager` 或管道，否则会被权限规则拒绝；不要 add、commit、stash 或切换分支。
 - questions 只用于真实的产品歧义。工具、权限、环境类问题不要提问：按本指南处理，
   某项检查无法执行就跳过并在 summary 里说明，让外部冒烟和回归去验证。
-- 测试先行：每个行为先写单元测试，看到它因预期原因失败，再写最小实现让它通过，最后重构。
+- 测试分层（每层单独出结论，任何一层红都过不了）：
+  - 单元测试（`*Test`，包 `org.dromara.biz.<feature>`，Mockito 隔离 Mapper，不起 Spring 上下文）由 surefire 跑；
+  - 集成测试（`*IT`，包 `org.dromara.biz.<feature>.integration`，可起 Spring 上下文或真实数据库）由 failsafe 跑，
+    命令 `mvn -q -o -f backend/pom.xml -Dmaven.test.skip=false -DskipTests=false -DskipITs=false -pl ruoyi-modules/ruoyi-biz failsafe:integration-test failsafe:verify`；
+  - 静态检查：`pnpm --dir frontend exec vue-tsc --noEmit`；
+  - 变更验收 `acceptance/changes/<change-id>/`（合同，你不能改）；项目级系统冒烟 `acceptance/smoke/`（你不能改，合并后由维护流程更新）。
+- 特征化（characterize 角色）：实现之前，为将被修改的既有类写只断言"必须不变"行为的单元测试（列表和字段会扩展的用 contains 断言），
+  放在同一个单元测试包里，命名 `<Class>CharacterizationTest`，必须在当前代码上跑绿；只能写 `src/test` 下的文件。
+- 测试先行：每个行为先写单元测试，看到它因预期原因失败，再写最小实现让它通过，最后重构。实现只能修改 payload.characterization.touched 列出的既有文件和新文件。
   - 后端：`backend/ruoyi-modules/<module>/src/test/java/org/dromara/biz/<feature>/` 下的 JUnit 5 测试，Service 层用 Mockito 隔离 Mapper
     （`spring-boot-starter-test` 已对所有业务模块可用，不要起 Spring 上下文）。测试类必须加 `@Tag("dev")`，
     因为父 pom 的 surefire 只运行当前 profile 标签的测试，没有标签的类会被静默跳过。单跑一个类：

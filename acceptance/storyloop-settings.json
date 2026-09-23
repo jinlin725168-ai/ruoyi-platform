@@ -1,4 +1,49 @@
 {
+  "unit_commands": [
+    [
+      "mvn",
+      "-q",
+      "-o",
+      "-f",
+      "backend/pom.xml",
+      "-Dmaven.test.skip=false",
+      "-DskipTests=false",
+      "-pl",
+      "ruoyi-admin",
+      "-am",
+      "test"
+    ]
+  ],
+  "integration_commands": [
+    [
+      "mvn",
+      "-q",
+      "-o",
+      "-f",
+      "backend/pom.xml",
+      "-Dmaven.test.skip=false",
+      "-DskipTests=false",
+      "-DskipITs=false",
+      "-pl",
+      "ruoyi-modules/ruoyi-biz",
+      "failsafe:integration-test",
+      "failsafe:verify"
+    ]
+  ],
+  "check_commands": [
+    [
+      "pnpm",
+      "--dir",
+      "frontend",
+      "exec",
+      "vue-tsc",
+      "--noEmit"
+    ]
+  ],
+  "test_roots": [
+    "backend/**/src/test/**",
+    "frontend/src/**/*.test.ts"
+  ],
   "module_roots": [
     "backend/ruoyi-modules",
     "frontend/src",
@@ -15,21 +60,6 @@
     "frontend/package.json",
     "frontend/pnpm-workspace.yaml",
     "frontend/pnpm-lock.yaml"
-  ],
-  "test_commands": [
-    [
-      "mvn",
-      "-q",
-      "-o",
-      "-f",
-      "backend/pom.xml",
-      "-Dmaven.test.skip=false",
-      "-DskipTests=false",
-      "-pl",
-      "ruoyi-admin",
-      "-am",
-      "test"
-    ]
   ],
   "candidate_allow": [
     "frontend/.env.development",
