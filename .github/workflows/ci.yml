@@ -1,0 +1,142 @@
+name: CI
+
+# 与 StoryLoop 闭环里的分层一致：单元 / 集成 / 静态检查 / 系统冒烟，加上只适合放 CI 的漏洞扫描与 SAST。
+# 闭环里每轮尝试跑的是前四层的离线版本；这里是同一套命令的在线版本（不带 -o），供 GitHub 上的 push / PR 使用。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  MAVEN_OPTS: -Dmaven.artifact.threads=8 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+jobs:
+  backend:
+    name: 后端：单元 / 集成 / 格式 / 编码约束
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: 编译并安装到本地仓库（父 pom 默认跳过测试，这里关掉）
+        run: mvn -B -f backend/pom.xml -Dmaven.test.skip=false -DskipTests install
+      - name: 单元测试（surefire，只跑 @Tag("dev")）
+        run: mvn -B -f backend/pom.xml -Dmaven.test.skip=false -DskipTests=false -pl ruoyi-admin -am test
+      - name: 集成测试（failsafe，…/integration/**/*IT）
+        run: mvn -B -f backend/pom.xml -Dmaven.test.skip=false -DskipTests=false -DskipITs=false -pl ruoyi-modules/ruoyi-biz failsafe:integration-test failsafe:verify
+      - name: 格式（Spotless，业务模块）
+        run: mvn -B -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz spotless:check
+      - name: 编码约束（Checkstyle，业务模块）
+        run: mvn -B -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz checkstyle:check
+      - name: 测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports
+          path: |
+            backend/**/target/surefire-reports/*.xml
+            backend/**/target/failsafe-reports/*.xml
+          if-no-files-found: ignore
+
+  frontend:
+    name: 前端：oxlint / 类型检查（业务文件）
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm --dir frontend install --frozen-lockfile
+      - name: oxlint + vue-tsc（只对 src/views/biz、src/api/biz 判失败）
+        run: python3 acceptance/tools/frontend_check.py --in-place
+
+  security:
+    name: 安全：密钥 / 依赖漏洞 / SAST
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: gitleaks（配置见 .gitleaks.toml）
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
+            detect --no-git --source /repo --config /repo/.gitleaks.toml --redact --exit-code 1
+      - name: Trivy 依赖漏洞（Maven + pnpm 锁文件，只看 HIGH/CRITICAL 且有修复版本）
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          skip-dirs: frontend/node_modules,frontend/dist
+      - name: Semgrep SAST（只扫业务代码）
+        run: |
+          docker run --rm -v "$PWD:/src" semgrep/semgrep semgrep scan \
+            --config p/java --config p/javascript --config p/typescript --config p/secrets \
+            --error --metrics=off \
+            --include 'backend/ruoyi-modules/ruoyi-biz/**' \
+            --include 'frontend/src/views/biz/**' --include 'frontend/src/api/biz/**' \
+            /src
+
+  smoke:
+    name: 系统冒烟（acceptance/smoke，层 1）
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    needs: [backend]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: 中间件（与本地开发相同的端口与容器名）
+        run: |
+          docker compose -f infra/docker-compose.yml up -d
+          for i in $(seq 1 60); do
+            docker exec ruoyi-mysql mysqladmin ping -uroot -proot --silent && break
+            sleep 2
+          done
+      - name: 预热 Maven 本地仓库（冒烟执行器在 scratch 里离线构建）
+        run: mvn -B -f backend/pom.xml -DskipTests -Dmaven.test.skip=true package -q
+      - name: 前端依赖与浏览器
+        run: |
+          pnpm --dir frontend install --frozen-lockfile
+          pnpm --dir frontend exec playwright install --with-deps chromium
+      - name: 运行系统冒烟清单
+        run: python3 acceptance/tools/run_manifest.py acceptance/smoke/manifest.json
+      - name: 冒烟日志
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-logs
+          path: /tmp/storyloop-ruoyi-smoke/smoke-*.log
+          if-no-files-found: ignore
