@@ -80,15 +80,10 @@ jobs:
           docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
             detect --no-git --source /repo --config /repo/.gitleaks.toml --redact --exit-code 1
       - name: Trivy 依赖漏洞（Maven + pnpm 锁文件，只看 HIGH/CRITICAL 且有修复版本）
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: fs
-          scan-ref: .
-          scanners: vuln
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
-          skip-dirs: frontend/node_modules,frontend/dist
+        run: |
+          docker run --rm -v "$PWD:/repo" -v "$HOME/.cache/trivy:/root/.cache/trivy" aquasec/trivy:latest \
+            fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            --skip-dirs frontend/node_modules,frontend/dist /repo
       - name: Semgrep SAST（只扫业务代码）
         run: |
           docker run --rm -v "$PWD:/src" semgrep/semgrep semgrep scan \
