@@ -11,6 +11,14 @@
           </div>
         </template>
         <el-form ref="queryFormRef" :model="queryParams" :inline="true" class="query-form">
+          <el-form-item label="供应商编码" prop="supplierCode">
+            <el-input
+              v-model="queryParams.supplierCode"
+              placeholder="请输入供应商编码"
+              clearable
+              @keyup.enter="handleQuery"
+            />
+          </el-form-item>
           <el-form-item label="供应商名称" prop="supplierName">
             <el-input
               v-model="queryParams.supplierName"
@@ -208,6 +216,7 @@ const data = reactive<PageData<SupplierForm, SupplierQuery>>({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
+    supplierCode: undefined,
     supplierName: undefined,
     status: undefined,
     supplierCategory: undefined
