@@ -44,9 +44,9 @@ jobs:
         run: mvn -B -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz spotless:check
       - name: 编码约束（Checkstyle，业务模块）
         run: mvn -B -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz checkstyle:check
-      # 依赖漏洞：上游 RuoYi 的依赖树里有上百个 HIGH/CRITICAL（首跑约 200 个），不是单次业务变更能修的，
-      # 所以只记录不阻断：结果进 Security 标签页（SARIF）和作业摘要，升级依赖走 BASE 迭代。
-      - name: Trivy 依赖漏洞（本地 Maven 仓库离线解析；只记录，不阻断）
+      # 依赖漏洞是门：HIGH/CRITICAL 且已有修复版本的依赖必须升级才能合入（升级走 BASE 迭代，在根 pom 的
+      # "安全版本覆盖"里钉版本）。没有修复版本的只记录；确有理由的例外写进 .trivyignore 并注明原因。
+      - name: Trivy 依赖漏洞（本地 Maven 仓库离线解析；有修复版本的 HIGH/CRITICAL 阻断）
         run: |
           mkdir -p "$HOME/.cache/trivy"
           docker run --rm -v "$PWD:/repo" -v "$HOME/.m2:/root/.m2" -v "$HOME/.cache/trivy:/root/.cache/trivy" \
@@ -54,10 +54,11 @@ jobs:
             --offline-scan --skip-dirs frontend/node_modules,frontend/dist \
             --format sarif --output /repo/trivy.sarif /repo
           docker run --rm -v "$PWD:/repo" -v "$HOME/.m2:/root/.m2" -v "$HOME/.cache/trivy:/root/.cache/trivy" \
-            aquasec/trivy:latest fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 \
+            aquasec/trivy:latest fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
             --offline-scan --skip-dirs frontend/node_modules,frontend/dist --format table /repo \
-            | grep -E "Target|pom|lock|Total" | head -60 >> "$GITHUB_STEP_SUMMARY" || true
+            | tee -a "$GITHUB_STEP_SUMMARY"
       - name: 上传 Trivy 结果到 Security 标签页
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy.sarif

@@ -38,6 +38,12 @@
         <satoken.version>1.45.0</satoken.version>
         <justauth.version>3.0.1</justauth.version>
         <bouncycastle.version>1.85</bouncycastle.version>
+        <!-- 安全版本覆盖，见 dependencyManagement 开头的说明 -->
+        <netty.version>4.2.17.Final</netty.version>
+        <tomcat.version>11.0.25</tomcat.version>
+        <httpcore5.version>5.4.3</httpcore5.version>
+        <postgresql.version>42.7.12</postgresql.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
 
         <!-- 缓存、锁与任务调度相关依赖版本 -->
         <redisson.version>4.6.1</redisson.version>
@@ -117,6 +123,62 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
+
+            <!-- 安全版本覆盖（CI 的 Trivy 门要求 HIGH/CRITICAL 且有修复版本的依赖必须升级；
+                 这些是 Spring Boot ${spring-boot.version} 传递引入的旧版本。BOM 先声明者优先，
+                 显式条目优先于任何 BOM；上游升级 Spring Boot 后可逐条删除。 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-el</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-websocket</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5</artifactId>
+                <version>${httpcore5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5-h2</artifactId>
+                <version>${httpcore5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcutil-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
 
             <!-- SpringBoot的依赖配置-->
             <dependency>
