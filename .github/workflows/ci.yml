@@ -21,7 +21,7 @@ env:
 
 jobs:
   backend:
-    name: 后端：单元 / 集成 / 格式 / 编码约束
+    name: 后端：单元 / 集成 / 格式 / 编码约束 / 依赖漏洞
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -41,6 +41,11 @@ jobs:
         run: mvn -B -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz spotless:check
       - name: 编码约束（Checkstyle，业务模块）
         run: mvn -B -f backend/pom.xml -pl ruoyi-modules/ruoyi-biz checkstyle:check
+      - name: Trivy 依赖漏洞（用本地 Maven 仓库解析依赖树，避免请求 Maven Central 被限流；pnpm 锁文件直接解析）
+        run: |
+          docker run --rm -v "$PWD:/repo" -v "$HOME/.m2:/root/.m2" -v "$HOME/.cache/trivy:/root/.cache/trivy" \
+            aquasec/trivy:latest fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            --offline-scan --skip-dirs frontend/node_modules,frontend/dist /repo
       - name: 测试报告
         if: always()
         uses: actions/upload-artifact@v4
@@ -70,7 +75,7 @@ jobs:
         run: python3 acceptance/tools/frontend_check.py --in-place
 
   security:
-    name: 安全：密钥 / 依赖漏洞 / SAST
+    name: 安全：密钥 / SAST
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -79,11 +84,6 @@ jobs:
         run: |
           docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
             detect --no-git --source /repo --config /repo/.gitleaks.toml --redact --exit-code 1
-      - name: Trivy 依赖漏洞（Maven + pnpm 锁文件，只看 HIGH/CRITICAL 且有修复版本）
-        run: |
-          docker run --rm -v "$PWD:/repo" -v "$HOME/.cache/trivy:/root/.cache/trivy" aquasec/trivy:latest \
-            fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
-            --skip-dirs frontend/node_modules,frontend/dist /repo
       - name: Semgrep SAST（只扫业务代码）
         run: |
           docker run --rm -v "$PWD:/src" semgrep/semgrep semgrep scan \
