@@ -78,6 +78,10 @@ export interface SupplierForm extends BaseEntity {
 
 export interface SupplierQuery extends PageQuery {
   /**
+   * 供应商编码（模糊匹配）
+   */
+  supplierCode?: string;
+  /**
    * 供应商名称（模糊匹配）
    */
   supplierName?: string;

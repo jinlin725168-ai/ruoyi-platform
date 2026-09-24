@@ -1,0 +1,1919 @@
+{
+  "version": 1,
+  "status": "PASSED",
+  "change_id": "FEAT-20260924-001",
+  "generated_at": "2026-09-24T09:34:56.702447Z",
+  "requirement": {
+    "goal": "供应商列表和导出新增『编码』查询条件，匹配时和名称条件一样用模糊匹配：编码包含输入内容即命中，去掉首尾空白字符，不区分英文大小写，保留中间空白字符。导出的筛选范围和列表查询保持一致。",
+    "approval": {
+      "revision": 2,
+      "contract_digest": "c8e81e13083d8b9da4070c6a3aa11cd17f2b4e32844a5682439c1384c6e36be6",
+      "approved_by": "user",
+      "approved_at": "2026-09-24T09:20:58.342201Z"
+    },
+    "revision": 2
+  },
+  "implementation_commit": "060da6a0700a26261e0ddb4ef9b2453cca4f5fff",
+  "layers": {
+    "unit": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-Dmaven.test.skip=false",
+            "-DskipTests=false",
+            "-pl",
+            "ruoyi-admin",
+            "-am",
+            "test"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "@BeforeEach ==================\n@AfterEach ==================\n",
+          "stderr": "Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3\nOpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended\nWARNING: A Java agent has been loaded dynamically (/home/jinlin/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.10/byte-buddy-agent-1.18.10.jar)\nWARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning\nWARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information\nWARNING: Dynamic loading of agents will be disallowed by default in a future release\n"
+        }
+      ],
+      "candidate_sha256": "3415a518226d00e5eb751c8ea018568f77ba8067c5ccd3be9a1d70d61a3e092d"
+    },
+    "integration": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-Dmaven.test.skip=false",
+            "-DskipTests=false",
+            "-DskipITs=false",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "failsafe:integration-test",
+            "failsafe:verify"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "candidate_sha256": "3415a518226d00e5eb751c8ea018568f77ba8067c5ccd3be9a1d70d61a3e092d"
+    },
+    "acceptance": {
+      "version": 1,
+      "change_id": "FEAT-20260924-001",
+      "status": "PASSED",
+      "expect_red": false,
+      "started_at": "2026-09-24T09:32:06.260807Z",
+      "finished_at": "2026-09-24T09:33:16.382300Z",
+      "head_commit": "c88ca9745bfc8afbded3950702497cc25c494422",
+      "workspace_sha256": "3415a518226d00e5eb751c8ea018568f77ba8067c5ccd3be9a1d70d61a3e092d",
+      "suite_digests": {
+        "manifest.json": "2d1923a83d10a1b87be40be0a5936f7e67f15e0f28d70423327ca5a8d8b11302",
+        "supplier_code_search.spec.ts": "013edf30f6a8ae032293414003e28faa39bd58bc2aa33164b119a912db45db1c",
+        "test_supplier_code_search.py": "5845397a16b71476248d00dfc0ff3c1b41f72664fa5b89b29ed9122942be515f"
+      },
+      "results": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "criteria": [
+            "A4",
+            "A5",
+            "A6",
+            "A25",
+            "A61",
+            "A69",
+            "A70",
+            "A62",
+            "A63",
+            "A64",
+            "A65",
+            "A66",
+            "A71",
+            "A82",
+            "A73",
+            "A74",
+            "A75",
+            "A76",
+            "A83",
+            "A77",
+            "A78",
+            "A79",
+            "A41",
+            "A42",
+            "A51",
+            "A58",
+            "A7",
+            "A8",
+            "A43",
+            "A44",
+            "A52",
+            "A56",
+            "A59",
+            "A19",
+            "A34",
+            "A49",
+            "A54",
+            "A57",
+            "A60",
+            "A67",
+            "A72",
+            "A68",
+            "A84",
+            "A80",
+            "A81",
+            "A20",
+            "A21"
+          ],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "\nRunning 7 tests using 1 worker\n\n  ✓  1 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:193:5 › A8 按名称搜索只显示符合条件的供应商并显示分页，名称首尾空格和大小写不影响结果 (3.1s)\n  ✓  2 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:211:5 › A43 按分类服务搜索时每一行分类都显示服务 (2.3s)\n  ✓  3 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:222:5 › A44 分类为空的历史供应商在分类列显示未分类 (2.4s)\n  ✓  4 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:231:5 › A52 按未分类搜索时每一行都显示未分类且包含历史供应商 (2.8s)\n  ✓  5 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:242:5 › A56 分类值已从字典删除的供应商在分类列显示未分类 (2.0s)\n  ✓  6 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:251:5 › A59 按名称和未分类搜索能找到分类值已删除的供应商 (1.8s)\n  ✓  7 [chromium] › acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts:260:5 › A20 点击导出下载 Excel 文件 (1.3s)\n\n  7 passed (16.3s)\n",
+          "stderr": "test_A73_code_leading_trailing_half_width_spaces_ignored (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A73_code_leading_trailing_half_width_spaces_ignored) ... ok\ntest_A74_code_full_width_space_tab_newline_ignored (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A74_code_full_width_space_tab_newline_ignored) ... ok\ntest_A75_code_lower_case_condition_matches (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A75_code_lower_case_condition_matches) ... ok\ntest_A76_code_upper_case_with_spaces_matches (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A76_code_upper_case_with_spaces_matches) ... ok\ntest_A77_code_inner_space_is_kept (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A77_code_inner_space_is_kept) ... ok\ntest_A78_code_only_mixed_whitespace_is_no_condition (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A78_code_only_mixed_whitespace_is_no_condition) ... ok\ntest_A79_code_and_name_combined (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A79_code_and_name_combined) ... ok\ntest_A82_filter_by_code_fragment (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A82_filter_by_code_fragment) ... ok\ntest_A83_code_fragment_with_changed_case_and_spaces (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.CodeRuleTest.test_A83_code_fragment_with_changed_case_and_spaces) ... ok\ntest_A19_export_excel_with_category_header (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A19_export_excel_with_category_header) ... ok\ntest_A21_export_values_match_system (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A21_export_values_match_system) ... ok\ntest_A34_export_all_matching_rows_not_paged (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A34_export_all_matching_rows_not_paged) ... ok\ntest_A49_export_by_category (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A49_export_by_category) ... ok\ntest_A54_export_empty_category_as_uncategorized (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A54_export_empty_category_as_uncategorized) ... ok\ntest_A57_export_deleted_category_as_uncategorized (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A57_export_deleted_category_as_uncategorized) ... ok\ntest_A60_export_uncategorized_filter (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A60_export_uncategorized_filter) ... ok\ntest_A67_export_name_with_changed_case_and_spaces (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A67_export_name_with_changed_case_and_spaces) ... ok\ntest_A68_export_blank_name_with_disabled_status (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A68_export_blank_name_with_disabled_status) ... ok\ntest_A72_export_name_with_full_width_space_tab_newline (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A72_export_name_with_full_width_space_tab_newline) ... ok\ntest_A80_export_code_with_changed_case_full_width_space_tab_newline (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A80_export_code_with_changed_case_full_width_space_tab_newline) ... ok\ntest_A81_export_blank_code_with_disabled_status (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A81_export_blank_code_with_disabled_status) ... ok\ntest_A84_export_by_code_fragment (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.ExportTest.test_A84_export_by_code_fragment) ... ok\ntest_A61_leading_trailing_half_width_spaces_ignored (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A61_leading_trailing_half_width_spaces_ignored) ... ok\ntest_A62_lower_case_condition_matches (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A62_lower_case_condition_matches) ... ok\ntest_A63_upper_case_condition_matches (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A63_upper_case_condition_matches) ... ok\ntest_A64_fragment_with_changed_case_and_spaces (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A64_fragment_with_changed_case_and_spaces) ... ok\ntest_A65_inner_space_is_kept (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A65_inner_space_is_kept) ... ok\ntest_A66_only_half_width_spaces_is_no_condition (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A66_only_half_width_spaces_is_no_condition) ... ok\ntest_A69_leading_trailing_full_width_spaces_ignored (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A69_leading_trailing_full_width_spaces_ignored) ... ok\ntest_A70_leading_tab_trailing_newline_ignored (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A70_leading_tab_trailing_newline_ignored) ... ok\ntest_A71_only_mixed_whitespace_is_no_condition (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.NameRuleTest.test_A71_only_mixed_whitespace_is_no_condition) ... ok\ntest_A25_filter_by_name_fragment (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A25_filter_by_name_fragment) ... ok\ntest_A41_filter_by_category (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A41_filter_by_category) ... ok\ntest_A42_filter_by_name_and_category (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A42_filter_by_name_and_category) ... ok\ntest_A4_first_page_without_conditions (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A4_first_page_without_conditions) ... ok\ntest_A51_uncategorized_filter_returns_empty_category (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A51_uncategorized_filter_returns_empty_category) ... ok\ntest_A58_uncategorized_filter_returns_deleted_category (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A58_uncategorized_filter_returns_deleted_category) ... ok\ntest_A5_filter_by_disabled_status (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A5_filter_by_disabled_status) ... ok\ntest_A6_filter_by_full_name (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A6_filter_by_full_name) ... ok\ntest_A7_list_requires_login (acceptance_changes_FEAT_20260924_001_test_supplier_code_search_py.QueryTest.test_A7_list_requires_login) ... ok\n\n----------------------------------------------------------------------\nRan 40 tests in 5.567s\n\nOK\n"
+        }
+      ],
+      "evidence_path": "/home/jinlin/work/ruoyi-platform/.storyloop/evidence/FEAT-20260924-001/acceptance-result.json",
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    "smoke": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "system-purchase-order-supplier-category",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/purchase-order/test_purchase_order_category.py",
+            "acceptance/smoke/purchase-order/purchase_order_category.spec.ts"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "\nRunning 2 tests using 1 worker\n\n  ✓  1 [chromium] › acceptance/smoke/purchase-order/purchase_order_category.spec.ts:145:5 › 按单号查询只展示匹配的单据并带供应商分类等核心列 (3.5s)\n  ✓  2 [chromium] › acceptance/smoke/purchase-order/purchase_order_category.spec.ts:162:5 › 按供应商分类查询时表格只展示该分类的单据 (3.1s)\n\n  2 passed (7.0s)\n",
+          "stderr": "test_deleted_supplier_keeps_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_deleted_supplier_keeps_category) ... ok\ntest_empty_supplier_category_shows_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_empty_supplier_category_shows_uncategorized) ... ok\ntest_invalid_supplier_category_shows_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_invalid_supplier_category_shows_uncategorized) ... ok\ntest_row_shows_supplier_category_label (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_row_shows_supplier_category_label) ... ok\ntest_changed_supplier_category_is_used (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_changed_supplier_category_is_used) ... ok\ntest_deleted_supplier_order_matches_its_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_deleted_supplier_order_matches_its_category) ... ok\ntest_filter_by_service_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_filter_by_service_category) ... ok\ntest_filter_uncategorized_excludes_valid_and_deleted_supplier (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_filter_uncategorized_excludes_valid_and_deleted_supplier) ... ok\ntest_export_by_service_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_by_service_category) ... ok\ntest_export_empty_category_as_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_empty_category_as_uncategorized) ... ok\ntest_export_returns_excel (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_returns_excel) ... ok\ntest_filter_by_draft_status (acceptance_smoke_purchase_order_test_purchase_order_category_py.QueryBasicsTest.test_filter_by_draft_status) ... ok\ntest_filter_by_order_no_fragment (acceptance_smoke_purchase_order_test_purchase_order_category_py.QueryBasicsTest.test_filter_by_order_no_fragment) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 3.386s\n\nOK\n"
+        }
+      ],
+      "suite_digests": {
+        "manifest.json": "24059b90cab6f4c1a14afc4e0c2fd53636ad682eeded4e8621fa6378b195594f",
+        "purchase-order/purchase_order_category.spec.ts": "cbea9615ab068eb79f2f3c5c494b5cbded0a4de7023aab2a5299bf785bc8407c",
+        "purchase-order/test_purchase_order_category.py": "9c0e68b60f0c7b9138c1e298a4a7fb8d34df372bb3902d2bd736d36657973cd9"
+      }
+    },
+    "checks": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "spotless:check"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "id": "REGRESSION-002",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "checkstyle:check"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "id": "REGRESSION-003",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/frontend_check.py"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "Found 0 warnings and 0 errors.\nFinished in 173ms on 244 files with 157 rules using 24 threads.\n",
+          "stderr": "frontend_check: vue-tsc 0 error(s) in business files, 41 in upstream files (not a gate)\n"
+        },
+        {
+          "id": "REGRESSION-004",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.local/bin/gitleaks",
+            "detect",
+            "--no-git",
+            "--source",
+            ".",
+            "--config",
+            ".gitleaks.toml",
+            "--redact",
+            "--exit-code",
+            "1"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "\n    ○\n    │╲\n    │ ○\n    ○ ░\n    ░    gitleaks\n\n\u001b[90m5:34AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~16738931 bytes (16.74 MB) in 523ms\u001b[0m\n\u001b[90m5:34AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n"
+        }
+      ],
+      "candidate_sha256": "3415a518226d00e5eb751c8ea018568f77ba8067c5ccd3be9a1d70d61a3e092d"
+    }
+  },
+  "review": {
+    "verdict": "pass",
+    "summary": "The implementation matches the approved stories S2 and S6, the architect's design_plan and the implementer's design record. Backend: BizSupplierServiceImpl.buildQueryWrapper now adds a code condition. It uses Hutool StringUtils.trim, which removes half-width and full-width spaces, tabs and CR/LF. An empty result is treated as no condition. Otherwise it applies the bound parameter `LOWER(supplier_code) LIKE {0}` with '%'+lower(Locale.ROOT)+'%'. This is placed before the name condition and follows the same pattern as the existing name rule. List (queryPageList) and export (queryList) share this builder, so export filtering stays consistent with the list. checkCodeUnique, insert/update, the BO, the controller, index.ts, the mapper XML and the SQL files are unchanged, as planned, so the non-goals hold: codes are stored as entered and uniqueness stays case-sensitive. Frontend: SupplierQuery.supplierCode?: string was added. index.vue has a clearable 供应商编码 input with prop=supplierCode as the first search item, and supplierCode: undefined in the initial queryParams. Both list and export pick it up through the whole queryParams object. The changed files are exactly the planned files plus the two new test files, and the boundary check is ALLOWED. The design's Tests First section is concrete. All 7 backend tests it lists exist in BizSupplierCodeConditionTest (@Tag(\"dev\"), Mockito, no Spring context). They check both the selectVoPage (list) and selectVoList (export) wrappers for these behaviours: fragment contains-match, half-width trim, full-width/tab/newline trim, case-insensitivity, kept inner whitespace, blank or whitespace-only input treated as no condition, and AND-combination with name and status. The frontend query.test.ts checks the supplierCode type contract with expectTypeOf. The code follows the extension.md buildQueryWrapper convention and mirrors the existing name condition, so no building block is re-implemented. All layers passed on the same candidate (sha 3415a518…): the unit regression, integration, acceptance (40 API tests plus 7 Playwright tests covering A4–A84), system smoke, spotless, checkstyle, frontend_check and gitleaks. I did not re-run any builds or tests myself; this review relied on the evidence supplied.",
+    "findings": [],
+    "questions": []
+  },
+  "traceability": [
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A4",
+        "given": "系统中有多条供应商记录，用户拥有供应商列表权限",
+        "when": "用户不带任何条件请求第 1 页供应商列表",
+        "then": "返回成功，结果含当前页记录和总条数，每条记录包含编码、名称、分类、联系人、联系电话、状态、备注",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A5",
+        "given": "系统中有一条启用（状态 0）的供应商和一条停用（状态 1）的供应商",
+        "when": "用户以状态为停用作为条件查询",
+        "then": "结果只包含停用的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A6",
+        "given": "系统中有一条名称已知的供应商",
+        "when": "用户以该供应商的完整名称作为名称条件查询",
+        "then": "结果包含该供应商，且不包含名称不匹配的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A25",
+        "given": "系统中有一条名称已知的供应商，以及一条名称不包含某段文字的供应商",
+        "when": "用户只用该已知名称中间的一段文字（不是完整名称）作为名称条件查询",
+        "then": "结果包含名称已知的供应商，且不包含名称里没有这段文字的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A61",
+        "given": "系统中有一条名称为 N 的供应商，以及一条名称不包含 N 的供应商",
+        "when": "用户以在 N 前后各加若干半角空格后的文字作为名称条件查询",
+        "then": "结果包含名称为 N 的供应商，且不包含名称不包含 N 的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A69",
+        "given": "系统中有一条名称为 N 的供应商，以及一条名称不包含 N 的供应商",
+        "when": "用户以在 N 前后各加若干全角空格（　）后的文字作为名称条件查询",
+        "then": "结果包含名称为 N 的供应商，且不包含名称不包含 N 的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A70",
+        "given": "系统中有一条名称为 N 的供应商，以及一条名称不包含 N 的供应商",
+        "when": "用户以在 N 前面加制表符、后面加换行后的文字作为名称条件查询",
+        "then": "结果包含名称为 N 的供应商，且不包含名称不包含 N 的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A62",
+        "given": "系统中有一条名称含大小写混合英文字母的供应商，名称为 N",
+        "when": "用户以 N 的全小写形式作为名称条件查询",
+        "then": "结果包含该供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A63",
+        "given": "系统中有一条名称含大小写混合英文字母的供应商，名称为 N",
+        "when": "用户以 N 的全大写形式作为名称条件查询",
+        "then": "结果包含该供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A64",
+        "given": "系统中有一条名称含英文字母的供应商，另有一条名称不含这段文字的供应商",
+        "when": "用户以该名称中间一段文字改变大小写、再在前后加空格后的内容作为名称条件查询",
+        "then": "结果包含名称含这段文字的供应商，且不包含名称不含这段文字的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A65",
+        "given": "系统中有一条名称为『Acme Steel』（中间有空格）的供应商和一条名称为『AcmeSteel』（中间无空格）的供应商",
+        "when": "用户以『acme steel』作为名称条件查询",
+        "then": "结果包含名称为『Acme Steel』的供应商，且不包含名称为『AcmeSteel』的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A66",
+        "given": "系统中有多条供应商记录，用户拥有供应商列表权限",
+        "when": "用户以只含若干半角空格的名称条件请求第 1 页供应商列表",
+        "then": "返回成功，总条数与不带任何条件查询得到的总条数相同",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A71",
+        "given": "系统中有多条供应商记录，用户拥有供应商列表权限",
+        "when": "用户以只由半角空格、全角空格、制表符和换行混合组成的名称条件请求第 1 页供应商列表",
+        "then": "返回成功，总条数与不带任何条件查询得到的总条数相同",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A82",
+        "given": "系统中有一条编码已知的供应商，以及一条编码不包含某段文字的供应商",
+        "when": "用户只用该已知编码中间的一段文字（不是完整编码）作为编码条件查询",
+        "then": "结果包含编码已知的供应商，且不包含编码里没有这段文字的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A73",
+        "given": "系统中有一条编码为 X 的供应商，以及一条编码与 X 无关的供应商",
+        "when": "用户以在 X 前后各加若干半角空格后的文字作为编码条件查询",
+        "then": "结果包含编码为 X 的供应商，且不包含编码与 X 无关的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A74",
+        "given": "系统中有一条编码为 X 的供应商，以及一条编码与 X 无关的供应商",
+        "when": "用户以在 X 前面加全角空格和制表符、后面加换行后的文字作为编码条件查询",
+        "then": "结果包含编码为 X 的供应商，且不包含编码与 X 无关的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A75",
+        "given": "系统中有一条编码含大小写混合英文字母的供应商，编码为 X",
+        "when": "用户以 X 的全小写形式作为编码条件查询",
+        "then": "结果包含该供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A76",
+        "given": "系统中有一条编码含大小写混合英文字母的供应商，编码为 X",
+        "when": "用户以 X 的全大写形式、前后再加半角空格后的内容作为编码条件查询",
+        "then": "结果包含该供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A83",
+        "given": "系统中有一条编码含英文字母的供应商，另有一条编码不含这段文字的供应商",
+        "when": "用户以该编码中间一段文字改变大小写、再在前后加空格后的内容作为编码条件查询",
+        "then": "结果包含编码含这段文字的供应商，且不包含编码不含这段文字的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A77",
+        "given": "系统中有一条编码为『Ab 01』（中间有空格）的供应商和一条编码为『Ab01』（中间无空格）的供应商",
+        "when": "用户以『ab 01』作为编码条件查询",
+        "then": "结果包含编码为『Ab 01』的供应商，且不包含编码为『Ab01』的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A78",
+        "given": "系统中有多条供应商记录，用户拥有供应商列表权限",
+        "when": "用户以只由半角空格、全角空格、制表符和换行混合组成的编码条件请求第 1 页供应商列表",
+        "then": "返回成功，总条数与不带任何条件查询得到的总条数相同",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A79",
+        "given": "系统中有一条编码为 X、名称为 N 的供应商，以及一条名称同为 N、编码与 X 无关的供应商",
+        "when": "用户同时以改变大小写后的 X 作为编码条件、以 N 作为名称条件查询",
+        "then": "结果只包含编码为 X 的那条供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A41",
+        "given": "系统中有一条分类为『原材料』的供应商和一条分类为『服务』的供应商",
+        "when": "用户以分类为『原材料』作为条件查询",
+        "then": "结果包含分类为『原材料』的供应商，且每条结果的分类都是『原材料』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A42",
+        "given": "系统中有一条分类为『设备』、名称已知的供应商，以及一条同名但分类为『服务』的供应商",
+        "when": "用户同时以该名称和分类『设备』作为条件查询",
+        "then": "结果只包含分类为『设备』的那条供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A51",
+        "given": "系统中有一条分类为空的历史供应商和一条分类为『原材料』的供应商",
+        "when": "用户以『未分类』作为分类条件查询",
+        "then": "结果包含这条分类为空的历史供应商，且不包含分类为『原材料』的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A58",
+        "given": "系统中有一条分类为 C 的供应商，之后 C 已从『供应商分类』字典中删除，另有一条分类为『服务』的供应商",
+        "when": "用户以『未分类』作为分类条件查询",
+        "then": "结果包含分类为 C 的这条供应商，且不包含分类为『服务』的供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A7",
+        "given": "用户未登录",
+        "when": "用户请求供应商列表",
+        "then": "请求被拒绝，并提示未登录",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A8",
+        "given": "管理员已登录前端",
+        "when": "管理员在供应商管理页面按名称条件搜索",
+        "then": "表格只显示符合条件的供应商，并显示分页控件",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A43",
+        "given": "管理员已登录前端，系统中有一条分类为『服务』的供应商",
+        "when": "管理员在供应商管理页面按分类『服务』搜索",
+        "then": "表格中每一行的分类列都显示『服务』，且包含这条供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A44",
+        "given": "管理员已登录前端，系统中有一条在引入分类之前创建、分类为空的供应商",
+        "when": "管理员在供应商管理页面按该供应商的名称搜索",
+        "then": "该供应商所在行的分类列显示『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A52",
+        "given": "管理员已登录前端，系统中有一条分类为空的历史供应商",
+        "when": "管理员在供应商管理页面按分类『未分类』搜索",
+        "then": "表格中每一行的分类列都显示『未分类』，且包含这条历史供应商",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A56",
+        "given": "管理员已登录前端，系统中有一条名称已知、分类为 C 的供应商，之后 C 已从『供应商分类』字典中删除",
+        "when": "管理员在供应商管理页面按该供应商的名称搜索",
+        "then": "该供应商所在行的分类列显示『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S2",
+        "title": "分页查询供应商",
+        "as_a": "有供应商列表权限的业务人员",
+        "want": "按供应商编码、名称、状态和分类分页查询供应商列表，并看到每个供应商的分类；按编码或名称搜索时只输入其中一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能快速找到某个或某一类供应商，也能筛出还没有有效分类的供应商逐步补齐，不会因为只记得编码的一段、多敲了空格、粘贴时带进来空白字符或大小写不一致而漏掉供应商"
+      },
+      "criterion": {
+        "id": "A59",
+        "given": "管理员已登录前端，系统中有一条名称已知、分类为 C 的供应商，之后 C 已从『供应商分类』字典中删除",
+        "when": "管理员在供应商管理页面按该名称和分类『未分类』搜索",
+        "then": "表格中包含这条供应商，其分类列显示『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A19",
+        "given": "系统中至少有一条供应商，用户拥有导出权限",
+        "when": "用户请求导出供应商",
+        "then": "返回一个非空的 Excel 文件，表头包含供应商编码、名称、分类、联系人、联系电话、状态、备注",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A34",
+        "given": "系统中符合某一状态条件的供应商数量超过列表默认的一页条数",
+        "when": "用户以该状态为条件请求导出",
+        "then": "导出文件的数据行数等于按同一条件查询得到的总条数，且每一行的状态都是该状态",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A49",
+        "given": "系统中有分类为『原材料』的供应商，也有其他分类的供应商，用户拥有导出权限",
+        "when": "用户以分类为『原材料』作为条件请求导出",
+        "then": "导出文件的数据行数等于按同一条件查询得到的总条数，且每一行的分类列都显示『原材料』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A54",
+        "given": "系统中有一条分类为空、名称已知的历史供应商，用户拥有导出权限",
+        "when": "用户以该供应商的名称作为条件请求导出",
+        "then": "导出文件中该供应商所在行的分类列显示『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A57",
+        "given": "系统中有一条名称已知、分类为 C 的供应商，之后 C 已从『供应商分类』字典中删除，用户拥有导出权限",
+        "when": "用户以该供应商的名称作为条件请求导出",
+        "then": "导出文件中该供应商所在行的分类列显示『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A60",
+        "given": "系统中有一条分类为空的历史供应商、一条分类值已从『供应商分类』字典中删除的供应商，以及一条分类为『服务』的供应商，用户拥有导出权限",
+        "when": "用户以『未分类』作为分类条件请求导出",
+        "then": "导出文件包含前两条供应商、不包含分类为『服务』的供应商，数据行数等于按同一条件查询得到的总条数，且每一行的分类列都显示『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A67",
+        "given": "系统中有一条名称含大小写混合英文字母的供应商，名称为 N，用户拥有导出权限",
+        "when": "用户以 N 改变大小写、再在前后加半角空格后的内容作为名称条件请求导出",
+        "then": "导出文件包含该供应商，数据行数等于以同一名称条件查询得到的总条数",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A72",
+        "given": "系统中有一条名称为 N 的供应商，用户拥有导出权限",
+        "when": "用户以在 N 前面加全角空格和制表符、后面加换行后的内容作为名称条件请求导出",
+        "then": "导出文件包含该供应商，数据行数等于以同一名称条件查询得到的总条数",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A68",
+        "given": "系统中有启用和停用的供应商，用户拥有导出权限",
+        "when": "用户以只含若干空白字符（半角空格、全角空格、制表符、换行混合）的名称条件加上状态为停用作为条件请求导出",
+        "then": "导出文件的数据行数等于只以状态为停用查询得到的总条数，且每一行的状态都是停用",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A84",
+        "given": "系统中有一条编码已知的供应商，以及一条编码不包含某段文字的供应商，用户拥有导出权限",
+        "when": "用户只用该已知编码中间的一段文字作为编码条件请求导出",
+        "then": "导出文件包含编码已知的供应商、不包含编码里没有这段文字的供应商，数据行数等于以同一编码条件查询得到的总条数",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A80",
+        "given": "系统中有一条编码含大小写混合英文字母的供应商，编码为 X，用户拥有导出权限",
+        "when": "用户以 X 改变大小写、前面加全角空格和制表符、后面加换行后的内容作为编码条件请求导出",
+        "then": "导出文件包含该供应商，数据行数等于以同一编码条件查询得到的总条数",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A81",
+        "given": "系统中有启用和停用的供应商，用户拥有导出权限",
+        "when": "用户以只含若干空白字符（半角空格、全角空格、制表符、换行混合）的编码条件加上状态为停用作为条件请求导出",
+        "then": "导出文件的数据行数等于只以状态为停用查询得到的总条数，且每一行的状态都是停用",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A20",
+        "given": "管理员已登录前端，打开了供应商管理页面",
+        "when": "管理员导出供应商",
+        "then": "浏览器下载一个 Excel 文件",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    },
+    {
+      "story": {
+        "id": "S6",
+        "title": "导出供应商 Excel",
+        "as_a": "有供应商导出权限的业务人员",
+        "want": "把供应商数据（包括分类）导出为 Excel 文件；按编码或名称筛选导出时，和列表一样用模糊匹配，并且忽略首尾空白字符和英文大小写",
+        "so_that": "导出的范围和我在列表里看到的一致，可以离线按分类查看、归档，或提供给其他部门使用"
+      },
+      "criterion": {
+        "id": "A21",
+        "given": "已导出一个 Excel 文件，系统中有一条已知分类的供应商",
+        "when": "用户用 Excel 打开该文件",
+        "then": "文件中该供应商各列的值与系统一致，分类显示为分类名称，状态显示为正常或停用",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-001-supplier-code-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-001/test_supplier_code_search.py",
+            "acceptance/changes/FEAT-20260924-001/supplier_code_search.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "e6d072c5d8fe105fddfb22aebd1b91f9f8ded16309af7dbe072015e61a141682"
+    }
+  ],
+  "telemetry": {
+    "calls": 7,
+    "failed": 0,
+    "agent_ms": 649226,
+    "cost_usd": 4.4216,
+    "by_role": {
+      "product": {
+        "calls": 2,
+        "failed": 0,
+        "agent_ms": 152145,
+        "cost_usd": 0.8653,
+        "turns": 9
+      },
+      "acceptance": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 226806,
+        "cost_usd": 1.1598,
+        "turns": 13
+      },
+      "design": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 53254,
+        "cost_usd": 0.6753,
+        "turns": 14
+      },
+      "characterize": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 71236,
+        "cost_usd": 0.6107,
+        "turns": 18
+      },
+      "implement": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 124191,
+        "cost_usd": 0.7241,
+        "turns": 24
+      },
+      "review": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 21594,
+        "cost_usd": 0.3864,
+        "turns": 6
+      }
+    },
+    "attempts": 1,
+    "loop_ms": 837422
+  }
+}

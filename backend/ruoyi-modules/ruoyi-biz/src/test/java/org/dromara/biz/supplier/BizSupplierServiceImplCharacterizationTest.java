@@ -2,6 +2,7 @@ package org.dromara.biz.supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -196,6 +197,82 @@ class BizSupplierServiceImplCharacterizationTest {
             .containsExactly("原材料", "未分类", "未分类");
         assertThat(list).extracting(BizSupplierVo::getSupplierCategoryLabel)
             .containsExactly("原材料", "未分类", "未分类");
+    }
+
+    // 以下为编码查询条件变更（FEAT-20260924-001）前锁定的行为
+
+    private static BizSupplierBo codeBo(String code, String name, String status, String category) {
+        BizSupplierBo bo = bo(name, status, category);
+        bo.setSupplierCode(code);
+        return bo;
+    }
+
+    @Test
+    void nullOrEmptyOrWhitespaceOnlyCodeAddsNoCodeCondition() {
+        for (String code : new String[]{null, "", "   ", " 　\t\n "}) {
+            LambdaQueryWrapper<BizSupplier> page = pageWrapper(codeBo(code, null, null, null));
+            LambdaQueryWrapper<BizSupplier> list = listWrapper(codeBo(code, null, null, null));
+            for (LambdaQueryWrapper<BizSupplier> lqw : List.of(page, list)) {
+                assertThat(lqw.getSqlSegment())
+                    .doesNotContain("supplier_code")
+                    .contains("ORDER BY supplier_id DESC");
+            }
+        }
+    }
+
+    @Test
+    void codeDoesNotChangeNameStatusCategoryConditionsOrOrder() {
+        LambdaQueryWrapper<BizSupplier> page = pageWrapper(codeBo("Ab01", "钢铁", "1", "2"));
+        LambdaQueryWrapper<BizSupplier> list = listWrapper(codeBo("Ab01", "钢铁", "1", "2"));
+
+        for (LambdaQueryWrapper<BizSupplier> lqw : List.of(page, list)) {
+            assertThat(lqw.getSqlSegment())
+                .contains("LOWER(supplier_name) LIKE")
+                .contains("status =")
+                .contains("supplier_category =")
+                .endsWith("ORDER BY supplier_id DESC");
+            assertThat(anyParamContains(lqw, "%钢铁%")).isTrue();
+            assertThat(lqw.getParamNameValuePairs().values()).contains("1", "2");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private LambdaQueryWrapper<BizSupplier> uniqueWrapper(BizSupplierBo bo) {
+        ArgumentCaptor<Wrapper<BizSupplier>> captor = ArgumentCaptor.forClass(Wrapper.class);
+        when(supplierMapper.exists(captor.capture())).thenReturn(false);
+        assertThat(supplierService.checkCodeUnique(bo)).isTrue();
+        return (LambdaQueryWrapper<BizSupplier>) captor.getValue();
+    }
+
+    @Test
+    void codeUniquenessIsExactCaseSensitiveMatchOnRawCode() {
+        LambdaQueryWrapper<BizSupplier> lqw = uniqueWrapper(codeBo("Ab 01", null, null, null));
+
+        assertThat(lqw.getSqlSegment())
+            .contains("supplier_code =")
+            .doesNotContainIgnoringCase("like")
+            .doesNotContain("LOWER(")
+            .doesNotContain("supplier_id");
+        assertThat(lqw.getParamNameValuePairs().values()).containsExactly("Ab 01");
+    }
+
+    @Test
+    void codeUniquenessExcludesSelfWhenEditing() {
+        BizSupplierBo bo = codeBo("Ab01", null, null, null);
+        bo.setSupplierId(9L);
+
+        LambdaQueryWrapper<BizSupplier> lqw = uniqueWrapper(bo);
+
+        assertThat(lqw.getSqlSegment()).contains("supplier_code =").contains("supplier_id <>");
+        assertThat(lqw.getParamNameValuePairs().values()).contains("Ab01", 9L);
+    }
+
+    @Test
+    void blankCodeIsUniqueWithoutQuery() {
+        for (String code : new String[]{null, "", "   "}) {
+            assertThat(supplierService.checkCodeUnique(codeBo(code, null, null, null))).isTrue();
+        }
+        verifyNoInteractions(supplierMapper);
     }
 
 }
