@@ -304,7 +304,8 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
     }
 
     /**
-     * 修改草稿采购单：单号与状态不可修改，明细以本次提交的集合为准
+     * 修改草稿采购单：单号与状态不可修改，明细以本次提交的集合为准；
+     * 备注以本次提交的值为准，未填写时清空原备注
      *
      * @param bo 采购单
      * @return 是否修改成功
@@ -321,6 +322,8 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
         update.setStatus(null);
         update.setSupplierName(supplier.getSupplierName());
         update.setTotalAmount(sumAmount(details));
+        // updateById 跳过空值字段，未填写的备注写成空串才能覆盖原备注
+        update.setRemark(StringUtils.defaultString(bo.getRemark()));
         boolean flag = purchaseOrderMapper.updateById(update) > 0;
         if (flag) {
             removeDetails(List.of(exists.getOrderId()));

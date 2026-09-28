@@ -1,0 +1,799 @@
+{
+  "version": 1,
+  "status": "PASSED",
+  "change_id": "FEAT-20260928-002",
+  "generated_at": "2026-09-28T02:33:43.203563Z",
+  "requirement": {
+    "goal": "采购员在新建和修改草稿采购单时可以填写备注（可为空，最多 500 个字符），采购单列表、详情和导出的 Excel 都显示备注，方便记录和传达单据的补充说明。",
+    "approval": {
+      "revision": 1,
+      "contract_digest": "651e8731a66e1d25c8d2aa32b1abe83ee5a5ec6f599defc2d88b4c5a0eea65a3",
+      "approved_by": "user",
+      "approved_at": "2026-09-28T02:06:16.204610Z"
+    },
+    "revision": 1
+  },
+  "implementation_commit": "6b988ea7b38a8a14e9e4855515a5afe0dbf2ef57",
+  "layers": {
+    "unit": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-Dmaven.test.skip=false",
+            "-DskipTests=false",
+            "-pl",
+            "ruoyi-admin",
+            "-am",
+            "test"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "22:30:09.992 [main] INFO org.hibernate.validator.internal.util.Version -- HV000001: Hibernate Validator 9.1.0.Final\n22:30:10.223 [main] WARN org.hibernate.validator.internal.metadata.aggregated.CascadingMetaDataBuilder -- HV000271: Using `@Valid` on a container (java.util.List) is deprecated. You should apply the annotation on the type argument(s). Affected element: details\n@BeforeEach ==================\n@AfterEach ==================\n",
+          "stderr": "Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3\nWARNING: A Java agent has been loaded dynamically (/home/jinlin/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.10/byte-buddy-agent-1.18.10.jar)\nWARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning\nWARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information\nWARNING: Dynamic loading of agents will be disallowed by default in a future release\nOpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended\n"
+        }
+      ],
+      "candidate_sha256": "1f5b7a7230e3d589de95d3d859efc083bd6e8ea7915ee343610b5824739fc3c3"
+    },
+    "integration": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-Dmaven.test.skip=false",
+            "-DskipTests=false",
+            "-DskipITs=false",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "failsafe:integration-test",
+            "failsafe:verify"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "candidate_sha256": "1f5b7a7230e3d589de95d3d859efc083bd6e8ea7915ee343610b5824739fc3c3"
+    },
+    "acceptance": {
+      "version": 1,
+      "change_id": "FEAT-20260928-002",
+      "status": "PASSED",
+      "expect_red": false,
+      "started_at": "2026-09-28T02:30:19.052082Z",
+      "finished_at": "2026-09-28T02:31:21.861025Z",
+      "head_commit": "348c6c59e2597d6699910f00ec2b655e68293079",
+      "workspace_sha256": "1f5b7a7230e3d589de95d3d859efc083bd6e8ea7915ee343610b5824739fc3c3",
+      "suite_digests": {
+        "manifest.json": "2d18aa43534742bc241a2f8a525c2edb81ea6196e1bb407f1ac1975cfcb5bb82",
+        "purchase_order_remark.spec.ts": "9c8b5255d50855fec83c887e47c3784425e533daf31517c83ccfa25e3c8378f1",
+        "test_purchase_order_remark.py": "4a4864fa9f89c27a072a056648ea128bfdf19f378a665822ce11cf6db548fa23"
+      },
+      "results": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "criteria": [
+            "A98",
+            "A99",
+            "A100",
+            "A101",
+            "A102",
+            "A103",
+            "A104",
+            "A105",
+            "A106",
+            "A107",
+            "A108",
+            "A109",
+            "A110",
+            "A111",
+            "A112"
+          ],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "\nRunning 3 tests using 1 worker\n\n  ✓  1 [chromium] › acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts:164:5 › A106 新增表单填写备注保存后列表该行显示所填备注 (5.4s)\n  ✓  2 [chromium] › acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts:212:5 › A111 按单号查询时表格有备注列并在该行显示备注 (2.1s)\n  ✓  3 [chromium] › acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts:223:5 › A112 采购单详情中显示备注 (2.7s)\n\n  3 passed (10.6s)\n",
+          "stderr": "test_A107_list_row_returns_remark (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkDisplayTest.test_A107_list_row_returns_remark) ... ok\ntest_A108_submitted_detail_returns_remark (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkDisplayTest.test_A108_submitted_detail_returns_remark) ... ok\ntest_A109_export_has_remark_column (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkDisplayTest.test_A109_export_has_remark_column) ... ok\ntest_A110_export_empty_remark_cell (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkDisplayTest.test_A110_export_empty_remark_cell) ... ok\ntest_A100_add_with_exactly_500_characters (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A100_add_with_exactly_500_characters) ... ok\ntest_A101_add_with_501_characters_rejected (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A101_add_with_501_characters_rejected) ... ok\ntest_A102_update_draft_replaces_remark (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A102_update_draft_replaces_remark) ... ok\ntest_A103_update_draft_with_empty_remark_clears_it (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A103_update_draft_with_empty_remark_clears_it) ... ok\ntest_A104_update_draft_with_501_characters_rejected (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A104_update_draft_with_501_characters_rejected) ... ok\ntest_A105_submitted_order_remark_cannot_change (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A105_submitted_order_remark_cannot_change) ... ok\ntest_A98_add_with_remark_keeps_it (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A98_add_with_remark_keeps_it) ... ok\ntest_A99_add_without_remark (acceptance_changes_FEAT_20260928_002_test_purchase_order_remark_py.RemarkEntryTest.test_A99_add_without_remark) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 3.060s\n\nOK\n"
+        }
+      ],
+      "evidence_path": "/home/jinlin/work/ruoyi-platform/.storyloop/evidence/FEAT-20260928-002/acceptance-result.json",
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    "smoke": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "system-purchase-order-supplier-category",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/purchase-order/test_purchase_order_category.py",
+            "acceptance/smoke/purchase-order/purchase_order_category.spec.ts"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "\nRunning 2 tests using 1 worker\n\n  ✓  1 [chromium] › acceptance/smoke/purchase-order/purchase_order_category.spec.ts:145:5 › 按单号查询只展示匹配的单据并带供应商分类等核心列 (4.0s)\n  ✓  2 [chromium] › acceptance/smoke/purchase-order/purchase_order_category.spec.ts:162:5 › 按供应商分类查询时表格只展示该分类的单据 (3.7s)\n\n  2 passed (8.1s)\n",
+          "stderr": "test_deleted_supplier_keeps_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_deleted_supplier_keeps_category) ... ok\ntest_empty_supplier_category_shows_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_empty_supplier_category_shows_uncategorized) ... ok\ntest_invalid_supplier_category_shows_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_invalid_supplier_category_shows_uncategorized) ... ok\ntest_row_shows_supplier_category_label (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_row_shows_supplier_category_label) ... ok\ntest_changed_supplier_category_is_used (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_changed_supplier_category_is_used) ... ok\ntest_deleted_supplier_order_matches_its_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_deleted_supplier_order_matches_its_category) ... ok\ntest_filter_by_service_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_filter_by_service_category) ... ok\ntest_filter_uncategorized_excludes_valid_and_deleted_supplier (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_filter_uncategorized_excludes_valid_and_deleted_supplier) ... ok\ntest_export_by_service_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_by_service_category) ... ok\ntest_export_empty_category_as_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_empty_category_as_uncategorized) ... ok\ntest_export_returns_excel (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_returns_excel) ... ok\ntest_filter_by_draft_status (acceptance_smoke_purchase_order_test_purchase_order_category_py.QueryBasicsTest.test_filter_by_draft_status) ... ok\ntest_filter_by_order_no_fragment (acceptance_smoke_purchase_order_test_purchase_order_category_py.QueryBasicsTest.test_filter_by_order_no_fragment) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 3.467s\n\nOK\n"
+        }
+      ],
+      "suite_digests": {
+        "manifest.json": "24059b90cab6f4c1a14afc4e0c2fd53636ad682eeded4e8621fa6378b195594f",
+        "purchase-order/purchase_order_category.spec.ts": "cbea9615ab068eb79f2f3c5c494b5cbded0a4de7023aab2a5299bf785bc8407c",
+        "purchase-order/test_purchase_order_category.py": "9c0e68b60f0c7b9138c1e298a4a7fb8d34df372bb3902d2bd736d36657973cd9"
+      }
+    },
+    "checks": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "spotless:check"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "id": "REGRESSION-002",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "checkstyle:check"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "id": "REGRESSION-003",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/frontend_check.py"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "Found 0 warnings and 0 errors.\nFinished in 172ms on 246 files with 157 rules using 24 threads.\n",
+          "stderr": "frontend_check: vue-tsc 0 error(s) in business files, 41 in upstream files (not a gate)\n"
+        },
+        {
+          "id": "REGRESSION-004",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.local/bin/gitleaks",
+            "detect",
+            "--no-git",
+            "--source",
+            ".",
+            "--config",
+            ".gitleaks.toml",
+            "--redact",
+            "--exit-code",
+            "1"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "\n    ○\n    │╲\n    │ ○\n    ○ ░\n    ░    gitleaks\n\n\u001b[90m10:32PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~17172283 bytes (17.17 MB) in 532ms\u001b[0m\n\u001b[90m10:32PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n"
+        }
+      ],
+      "candidate_sha256": "1f5b7a7230e3d589de95d3d859efc083bd6e8ea7915ee343610b5824739fc3c3"
+    }
+  },
+  "review": {
+    "verdict": "pass",
+    "summary": "Lead review of FEAT-20260928-002, attempt 3. None of the four reviewers raised a finding or a question, so no finding was dropped. I checked `git diff` against HEAD 348c6c5 myself. It matches what the reviewers described. In the backend, BizPurchaseOrderServiceImpl.updateByBo gains one line, `update.setRemark(StringUtils.defaultString(bo.getRemark()))`, plus a Javadoc and a comment. A draft edit with a null or missing remark now clears the stored remark (A103), and submitById is not changed. In the frontend, index.vue moves the remark el-col to the start of the form row with `class=\"remark-col\"` and adds a scoped `.remark-col { order: 1 }` style. All other remark support already existed from FEAT-20260920-001: the column, the BO @Size(max=500), the VO and the export VO, the loadDraft guard for submitted orders, and the list, form and detail UI. All layers passed on candidate 1f5b7a72: unit, integration, checks (spotless, checkstyle, frontend_check, gitleaks), acceptance A98–A112 (12 API tests and 3 Playwright tests) and smoke. Boundary is ALLOWED. The frontend change departs from design_plan D3 ('no frontend changes'), but the implementer's design D3 gives the reason: a first-match lookup by the 备注 label could land on the supplier item, whose selected supplier name contains 备注. The plan named nullToEmpty and the code uses defaultString, which behaves the same. A departure with a stated reason is not a finding. The dialog's keyboard tab order now reaches the remark box before the supplier field; the design lists this as a known risk, so it is noted, not raised. Correctness: pass. The null-clears-remark fix is right, validation and the submitted-order guard are unchanged, and list, detail and export already show the remark. Security: pass. The remark is a bound MyBatis-Plus parameter and there is no v-html; permissions, @Log, @RepeatSubmit and the length limit are unchanged, and no secrets were added. Architecture: pass. The change stays inside ruoyi-biz and frontend/src and uses the StringUtils and MapstructUtils building blocks; the frontend departure from the plan has a stated reason. Tests: pass. BizPurchaseOrderRemarkTest and remarkOrder.test.ts both exist and cover what Tests First claims, including a real red-to-green null-remark test. The characterization tests cover the touched paths. The frontend tests only check the source text, a limit the repo accepts because it has no @vue/test-utils.",
+    "findings": [],
+    "questions": []
+  },
+  "traceability": [
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A98",
+        "given": "存在一个启用状态的供应商",
+        "when": "提交一张带备注『请于月底前送达，外包装需防潮』和一条明细的新增请求",
+        "then": "保存成功，查询该单据详情得到的备注与提交的备注完全一致",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A99",
+        "given": "存在一个启用状态的供应商",
+        "when": "提交一张不带备注、含一条明细的新增请求",
+        "then": "保存成功，查询该单据详情得到的备注为空",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A100",
+        "given": "存在一个启用状态的供应商，以及一段由汉字、英文字母和数字混合组成的恰好 500 个字符的备注",
+        "when": "提交带这段备注的新增请求",
+        "then": "保存成功，查询该单据详情得到的备注与这 500 个字符完全一致",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A101",
+        "given": "存在一个启用状态的供应商，以及一段 501 个字符的备注",
+        "when": "提交带这段备注的新增请求",
+        "then": "保存失败并返回提到备注长度的可读提示，系统中不产生该采购单",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A102",
+        "given": "一张备注为 R1 的草稿采购单",
+        "when": "提交把备注改为 R2 的修改请求",
+        "then": "保存成功，查询该单据详情得到的备注为 R2",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A103",
+        "given": "一张备注为 R1 的草稿采购单",
+        "when": "提交备注为空的修改请求",
+        "then": "保存成功，查询该单据详情得到的备注为空",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A104",
+        "given": "一张备注为 R1 的草稿采购单",
+        "when": "提交备注为 501 个字符的修改请求",
+        "then": "保存失败并返回提到备注长度的可读提示，查询该单据详情得到的备注仍为 R1",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A105",
+        "given": "一张备注为 R1 的已提交采购单",
+        "when": "提交把备注改为 R2 的修改请求",
+        "then": "修改失败并返回已提交不可修改的提示，查询该单据详情得到的备注仍为 R1",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S9",
+        "title": "采购单备注录入",
+        "as_a": "采购员",
+        "want": "新建采购单或修改草稿采购单时填写、修改或清空备注",
+        "so_that": "我能在单据上记下交期、包装、联系方式等补充说明，并在提交前随时修正"
+      },
+      "criterion": {
+        "id": "A106",
+        "given": "以 admin 登录并打开采购单新增表单",
+        "when": "选择供应商、填写下单日期、添加一行明细并填写备注后保存",
+        "then": "保存成功，列表中该新单据所在行显示所填的备注",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S10",
+        "title": "采购单备注展示",
+        "as_a": "采购员或采购主管",
+        "want": "在采购单列表、详情和导出的 Excel 里看到每张单据的备注",
+        "so_that": "我不必进入编辑状态就能了解单据的补充说明，线下汇总和留档时也不会漏掉这些信息"
+      },
+      "criterion": {
+        "id": "A107",
+        "given": "一张备注为 R 的草稿采购单",
+        "when": "以该单据的单号查询采购单分页列表",
+        "then": "返回结果中该单据所在行的备注为 R",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S10",
+        "title": "采购单备注展示",
+        "as_a": "采购员或采购主管",
+        "want": "在采购单列表、详情和导出的 Excel 里看到每张单据的备注",
+        "so_that": "我不必进入编辑状态就能了解单据的补充说明，线下汇总和留档时也不会漏掉这些信息"
+      },
+      "criterion": {
+        "id": "A108",
+        "given": "一张备注为 R 的已提交采购单",
+        "when": "按该单据 ID 查询详情",
+        "then": "返回的主表信息中备注为 R",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S10",
+        "title": "采购单备注展示",
+        "as_a": "采购员或采购主管",
+        "want": "在采购单列表、详情和导出的 Excel 里看到每张单据的备注",
+        "so_that": "我不必进入编辑状态就能了解单据的补充说明，线下汇总和留档时也不会漏掉这些信息"
+      },
+      "criterion": {
+        "id": "A109",
+        "given": "一张备注为 R 的采购单，当前用户有导出权限",
+        "when": "以该单据的单号调用导出接口",
+        "then": "导出的 Excel 有列标题为『备注』的列，该单据所在行的备注单元格内容为 R",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S10",
+        "title": "采购单备注展示",
+        "as_a": "采购员或采购主管",
+        "want": "在采购单列表、详情和导出的 Excel 里看到每张单据的备注",
+        "so_that": "我不必进入编辑状态就能了解单据的补充说明，线下汇总和留档时也不会漏掉这些信息"
+      },
+      "criterion": {
+        "id": "A110",
+        "given": "一张没有备注的采购单，当前用户有导出权限",
+        "when": "以该单据的单号调用导出接口",
+        "then": "导出的 Excel 中该单据所在行的备注单元格为空",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S10",
+        "title": "采购单备注展示",
+        "as_a": "采购员或采购主管",
+        "want": "在采购单列表、详情和导出的 Excel 里看到每张单据的备注",
+        "so_that": "我不必进入编辑状态就能了解单据的补充说明，线下汇总和留档时也不会漏掉这些信息"
+      },
+      "criterion": {
+        "id": "A111",
+        "given": "以 admin 登录，系统中有一张备注为 R 的采购单",
+        "when": "进入采购单管理页面，以该单据的单号查询",
+        "then": "表格有『备注』列，该单据所在行显示 R",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    },
+    {
+      "story": {
+        "id": "S10",
+        "title": "采购单备注展示",
+        "as_a": "采购员或采购主管",
+        "want": "在采购单列表、详情和导出的 Excel 里看到每张单据的备注",
+        "so_that": "我不必进入编辑状态就能了解单据的补充说明，线下汇总和留档时也不会漏掉这些信息"
+      },
+      "criterion": {
+        "id": "A112",
+        "given": "以 admin 登录，系统中有一张备注为 R 的采购单",
+        "when": "在采购单管理页面查看该单据详情",
+        "then": "详情中显示备注 R",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260928-002-purchase-order-remark",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+            "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "a92a5a82c99d09d89c097f8822792cefe2e3d6c962c3a86513a4cd37ec47e842"
+    }
+  ],
+  "telemetry": {
+    "calls": 9,
+    "failed": 0,
+    "agent_ms": 1075605,
+    "cost_usd": 10.9379,
+    "by_role": {
+      "product": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 65217,
+        "cost_usd": 0.4169,
+        "turns": 11
+      },
+      "acceptance": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 221554,
+        "cost_usd": 1.5332,
+        "turns": 25
+      },
+      "design": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 82938,
+        "cost_usd": 0.8221,
+        "turns": 14
+      },
+      "characterize": {
+        "calls": 2,
+        "failed": 0,
+        "agent_ms": 175940,
+        "cost_usd": 1.2947,
+        "turns": 32
+      },
+      "implement": {
+        "calls": 3,
+        "failed": 0,
+        "agent_ms": 473398,
+        "cost_usd": 4.8577,
+        "turns": 93
+      },
+      "review": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 56558,
+        "cost_usd": 2.0133,
+        "turns": 33
+      }
+    },
+    "attempts": 3,
+    "loop_ms": 1645926
+  }
+}
