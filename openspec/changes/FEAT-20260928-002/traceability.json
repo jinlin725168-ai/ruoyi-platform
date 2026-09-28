@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "criteria": [
+    {
+      "criterion_id": "A98",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A99",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A100",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A101",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A102",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A103",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A104",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A105",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A106",
+      "story_id": "S9",
+      "tests": []
+    },
+    {
+      "criterion_id": "A107",
+      "story_id": "S10",
+      "tests": []
+    },
+    {
+      "criterion_id": "A108",
+      "story_id": "S10",
+      "tests": []
+    },
+    {
+      "criterion_id": "A109",
+      "story_id": "S10",
+      "tests": []
+    },
+    {
+      "criterion_id": "A110",
+      "story_id": "S10",
+      "tests": []
+    },
+    {
+      "criterion_id": "A111",
+      "story_id": "S10",
+      "tests": []
+    },
+    {
+      "criterion_id": "A112",
+      "story_id": "S10",
+      "tests": []
+    }
+  ]
+}

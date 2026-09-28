@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "FEAT-20260928-002-purchase-order-remark",
+      "criteria": [
+        "A98",
+        "A99",
+        "A100",
+        "A101",
+        "A102",
+        "A103",
+        "A104",
+        "A105",
+        "A106",
+        "A107",
+        "A108",
+        "A109",
+        "A110",
+        "A111",
+        "A112"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/changes/FEAT-20260928-002/test_purchase_order_remark.py",
+        "acceptance/changes/FEAT-20260928-002/purchase_order_remark.spec.ts"
+      ],
+      "timeout_seconds": 2400
+    }
+  ]
+}
