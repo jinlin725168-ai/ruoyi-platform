@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+      "criteria": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A36",
+        "A37",
+        "A38",
+        "A39",
+        "A40",
+        "A41",
+        "A42",
+        "A43",
+        "A44",
+        "A47",
+        "A48",
+        "A85",
+        "A86",
+        "A87",
+        "A88",
+        "A89",
+        "A90",
+        "A91",
+        "A92",
+        "A93",
+        "A96",
+        "A97",
+        "A25",
+        "A26",
+        "A45",
+        "A46",
+        "A94",
+        "A95"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+        "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+      ],
+      "timeout_seconds": 2400
+    }
+  ]
+}
