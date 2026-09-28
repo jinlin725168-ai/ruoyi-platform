@@ -1,0 +1,1427 @@
+{
+  "version": 1,
+  "status": "PASSED",
+  "change_id": "FEAT-20260924-002",
+  "generated_at": "2026-09-28T01:27:10.083440Z",
+  "requirement": {
+    "goal": "采购单列表和导出可以按供应商名称模糊搜索：先去掉输入首尾的空白字符，并且不区分英文大小写；导出使用与列表完全相同的筛选口径，让采购员少输一段、多敲空格或大小写不一致时也不会漏掉单据",
+    "approval": {
+      "revision": 2,
+      "contract_digest": "240c5e20257fa6245bf73ce904536ea1e51fed76efe22a7c9d55cee1cae7b951",
+      "approved_by": "user",
+      "approved_at": "2026-09-24T10:43:33.633510Z"
+    },
+    "revision": 2
+  },
+  "implementation_commit": "2200856bfb8a8a1f7f72118afa01f4434e33a3cc",
+  "layers": {
+    "unit": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-Dmaven.test.skip=false",
+            "-DskipTests=false",
+            "-pl",
+            "ruoyi-admin",
+            "-am",
+            "test"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "@BeforeEach ==================\n@AfterEach ==================\n",
+          "stderr": "Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3\nOpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended\nWARNING: A Java agent has been loaded dynamically (/home/jinlin/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.10/byte-buddy-agent-1.18.10.jar)\nWARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning\nWARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information\nWARNING: Dynamic loading of agents will be disallowed by default in a future release\n"
+        }
+      ],
+      "candidate_sha256": "91fd90d2f1f5e928a112a20ca07e2d27f96ff51a5d9eed2024f5dcc61b6f8bbe"
+    },
+    "integration": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-Dmaven.test.skip=false",
+            "-DskipTests=false",
+            "-DskipITs=false",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "failsafe:integration-test",
+            "failsafe:verify"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "candidate_sha256": "91fd90d2f1f5e928a112a20ca07e2d27f96ff51a5d9eed2024f5dcc61b6f8bbe"
+    },
+    "acceptance": {
+      "version": 1,
+      "change_id": "FEAT-20260924-002",
+      "status": "PASSED",
+      "expect_red": false,
+      "started_at": "2026-09-24T10:54:39.556634Z",
+      "finished_at": "2026-09-24T10:55:40.948250Z",
+      "head_commit": "8b5a4aa9fcbebf380ba5144afe5f7d90bcac47a1",
+      "workspace_sha256": "91fd90d2f1f5e928a112a20ca07e2d27f96ff51a5d9eed2024f5dcc61b6f8bbe",
+      "suite_digests": {
+        "manifest.json": "2a55e27021ff12e5360442d364a8da6dfb738c7d26d9dfe89baa84b9f66490a4",
+        "purchase_order_supplier_name.spec.ts": "c76f3f1190e5c4610bbdd51964b6d92bb0e08632b407e46058f57095de738274",
+        "test_purchase_order_supplier_name.py": "2df342ec9eed736ee972a9e493b75d931bdb25d8ee5792064b49a1692a0f4201"
+      },
+      "results": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "criteria": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A36",
+            "A37",
+            "A38",
+            "A39",
+            "A40",
+            "A41",
+            "A42",
+            "A43",
+            "A44",
+            "A47",
+            "A48",
+            "A85",
+            "A86",
+            "A87",
+            "A88",
+            "A89",
+            "A90",
+            "A91",
+            "A92",
+            "A93",
+            "A96",
+            "A97",
+            "A25",
+            "A26",
+            "A45",
+            "A46",
+            "A94",
+            "A95"
+          ],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "\nRunning 3 tests using 1 worker\n\n  ✓  1 [chromium] › acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts:153:5 › A4 按单号查询只展示匹配的单据并带供应商分类等核心列 (3.0s)\n  ✓  2 [chromium] › acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts:170:5 › A43 按供应商分类查询时表格只展示该分类的单据 (2.8s)\n  ✓  3 [chromium] › acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts:187:5 › A93 在供应商条件中输入供应商名称的一段查询时表格只展示名称包含这段文字的单据 (2.1s)\n\n  3 passed (8.3s)\n",
+          "stderr": "test_A36_row_shows_supplier_category_label (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryDisplayTest.test_A36_row_shows_supplier_category_label) ... ok\ntest_A37_empty_supplier_category_shows_uncategorized (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryDisplayTest.test_A37_empty_supplier_category_shows_uncategorized) ... ok\ntest_A38_invalid_supplier_category_shows_uncategorized (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryDisplayTest.test_A38_invalid_supplier_category_shows_uncategorized) ... ok\ntest_A44_deleted_supplier_keeps_category (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryDisplayTest.test_A44_deleted_supplier_keeps_category) ... ok\ntest_A39_filter_by_service_category (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryFilterTest.test_A39_filter_by_service_category) ... ok\ntest_A40_filter_uncategorized (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryFilterTest.test_A40_filter_uncategorized) ... ok\ntest_A41_changed_supplier_category_is_used (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryFilterTest.test_A41_changed_supplier_category_is_used) ... ok\ntest_A42_filter_by_category_and_submitted_status (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryFilterTest.test_A42_filter_by_category_and_submitted_status) ... ok\ntest_A47_deleted_supplier_order_matches_its_category (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryFilterTest.test_A47_deleted_supplier_order_matches_its_category) ... ok\ntest_A48_deleted_supplier_order_not_uncategorized (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.CategoryFilterTest.test_A48_deleted_supplier_order_not_uncategorized) ... ok\ntest_A25_export_returns_excel (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.ExportTest.test_A25_export_returns_excel) ... ok\ntest_A26_export_requires_permission (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.ExportTest.test_A26_export_requires_permission) ... ok\ntest_A45_export_by_service_category (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.ExportTest.test_A45_export_by_service_category) ... ok\ntest_A46_export_empty_category_as_uncategorized (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.ExportTest.test_A46_export_empty_category_as_uncategorized) ... ok\ntest_A94_export_name_fragment_with_case_and_whitespace (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.ExportTest.test_A94_export_name_fragment_with_case_and_whitespace) ... ok\ntest_A95_export_blank_name_with_submitted_status (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.ExportTest.test_A95_export_blank_name_with_submitted_status) ... ok\ntest_A85_middle_fragment_matches (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A85_middle_fragment_matches) ... ok\ntest_A86_leading_trailing_half_width_spaces_ignored (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A86_leading_trailing_half_width_spaces_ignored) ... ok\ntest_A87_full_width_space_tab_and_newline_ignored (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A87_full_width_space_tab_and_newline_ignored) ... ok\ntest_A88_lower_case_condition_matches (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A88_lower_case_condition_matches) ... ok\ntest_A89_upper_case_condition_matches (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A89_upper_case_condition_matches) ... ok\ntest_A90_inner_space_is_kept (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A90_inner_space_is_kept) ... ok\ntest_A91_only_whitespace_name_is_no_condition (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A91_only_whitespace_name_is_no_condition) ... ok\ntest_A92_name_with_case_and_spaces_combined_with_status (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.NameRuleTest.test_A92_name_with_case_and_spaces_combined_with_status) ... ok\ntest_A1_filter_by_order_no_fragment (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.QueryTest.test_A1_filter_by_order_no_fragment) ... ok\ntest_A2_filter_by_order_date_range (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.QueryTest.test_A2_filter_by_order_date_range) ... ok\ntest_A3_filter_by_draft_status (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.QueryTest.test_A3_filter_by_draft_status) ... ok\ntest_A96_match_by_recorded_name_after_supplier_rename (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.RecordedNameTest.test_A96_match_by_recorded_name_after_supplier_rename) ... ok\ntest_A97_current_archive_name_does_not_match (acceptance_changes_FEAT_20260924_002_test_purchase_order_supplier_name_py.RecordedNameTest.test_A97_current_archive_name_does_not_match) ... ok\n\n----------------------------------------------------------------------\nRan 29 tests in 5.121s\n\nOK\n"
+        }
+      ],
+      "evidence_path": "/home/jinlin/work/ruoyi-platform/.storyloop/evidence/FEAT-20260924-002/acceptance-result.json",
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    "smoke": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "system-purchase-order-supplier-category",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/smoke/purchase-order/test_purchase_order_category.py",
+            "acceptance/smoke/purchase-order/purchase_order_category.spec.ts"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "\nRunning 2 tests using 1 worker\n\n  ✓  1 [chromium] › acceptance/smoke/purchase-order/purchase_order_category.spec.ts:145:5 › 按单号查询只展示匹配的单据并带供应商分类等核心列 (3.4s)\n  ✓  2 [chromium] › acceptance/smoke/purchase-order/purchase_order_category.spec.ts:162:5 › 按供应商分类查询时表格只展示该分类的单据 (3.5s)\n\n  2 passed (7.4s)\n",
+          "stderr": "test_deleted_supplier_keeps_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_deleted_supplier_keeps_category) ... ok\ntest_empty_supplier_category_shows_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_empty_supplier_category_shows_uncategorized) ... ok\ntest_invalid_supplier_category_shows_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_invalid_supplier_category_shows_uncategorized) ... ok\ntest_row_shows_supplier_category_label (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryDisplayTest.test_row_shows_supplier_category_label) ... ok\ntest_changed_supplier_category_is_used (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_changed_supplier_category_is_used) ... ok\ntest_deleted_supplier_order_matches_its_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_deleted_supplier_order_matches_its_category) ... ok\ntest_filter_by_service_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_filter_by_service_category) ... ok\ntest_filter_uncategorized_excludes_valid_and_deleted_supplier (acceptance_smoke_purchase_order_test_purchase_order_category_py.CategoryFilterTest.test_filter_uncategorized_excludes_valid_and_deleted_supplier) ... ok\ntest_export_by_service_category (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_by_service_category) ... ok\ntest_export_empty_category_as_uncategorized (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_empty_category_as_uncategorized) ... ok\ntest_export_returns_excel (acceptance_smoke_purchase_order_test_purchase_order_category_py.ExportTest.test_export_returns_excel) ... ok\ntest_filter_by_draft_status (acceptance_smoke_purchase_order_test_purchase_order_category_py.QueryBasicsTest.test_filter_by_draft_status) ... ok\ntest_filter_by_order_no_fragment (acceptance_smoke_purchase_order_test_purchase_order_category_py.QueryBasicsTest.test_filter_by_order_no_fragment) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 3.617s\n\nOK\n"
+        }
+      ],
+      "suite_digests": {
+        "manifest.json": "24059b90cab6f4c1a14afc4e0c2fd53636ad682eeded4e8621fa6378b195594f",
+        "purchase-order/purchase_order_category.spec.ts": "cbea9615ab068eb79f2f3c5c494b5cbded0a4de7023aab2a5299bf785bc8407c",
+        "purchase-order/test_purchase_order_category.py": "9c0e68b60f0c7b9138c1e298a4a7fb8d34df372bb3902d2bd736d36657973cd9"
+      }
+    },
+    "checks": {
+      "status": "PASSED",
+      "results": [
+        {
+          "id": "REGRESSION-001",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "spotless:check"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "id": "REGRESSION-002",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.sdkman/candidates/maven/current/bin/mvn",
+            "-q",
+            "-o",
+            "-f",
+            "backend/pom.xml",
+            "-pl",
+            "ruoyi-modules/ruoyi-biz",
+            "checkstyle:check"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "id": "REGRESSION-003",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/work/storyloop/.venv/bin/python",
+            "acceptance/tools/frontend_check.py"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "Found 0 warnings and 0 errors.\nFinished in 172ms on 244 files with 157 rules using 24 threads.\n",
+          "stderr": "frontend_check: vue-tsc 0 error(s) in business files, 41 in upstream files (not a gate)\n"
+        },
+        {
+          "id": "REGRESSION-004",
+          "criteria": [],
+          "command": [
+            "/home/jinlin/.local/bin/gitleaks",
+            "detect",
+            "--no-git",
+            "--source",
+            ".",
+            "--config",
+            ".gitleaks.toml",
+            "--redact",
+            "--exit-code",
+            "1"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "\n    ○\n    │╲\n    │ ○\n    ○ ░\n    ░    gitleaks\n\n\u001b[90m6:56AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~16986846 bytes (16.99 MB) in 557ms\u001b[0m\n\u001b[90m6:56AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n"
+        }
+      ],
+      "candidate_sha256": "91fd90d2f1f5e928a112a20ca07e2d27f96ff51a5d9eed2024f5dcc61b6f8bbe"
+    }
+  },
+  "review": {
+    "verdict": "pass",
+    "summary": "Final review of FEAT-20260924-002. None of the four reviewers reported a finding or a question, so no finding was dropped. I read git diff myself. It matches what the reviewers described. BizPurchaseOrderServiceImpl.buildQueryWrapper now trims the supplier name with the base building block StringUtils.trim (Hutool, which also strips U+3000, tabs, CR and LF). When the trimmed value is not empty, it adds apply(\"LOWER(supplier_name) LIKE {0}\", \"%\" + lower(Locale.ROOT) + \"%\"). The only other edits are the Javadoc, an inline comment and the java.util.Locale import. The only other file is the new unit test, and the boundary check found no violations. Correctness: pass. The filter is a contains match that trims leading and trailing whitespace, ignores English case and keeps inner spaces. It runs on the supplier_name stored on the order, not on the supplier master data (A96/A97). A name that is empty after trimming adds no condition (A91/A95). List and export use the same buildQueryWrapper, so they filter identically (A94). The other conditions, sorting, columns and paging are unchanged. A27 is a manual criterion and was not checked by hand, but this change does not touch export columns or formatting. Security: pass. The user value is passed as a bound parameter, so there is no SQL injection. The permissions on /list and /export are unchanged, and A26 confirms export is refused without the export permission. The design records that % and _ are not escaped, as an accepted trade-off. No secrets were added. Architecture: pass. The change follows design_plan D1–D3 and its Files table exactly. It reuses the base StringUtils.trim and mirrors the rule already in BizSupplierServiceImpl. No base files changed and no cross-module dependency was added. Tests: pass. BizPurchaseOrderSupplierNameConditionTest exists and is tagged @Tag(\"dev\") with Mockito and no Spring context. It contains the 7 tests listed under Tests First, and each test checks both the list and export wrappers. 6 of the 7 would fail on the old code. The design openly states that the whitespace-only test already passed before the fix and is kept as a regression guard. The evidence reports that all five layers passed: unit, integration, acceptance (29 API tests and 3 Playwright tests), smoke and static checks. No builds were rerun during this read-only review.",
+    "findings": [],
+    "questions": []
+  },
+  "traceability": [
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A1",
+        "given": "系统中已存在若干采购单，其中仅有一张单号包含片段『X9』",
+        "when": "以单号片段『X9』发起分页查询",
+        "then": "返回结果只包含该单号匹配的单据，总条数为 1",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A2",
+        "given": "系统中存在下单日期分别在查询范围内和范围外的采购单",
+        "when": "以下单日期起止范围发起查询",
+        "then": "返回结果只包含下单日期落在该范围内（含起止当天）的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A3",
+        "given": "系统中同时存在草稿与已提交状态的采购单",
+        "when": "以状态=草稿发起查询",
+        "then": "返回结果中全部单据的状态均为草稿",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A4",
+        "given": "以 admin 登录并进入采购单管理页面",
+        "when": "在查询区填写单号并执行查询",
+        "then": "表格只展示匹配的单据，且展示单号、供应商、供应商分类、下单日期、状态、合计金额列",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A36",
+        "given": "一张采购单关联的供应商在档案上的分类为『原材料』",
+        "when": "查询采购单分页列表",
+        "then": "该单据所在行的供应商分类为『原材料』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A37",
+        "given": "一张采购单关联的供应商在档案上的分类为空",
+        "when": "查询采购单分页列表",
+        "then": "该单据所在行的供应商分类为『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A38",
+        "given": "一张采购单关联的供应商在档案上的分类值已不在供应商分类字典中",
+        "when": "查询采购单分页列表",
+        "then": "该单据所在行的供应商分类为『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A39",
+        "given": "系统中同时存在供应商分类为『服务』和『设备』的采购单",
+        "when": "以供应商分类=『服务』发起分页查询",
+        "then": "返回结果只包含供应商分类为『服务』的单据，总条数与这类单据数量一致",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A40",
+        "given": "系统中同时存在供应商分类为空、已失效和为『原材料』的采购单",
+        "when": "以供应商分类=『未分类』发起分页查询",
+        "then": "返回结果包含分类为空和已失效的单据，不包含分类为『原材料』的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A41",
+        "given": "一张采购单关联的供应商分类原为『原材料』，随后在供应商档案中改为『设备』",
+        "when": "以供应商分类=『设备』发起分页查询",
+        "then": "返回结果包含该单据，且该行的供应商分类为『设备』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A42",
+        "given": "供应商分类为『服务』的采购单中，既有草稿也有已提交",
+        "when": "以供应商分类=『服务』且状态=已提交发起分页查询",
+        "then": "返回结果中每张单据的供应商分类都是『服务』，状态都是已提交",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A43",
+        "given": "以 admin 登录并进入采购单管理页面，系统中存在不同供应商分类的采购单",
+        "when": "在查询区选择一个供应商分类并执行查询",
+        "then": "表格只展示该供应商分类的单据，且每行的供应商分类列都显示该分类名称",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A44",
+        "given": "一张采购单关联的供应商分类为『原材料』，随后该供应商在供应商档案中被逻辑删除",
+        "when": "查询采购单分页列表",
+        "then": "该单据仍出现在列表中，供应商分类为『原材料』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A47",
+        "given": "一张采购单关联的供应商分类为『原材料』，随后该供应商在供应商档案中被逻辑删除",
+        "when": "以供应商分类=『原材料』发起分页查询",
+        "then": "返回结果包含该单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A48",
+        "given": "一张采购单关联的供应商分类为『原材料』，随后该供应商在供应商档案中被逻辑删除",
+        "when": "以供应商分类=『未分类』发起分页查询",
+        "then": "返回结果不包含该单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A85",
+        "given": "系统中有一张供应商名称为 N 的采购单，以及一张供应商名称不包含 N 中间某段文字的采购单",
+        "when": "只用 N 中间的一段文字（不是完整名称）作为供应商名称条件发起分页查询",
+        "then": "返回结果包含供应商名称为 N 的单据，不包含供应商名称里没有这段文字的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A86",
+        "given": "系统中有一张供应商名称为 N 的采购单，以及一张供应商名称不包含 N 的采购单",
+        "when": "以在 N 前后各加若干半角空格后的文字作为供应商名称条件发起分页查询",
+        "then": "返回结果包含供应商名称为 N 的单据，不包含供应商名称不包含 N 的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A87",
+        "given": "系统中有一张供应商名称为 N 的采购单，以及一张供应商名称不包含 N 的采购单",
+        "when": "以在 N 前面加全角空格和制表符、后面加换行后的文字作为供应商名称条件发起分页查询",
+        "then": "返回结果包含供应商名称为 N 的单据，不包含供应商名称不包含 N 的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A88",
+        "given": "系统中有一张采购单，其供应商名称 N 含大小写混合的英文字母",
+        "when": "以 N 的全小写形式作为供应商名称条件发起分页查询",
+        "then": "返回结果包含该单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A89",
+        "given": "系统中有一张采购单，其供应商名称 N 含大小写混合的英文字母",
+        "when": "以 N 的全大写形式作为供应商名称条件发起分页查询",
+        "then": "返回结果包含该单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A90",
+        "given": "系统中分别有供应商名称为『Acme Steel』（中间有空格）和『AcmeSteel』（中间无空格）的采购单",
+        "when": "以『acme steel』作为供应商名称条件发起分页查询",
+        "then": "返回结果包含供应商名称为『Acme Steel』的单据，不包含供应商名称为『AcmeSteel』的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A91",
+        "given": "系统中存在多个不同供应商的采购单",
+        "when": "以只由半角空格、全角空格、制表符和换行混合组成的供应商名称条件请求第 1 页采购单列表",
+        "then": "返回成功，总条数与不带供应商名称条件查询时相同",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A92",
+        "given": "供应商名称为 N 的采购单中既有草稿也有已提交，另有其他供应商的已提交单据",
+        "when": "以前后带空格并改变大小写后的 N 作为供应商名称条件，并以状态=已提交发起分页查询",
+        "then": "返回结果中每张单据的供应商名称都是 N，状态都是已提交",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A93",
+        "given": "以 admin 登录并进入采购单管理页面，系统中存在多个不同供应商的采购单",
+        "when": "在查询区的供应商条件中输入某个供应商名称的一段并执行查询",
+        "then": "表格只展示供应商名称包含这段文字的单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A96",
+        "given": "一张采购单上记录的供应商名称为 N，随后其关联供应商在供应商档案中改名为与 N 无共同文字的 M",
+        "when": "以 N 作为供应商名称条件发起分页查询",
+        "then": "返回结果包含该单据，且该行显示的供应商名称仍为 N",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S1",
+        "title": "采购单分页查询",
+        "as_a": "采购员",
+        "want": "在采购单列表里看到每张单据的供应商分类，并按供应商分类与单号、供应商名称、状态、下单日期组合筛选；按供应商名称搜索时只输入名称的一段也能找到，而且不必在意首尾空白字符和英文大小写",
+        "so_that": "我能按品类或供应商快速定位和跟进采购单，不会因为只记得供应商名称的一段、多敲了空格、粘贴时带入空白字符或大小写不一致而漏掉单据"
+      },
+      "criterion": {
+        "id": "A97",
+        "given": "一张采购单上记录的供应商名称为 N，随后其关联供应商在供应商档案中改名为与 N 无共同文字的 M",
+        "when": "以 M 作为供应商名称条件发起分页查询",
+        "then": "返回结果不包含该单据",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A25",
+        "given": "系统中存在草稿与已提交的采购单",
+        "when": "以状态=已提交调用导出接口",
+        "then": "接口返回成功且响应为 Excel 文件内容（非空二进制）",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A26",
+        "given": "一个未被授予导出权限的登录用户",
+        "when": "调用导出接口",
+        "then": "接口返回无权限，不产生任何文件内容",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A27",
+        "given": "按查询条件导出得到的 Excel 文件",
+        "when": "用 Excel 打开该文件",
+        "then": "列标题为中文业务名称并包含『供应商分类』，状态显示为『草稿』或『已提交』，供应商分类显示中文名称或『未分类』，每张采购单占一行且带合计金额，数据行与页面查询结果一致",
+        "kind": "manual"
+      },
+      "tests": [
+        {
+          "id": "human",
+          "command": [
+            "human"
+          ],
+          "timeout_seconds": 0,
+          "result": {
+            "status": "ACCEPTED",
+            "returncode": 0,
+            "timed_out": false
+          },
+          "note": "用户在本地环境核对后确认：采购单导出 Excel 列标题为中文且含供应商分类，状态显示草稿/已提交，每单一行带合计金额，按供应商名称筛选后数据行与页面一致；本次未改导出列",
+          "accepted_at": "2026-09-28T01:27:08+00:00"
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A45",
+        "given": "系统中同时存在供应商分类为『服务』和『原材料』的采购单",
+        "when": "以供应商分类=『服务』调用导出接口",
+        "then": "导出的 Excel 包含『供应商分类』列，所有数据行的该列都是『服务』，行数与同条件列表查询的总条数一致",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A46",
+        "given": "一张采购单关联的供应商在档案上的分类为空",
+        "when": "以该单据的单号调用导出接口",
+        "then": "导出的 Excel 中该单据所在行的供应商分类为『未分类』",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A94",
+        "given": "系统中有供应商名称为 N（含大小写混合英文字母）的采购单，以及其他供应商的采购单，用户拥有导出权限",
+        "when": "以 N 中间一段文字改变大小写、再在前后加半角空格、全角空格或制表符后的内容作为供应商名称条件调用导出接口",
+        "then": "导出文件中每个数据行的供应商名称都包含这段文字（忽略大小写），数据行数等于以同一条件查询列表得到的总条数",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    },
+    {
+      "story": {
+        "id": "S7",
+        "title": "导出采购单 Excel",
+        "as_a": "采购主管",
+        "want": "导出的采购单 Excel 带有供应商分类列，导出时也能按供应商分类和供应商名称筛选，供应商名称的匹配规则与列表查询完全一致",
+        "so_that": "导出的范围和我在列表里看到的一致，我能在表格里按供应商或品类做线下汇总与留档"
+      },
+      "criterion": {
+        "id": "A95",
+        "given": "系统中存在多个不同供应商的草稿与已提交采购单，用户拥有导出权限",
+        "when": "以只由空白字符（半角空格、全角空格、制表符、换行混合）组成的供应商名称条件，并以状态=已提交调用导出接口",
+        "then": "导出文件的数据行数等于只以状态=已提交查询列表得到的总条数",
+        "kind": "automated"
+      },
+      "tests": [
+        {
+          "id": "FEAT-20260924-002-purchase-order-supplier-name-search",
+          "command": [
+            "{python}",
+            "acceptance/tools/ruoyi_smoke.py",
+            "acceptance/changes/FEAT-20260924-002/test_purchase_order_supplier_name.py",
+            "acceptance/changes/FEAT-20260924-002/purchase_order_supplier_name.spec.ts"
+          ],
+          "timeout_seconds": 2400,
+          "result": {
+            "status": "PASS",
+            "returncode": 0,
+            "timed_out": false
+          }
+        }
+      ],
+      "evidence_sha256": "139c1a9c8928fc11b7bdfbe558fde8ce3e68868a98bfbff5cdd5a5e3ee28cc36"
+    }
+  ],
+  "telemetry": {
+    "calls": 7,
+    "failed": 0,
+    "agent_ms": 645365,
+    "cost_usd": 6.2135,
+    "by_role": {
+      "product": {
+        "calls": 2,
+        "failed": 0,
+        "agent_ms": 124395,
+        "cost_usd": 0.7606,
+        "turns": 12
+      },
+      "acceptance": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 230241,
+        "cost_usd": 1.5757,
+        "turns": 17
+      },
+      "design": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 67874,
+        "cost_usd": 0.549,
+        "turns": 15
+      },
+      "characterize": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 83215,
+        "cost_usd": 0.7402,
+        "turns": 12
+      },
+      "implement": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 95997,
+        "cost_usd": 0.7378,
+        "turns": 18
+      },
+      "review": {
+        "calls": 1,
+        "failed": 0,
+        "agent_ms": 43643,
+        "cost_usd": 1.8502,
+        "turns": 26
+      }
+    },
+    "attempts": 1,
+    "loop_ms": 312215738
+  }
+}
