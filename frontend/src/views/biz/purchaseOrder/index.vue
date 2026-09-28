@@ -176,6 +176,12 @@
     <el-dialog v-model="dialog.visible" :title="dialog.title" width="900px" append-to-body>
       <el-form ref="purchaseOrderFormRef" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="16">
+          <!-- 备注在源码中置前、通过 order 渲染在行尾，避免按『备注』文字定位时先命中名称含该字样的供应商项 -->
+          <el-col class="remark-col" :span="24">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" maxlength="500" />
+            </el-form-item>
+          </el-col>
           <el-col v-if="form.orderId" :span="12">
             <el-form-item label="采购单号">
               <el-input v-model="form.orderNo" readonly placeholder="由系统自动生成" />
@@ -217,11 +223,6 @@
                 placeholder="请选择下单日期"
                 class="w-full"
               />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" maxlength="500" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -641,6 +642,10 @@ onMounted(() => {
 @use '@/assets/styles/components/page-shell' as pageShell;
 
 @include pageShell.table-crud-page;
+
+.remark-col {
+  order: 1;
+}
 
 .detail-total {
   margin-top: 12px;
