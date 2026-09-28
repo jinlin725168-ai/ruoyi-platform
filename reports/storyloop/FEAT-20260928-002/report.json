@@ -795,5 +795,6 @@
     },
     "attempts": 3,
     "loop_ms": 1645926
-  }
+  },
+  "merge_commit": "b0feb2e92b67fd41a842ba52daa439659b317aba"
 }
