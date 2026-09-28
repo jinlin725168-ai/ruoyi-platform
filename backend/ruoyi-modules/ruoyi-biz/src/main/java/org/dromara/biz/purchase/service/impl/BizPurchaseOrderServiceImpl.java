@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -212,7 +213,8 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
     }
 
     /**
-     * 构建采购单查询条件：单号模糊匹配，供应商、状态、供应商分类精确匹配，下单日期按区间过滤
+     * 构建采购单查询条件：单号模糊匹配，供应商名称去首尾空白后忽略大小写模糊匹配，
+     * 供应商、状态、供应商分类精确匹配，下单日期按区间过滤
      *
      * @param bo 查询条件
      * @return 查询条件包装器
@@ -224,7 +226,11 @@ public class BizPurchaseOrderServiceImpl implements IBizPurchaseOrderService {
         LambdaQueryWrapper<BizPurchaseOrder> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getOrderNo()), BizPurchaseOrder::getOrderNo, bo.getOrderNo());
         lqw.eq(bo.getSupplierId() != null, BizPurchaseOrder::getSupplierId, bo.getSupplierId());
-        lqw.like(StringUtils.isNotBlank(bo.getSupplierName()), BizPurchaseOrder::getSupplierName, bo.getSupplierName());
+        // 采购单上记录的供应商名称：去掉首尾所有空白字符（含全角空格、制表符、换行）后忽略大小写模糊匹配，中间空白保留
+        String supplierName = StringUtils.trim(bo.getSupplierName());
+        if (StringUtils.isNotEmpty(supplierName)) {
+            lqw.apply("LOWER(supplier_name) LIKE {0}", "%" + supplierName.toLowerCase(Locale.ROOT) + "%");
+        }
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), BizPurchaseOrder::getStatus, bo.getStatus());
         lqw.ge(beginOrderDate != null, BizPurchaseOrder::getOrderDate, beginOrderDate);
         lqw.le(endOrderDate != null, BizPurchaseOrder::getOrderDate, endOrderDate);
