@@ -90,5 +90,6 @@
     （父 pom 默认 `maven.test.skip=true`，两个开关都要传）。回归命令 `-pl ruoyi-admin -am test` 会一起跑业务模块的测试。
   - 前端：只对纯函数和 api 封装写 vitest 用例，文件放在源码旁边命名为 `<name>.test.ts`，运行
     `pnpm --dir frontend exec vitest run <file>`；仓库没有 @vue/test-utils，不写组件测试，页面行为交给冒烟。
+    单元层会用 `python3 acceptance/tools/frontend_unit.py`（同步到 scratch 后 `vitest run`）把这些用例和 Maven 单元测试一起跑，红了同样过不了。
   - design 的 `## Tests First` 逐条记录测试名、实现前看到的失败、最终绿灯。
 - 实现完成后自检：编译通过、SQL 语法正确、菜单权限串与 `@SaCheckPermission` 一致、前端 api 路径与后端 `@RequestMapping` 一致。

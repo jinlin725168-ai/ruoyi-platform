@@ -12,6 +12,10 @@
       "ruoyi-admin",
       "-am",
       "test"
+    ],
+    [
+      "{python}",
+      "acceptance/tools/frontend_unit.py"
     ]
   ],
   "integration_commands": [

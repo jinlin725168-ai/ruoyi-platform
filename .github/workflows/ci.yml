@@ -74,7 +74,7 @@ jobs:
           if-no-files-found: ignore
 
   frontend:
-    name: 前端：oxlint / 类型检查（业务文件）
+    name: 前端：单元测试 / oxlint / 类型检查（业务文件）
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -88,6 +88,8 @@ jobs:
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
       - run: pnpm --dir frontend install --frozen-lockfile
+      - name: 前端单元测试（vitest）
+        run: python3 acceptance/tools/frontend_unit.py --in-place
       - name: oxlint + vue-tsc（只对 src/views/biz、src/api/biz 判失败）
         run: python3 acceptance/tools/frontend_check.py --in-place
 
