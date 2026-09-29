@@ -1,42 +1,65 @@
-# ruoyi-platform 底座摸底文档（foundation）
+# 底座知识库
 
-- 基线版本：**1.0.7**（取自 `.storyloop/baseline.json` 的 `baseline_version`，对应 `main` 分支提交 `363a5d397`，即 BASE-20260923-001 之后）。
-- 后端 `backend/`：RuoYi-Vue-Plus 6.X，以 git subtree 引入。Maven `revision` 为 6.0.0，技术栈为 Spring Boot 4.1、JDK 21、Sa-Token 1.45、MyBatis-Plus 3.5.17（另有 mybatis-plus-join）、Redisson、MapStruct-Plus、Fesod（EasyExcel 的后继）、Warm-Flow、LiteFlow 和 SnailJob。
-- 前端 `frontend/`：plus-ui 6.X-Vue，以 git subtree 引入。技术栈为 Vue 3.5、TypeScript 6、Element Plus 2.14、Vite 8、Pinia 和 vxe-table，包管理用 pnpm 10。
-- 本仓库自建的部分：`acceptance/`（代理指南、冒烟执行器、客户端和 UI 回归资产）、`sql/biz/`（业务增量 SQL）、`infra/`（本地 MySQL 和 Redis 容器）、`openspec/`（活规格和变更归档）。
+对应底座版本：1.0.19，生成日期：2026-09-28，生成方式：storyloop survey（引擎以 survey 角色调用，只读摸底）。上一版对应 1.0.7（BASE-20260923-002），本版是刷新。
 
-本目录只记录底座的现状，以及怎样在底座上扩展。各角色必须遵守的规则写在 `acceptance/AGENT_GUIDE.md`。本文档与 AGENT_GUIDE 或代码冲突时，以 AGENT_GUIDE 和代码为准，再通过 BASE 提案修正本文档。
+- 后端 `backend/`：RuoYi-Vue-Plus 6.X，以 git subtree 引入。Maven `revision` 为 6.0.0。技术栈为 Spring Boot 4.1.0、JDK 21、Sa-Token 1.45.0、MyBatis-Plus 3.5.17（另有 mybatis-plus-join）、Redisson、MapStruct-Plus、Fesod、Warm-Flow、LiteFlow、SnailJob（`backend/pom.xml` 的 `<properties>`）。
+- 前端 `frontend/`：plus-ui 6.X，以 git subtree 引入。技术栈为 Vue 3.5、TypeScript 6、Element Plus 2.14、Vite 8、Pinia、vxe-table，另有 vitest 4.1.11 和 @playwright/test，包管理用 pnpm 10（`frontend/package.json`）。
+- 本仓库自建的部分：`acceptance/`（代理指南、冒烟与检查执行器、验收客户端、系统冒烟、变更验收、UI 回归资产）、`sql/biz/`（业务增量 SQL）、`infra/`（本地 MySQL 和 Redis 容器）、`openspec/`（活规格、变更归档、本知识库）、`.github/workflows/`（CI 与 CodeQL）。
+
+本知识库只记录底座现状，以及怎样在底座上扩展。各角色必须遵守的规则写在 `acceptance/AGENT_GUIDE.md`。本文档与 AGENT_GUIDE 或代码冲突时，以 AGENT_GUIDE 和代码为准，再通过 BASE 提案修正本文档。
+
+## 怎么用
+
+- product：先看 `capabilities.md`，避免重复建设；修改既有需求时沿用活规格里的旧 Requirement 标题。
+- implement：先看 `extension.md` 和 `building-blocks.md`；测试写法和运行命令看 `testing.md`。
+- characterize：先看 `testing.md` 第一节（特征化测试的位置、命名与 MapstructUtils 的处理）。
+- smoke / acceptance：先看 `testing.md` 和 `building-blocks.md` 第三节的验收客户端；接口路径和权限串看 `api.md`。
+- review：对照 `extension.md`（文件清单、禁止事项）和 `building-blocks.md`（有没有重复实现）。
 
 ## 文档索引
 
-| 文档 | 内容 | 主要读者 |
-|---|---|---|
-| [modules.md](modules.md) | 顶层目录，Maven 与前端模块的职责，依赖方向，可变区与集成点 | 所有角色 |
-| [architecture.md](architecture.md) | 启动顺序；配置键与运行档；请求管线（认证、权限、校验、加解密、异常）；数据访问、缓存、调度；前端运行时 | implement、review |
-| [extension.md](extension.md) | 端到端新增业务功能：每层文件、SQL、菜单与权限、字典、前端、测试、自检清单，以及参考实现 | implement |
-| [api.md](api.md) | 全部控制器路由和权限串，按模块分组 | smoke、implement |
-| [capabilities.md](capabilities.md) | 底座已有功能，以及 `openspec/specs/` 活规格的摘要 | 产品、需求分析 |
-| [building-blocks.md](building-blocks.md) | 可复用的后端类、注解、工具，前端 hooks、组件、工具，验收客户端与冒烟工具 | implement、smoke |
-| [testing.md](testing.md) | 单元测试、类型检查、冒烟、UI 回归的布局和运行方式，标签，默认跳过项 | implement、smoke |
+| 文档 | 一句话用途 |
+|---|---|
+| [modules.md](modules.md) | 顶层目录、Maven 模块与前端目录的职责，依赖方向，可变区、集成点和受保护路径 |
+| [architecture.md](architecture.md) | 技术栈版本、启动过程、一个请求从进入到返回的每个环节、数据访问、缓存与调度、前端运行机制、配置键位置 |
+| [extension.md](extension.md) | 新增一个业务表功能要创建或修改的全部文件、菜单与权限、前端页面、修改既有功能、代码生成器、禁止事项、参考实现 |
+| [api.md](api.md) | 接口约定，业务接口与上游系统接口的路由、权限串、实现类，前端 api 封装 |
+| [capabilities.md](capabilities.md) | 上游自带能力，本仓库已实现的能力（以 `openspec/specs/*/spec.md` 为准），能力之间的依赖 |
+| [building-blocks.md](building-blocks.md) | 应复用的后端类与服务、前端 hooks 与组件、验收工具，以及「别自己写」清单 |
+| [testing.md](testing.md) | 单元、集成、检查、前端单元、变更验收、系统冒烟、CI 各层的位置和运行命令，默认被跳过的东西，已知的坑 |
 
-## 使用方式
+## 1.0.7 以来的底座变化（本次刷新的原因）
 
-1. 先确定改动落在哪里：查 `modules.md` 的可变区。可变区只有 `backend/ruoyi-modules/**`、`frontend/src/**`、`frontend/public/**` 和 `sql/biz/**`。其余都是底座，需要改时写进 questions 或 summary，由外部流程转成 BASE 提案。
-2. 新增业务功能：按 `extension.md` 的步骤做。单表功能复制 `org.dromara.biz.supplier`；主子表加状态流转的功能复制 `org.dromara.biz.purchase`。
-3. 写冒烟用例：先读 `testing.md` 和 `api.md`，后端用例用 `acceptance/tools/ruoyi_client.py`，UI 用例的定位器复用 `acceptance/ui/<capability>/`。
-4. 引用配置时只写键名和文件位置。本目录不抄录任何配置值、口令、密钥或连接串，它们都在原文件里。
+- 测试分层（BASE-20260923-004）：StoryLoop 配置拆成 `unit_commands`、`integration_commands`、`check_commands`，另有 `test_roots`。`backend/ruoyi-modules/pom.xml` 加了 failsafe，只跑 `**/integration/**/*IT.java`。
+- 检查层（BASE-20260923-005、-006）：`ruoyi-biz` 上的 spotless 与 checkstyle（`backend/ruoyi-modules/checkstyle-biz.xml`），`acceptance/tools/frontend_check.py`（oxlint 加 vue-tsc；vue-tsc 只对业务文件判失败），gitleaks（`.gitleaks.toml`）。`backend/ruoyi-modules/ruoyi-biz/pom.xml` 从此成为集成点。
+- 前端单元层（BASE-20260928-001）：`acceptance/tools/frontend_unit.py` 在 scratch 里跑 vitest，已进入 `unit_commands`。
+- CI（BASE-20260923-007、BASE-20260924-001 至 -005）：`.github/workflows/ci.yml` 有 backend、frontend、security、smoke 四个作业，另有每周运行的 `codeql.yml`。Trivy 发现有修复版本的 HIGH/CRITICAL 依赖漏洞时阻断合入；两个 workflow 文件都是受保护路径。
+- 依赖版本覆盖（BASE-20260924-004）：`backend/pom.xml` 的 `dependencyManagement` 开头钉住了 netty、tomcat、httpcore5、postgresql、commons-beanutils、bouncycastle 的修复版本。
+- 验收分成两类：变更验收在 `acceptance/changes/<change-id>/`，项目级系统冒烟在 `acceptance/smoke/manifest.json`（由 smoke-propose / smoke-apply 维护）。
+- 业务侧：供应商增加了按编码查询，名称查询改为去首尾空白且不区分大小写；采购单增加了供应商分类的展示、筛选和导出，按供应商名称查询，以及备注；`ruoyi-biz` 已有 9 个单元测试类，前端已有 4 个 vitest 文件。
 
-## 与常见 RuoYi-Vue-Plus 资料不同的地方（容易踩坑）
+## 容易踩坑（与常见 RuoYi-Vue-Plus 资料不同的地方）
 
-- **没有多租户。** 底座没有 `ruoyi-common-tenant`，表里没有 `tenant_id`，也没有 `/auth/tenant/list` 路由。但 `ruoyi_client.Client.login()` 和现有冒烟 spec 仍在登录体里带 `tenantId`，后端会忽略它。`ruoyi_smoke.py` 的就绪探测地址也是 `/auth/tenant/list`，之所以能用，是因为 `smoke_harness.wait_http` 收到任意 HTTP 响应就算就绪。
-- **分页返回 `PageResult<T>`。** 类型是 `org.dromara.common.core.domain.PageResult`，字段为 `rows` 和 `total`。控制器返回 `R<PageResult<XVo>>`，所以 JSON 形如 `{code,msg,data:{rows,total}}`，不是旧版 `TableDataInfo` 那样把 rows 放在顶层。
-- **`BaseEntity` 没有 `params` 和 `searchValue`。** 它只有 `createDept/createBy/createTime/updateBy/updateTime`。需要日期区间这类额外参数时，在 BO 里自己声明 `Map<String,Object> params`（见 `BizPurchaseOrderBo`）。
-- **接口加密和验证码默认打开。** `application.yml` 里 `api-decrypt.enabled` 和 `captcha.enable` 默认都开，`/auth/login` 带 `@ApiEncrypt`。只有 smoke 运行档（`application-smoke.yml`）关闭它们；UI 冒烟再由执行器向 vite 注入 `VITE_APP_ENCRYPT=false`。
-- **生成器的菜单 SQL 模板列不全。** `ruoyi-gen` 的 `fm/sql/mysql.sql.ftl` 在 `sys_menu` 上缺少 `query_param/active_menu/ext` 三列。业务 SQL 以 `sql/biz/FEAT-20260918-001.sql` 的完整列清单为准。
-- **业务接口不在接口文档分组里。** `springdoc.group-configs` 不包含 `org.dromara.biz`，这是底座配置。
-- **唯一键冲突返回 `code=409`。** `DuplicateKeyException` 由 `MybatisExceptionHandler` 统一处理，结果是 409 而不是 500。需要可读提示时，先在 Service 里校验（如 `checkCodeUnique`），或者捕获 `DuplicateKeyException`（见 `BizPurchaseOrderServiceImpl.insertWithGeneratedOrderNo`）。
-- **手写 SQL 不过滤逻辑删除。** 逻辑删除条件由 MyBatis-Plus 全局开关加实体上的 `@TableLogic` 自动追加；Mapper XML 里的手写 SQL 不会追加。
-- **权限在登录时固化。** 权限写进 `LoginUser.menuPermission`，给测试用户新分配角色或菜单后，要重新登录才生效。超级管理员（角色 key 为 `superadmin`）直接拥有 `*:*:*`。
-- **前端弹窗提示的写法。** 现有业务页用 `import modal from '@/plugins/modal'` 加上 `@/hooks/**` 里的组合函数。AGENT_GUIDE 提到的 `proxy?.$modal` 也能用，但新页面应与 `views/biz/*` 保持一致。
-- **测试默认不跑。** `ruoyi-biz` 目前没有任何 `src/test`。父 pom 默认 `maven.test.skip=true`，surefire 只运行带 `@Tag(<profiles.active>)`（默认 `dev`）的测试类。
-- **纯单测里不能直接用 `MapstructUtils`。** 它在类初始化时从 Spring 容器取 `Converter`，没有 Spring 上下文的 Mockito 测试一旦触发它的类加载就会失败，详见 `testing.md`。
+- **没有多租户**：没有 `ruoyi-common-tenant`，表里没有 `tenant_id`。`ruoyi_smoke.py` 的就绪探测地址 `/auth/tenant/list` 能用，只是因为 `smoke_harness.wait_http` 收到任意 HTTP 响应就算就绪。
+- **分页返回 `PageResult<T>`**：JSON 形如 `{code,msg,data:{rows,total}}`，不是旧版 `TableDataInfo` 那样把 rows 放在顶层（`org.dromara.common.core.domain.PageResult`）。
+- **`BaseEntity` 没有 `params`**：需要日期区间时，在 BO 里自己声明 `Map<String,Object> params`（见 `BizPurchaseOrderBo`）。
+- **接口加密和验证码默认打开**：只有 smoke 运行档（`application-smoke.yml`）关闭它们。
+- **生成器菜单 SQL 模板缺列**：`fm/sql/mysql.sql.ftl` 缺 `query_param/active_menu/ext`，以 `sql/biz/FEAT-20260918-001.sql` 的列清单为准。
+- **唯一键冲突返回 code=409**（`MybatisExceptionHandler`）。
+- **手写 XML 不过滤逻辑删除**：`BizSupplierMapper.xml` 就是有意利用这一点，查询已删除供应商的分类。
+- **测试默认不跑**：父 pom 默认 `maven.test.skip=true`；surefire 与 failsafe 都只运行带 `@Tag(<profiles.active>)`（默认 `dev`）的类，没打标签的类会被静默跳过。
+- **纯单元测试里的 `MapstructUtils` 和 `LambdaQueryWrapper`**：要手动提供 Spring 的 `Converter`，并初始化 `TableInfoHelper`，写法见 `BizPurchaseOrderRemarkTest`（`testing.md` 有详细说明）。
+- **`ruoyi-biz/pom.xml` 已是集成点**：需要新的 common 模块依赖时，写进 questions 或 summary，走 BASE 提案，不要自己改。
+- **`updateById` 会跳过 null 字段**：要清空某个字段，必须写空串（见 `BizPurchaseOrderServiceImpl.updateByBo` 对 remark 的处理）。
+
+## 已知空白（[待确认] 汇总）
+
+- 仓库里还没有任何 `*IT` 集成测试。集成测试怎样拿到数据库或 Redis（起 Spring 上下文时的数据源、profile 和端口）没有先例，第一个写集成测试的变更要自己验证（testing.md）。
+- 本地环境没装 gitleaks 时，StoryLoop 检查层会怎样判定，未验证（testing.md）。
+- `acceptance/smoke/FEAT-*` 这四个按变更划分的旧冒烟目录已不在系统冒烟清单里，它们是否还会被某个流程使用，未确认（testing.md）。
+- 仓库里没有 `.trivyignore`。CI 注释提到可以用它登记例外，但目前没有任何例外（testing.md）。
+- `frontend_check.py` 在找不到 unplugin 声明文件时会跳过 vue-tsc，只打印提示。在从没跑过冒烟的新环境里，类型检查实际上没有执行（testing.md）。
+
+## 什么时候刷新
+
+底座版本变化时刷新：上游 subtree 同步，或者某个 BASE 迭代改变了模块、机制、测试分层、检查或 CI。普通功能变更合入后，`capabilities.md` 和 `api.md` 会稍有滞后，但活规格 `openspec/specs/` 始终是准的；累积几个变更后再刷新即可。
