@@ -1,0 +1,339 @@
+{
+  "version": 1,
+  "binding": {
+    "product_digest": "c50eb7977a32f449e60789040ca4d2ae91c6c80f245fc8236742fc168c2bdb71",
+    "source_commit": "bc1817ae1f9f8ef74f20f1796538e1a13778ad42",
+    "scope_digest": "8ce9445904305959be07c18fd8ae0b38135f8426850981323175cfa4eb005468",
+    "suite_digest": "7317b3ab9a97fd6c078a45cecb59e2c083a10672cb766f68bfeadeb5ca83b09e",
+    "policy_digest": "152717bb54cd3949e38cb8aea87616f936d3d21977074283952bc41ba35d827d",
+    "principles_digest": null,
+    "baseline_digest": "17c30e3c8e0700e653d9af1f8711e84de330a83dfdd86c46ca988c1a57896e7d"
+  },
+  "main_option": "shared-brand",
+  "options": [
+    {
+      "id": "shared-brand",
+      "summary": "集中维护品牌与标题格式，抽取登录/注册共用展示组件，以现有卡片布局介绍真实业务能力。",
+      "touched": [
+        "frontend/src/layout/components/Sidebar/Logo.vue",
+        "frontend/src/permission.ts",
+        "frontend/src/settings.ts",
+        "frontend/src/utils/dynamicTitle.ts",
+        "frontend/src/views/index.vue",
+        "frontend/src/views/login.vue",
+        "frontend/src/views/register.vue"
+      ],
+      "creates": [
+        "frontend/src/components/AuthBrandPanel/index.vue",
+        "frontend/src/constants/brand.test.ts",
+        "frontend/src/constants/brand.ts"
+      ],
+      "interfaces": [
+        "@/constants/brand：导出 BRAND_FULL_NAME、BRAND_SHORT_NAME、formatBrandTitle(pageTitle?: string, dynamicTitle?: boolean): string",
+        "AuthBrandPanel：无认证状态、无请求、无事件的共用品牌展示组件"
+      ],
+      "symbols": [
+        {
+          "path": "frontend/src/layout/components/Sidebar/Logo.vue",
+          "symbol": "title"
+        },
+        {
+          "path": "frontend/src/permission.ts",
+          "symbol": "router.beforeEach"
+        },
+        {
+          "path": "frontend/src/settings.ts",
+          "symbol": "setting"
+        },
+        {
+          "path": "frontend/src/utils/dynamicTitle.ts",
+          "symbol": "useDynamicTitle"
+        },
+        {
+          "path": "frontend/src/views/index.vue",
+          "symbol": "capabilityGroups"
+        },
+        {
+          "path": "frontend/src/views/index.vue",
+          "symbol": "products"
+        },
+        {
+          "path": "frontend/src/views/login.vue",
+          "symbol": "getLoginData"
+        },
+        {
+          "path": "frontend/src/views/login.vue",
+          "symbol": "loginForm"
+        },
+        {
+          "path": "frontend/src/views/login.vue",
+          "symbol": "title"
+        },
+        {
+          "path": "frontend/src/views/register.vue",
+          "symbol": "title"
+        }
+      ],
+      "risks": {
+        "sensitive": {
+          "value": "yes",
+          "evidence": {
+            "locations": [
+              "frontend/src/views/login.vue:137",
+              "frontend/src/views/login.vue:224"
+            ],
+            "search_scope": [
+              "frontend/src/views/login.vue"
+            ]
+          }
+        },
+        "migration": {
+          "value": "no",
+          "evidence": {
+            "locations": [
+              "frontend/src/views/index.vue:68"
+            ],
+            "search_scope": [
+              "frontend/src/views/index.vue",
+              "frontend/src/views/login.vue"
+            ]
+          }
+        },
+        "external_contract": {
+          "value": "no",
+          "evidence": {
+            "locations": [
+              "frontend/src/views/login.vue:196",
+              "frontend/src/views/login.vue:236"
+            ],
+            "search_scope": [
+              "frontend/src/views/login.vue",
+              "frontend/src/views/register.vue"
+            ]
+          }
+        },
+        "new_interface": {
+          "value": "yes",
+          "evidence": {
+            "locations": [
+              "frontend/src/views/login.vue:4",
+              "frontend/src/views/register.vue:4",
+              "frontend/src/utils/dynamicTitle.ts:10"
+            ],
+            "search_scope": [
+              "frontend/src/views/login.vue",
+              "frontend/src/views/register.vue",
+              "frontend/src/utils/dynamicTitle.ts"
+            ]
+          }
+        },
+        "crosscut": {
+          "value": "yes",
+          "evidence": {
+            "locations": [
+              "frontend/src/settings.ts:8",
+              "frontend/src/utils/dynamicTitle.ts:10",
+              "frontend/src/permission.ts:25",
+              "frontend/src/layout/components/Sidebar/Logo.vue:33"
+            ],
+            "search_scope": [
+              "frontend/src/settings.ts",
+              "frontend/src/utils/dynamicTitle.ts",
+              "frontend/src/permission.ts",
+              "frontend/src/layout/components/Sidebar/Logo.vue"
+            ]
+          }
+        },
+        "principle_deviation": {
+          "value": "no",
+          "evidence": {
+            "locations": [
+              "openspec/foundation/modules.md:95",
+              "openspec/foundation/modules.md:104"
+            ],
+            "search_scope": [
+              "openspec/foundation/modules.md"
+            ]
+          }
+        },
+        "hard_verify_high_cost": {
+          "value": "yes",
+          "evidence": {
+            "locations": [
+              "openspec/foundation/testing.md:74",
+              "openspec/foundation/testing.md:82",
+              "openspec/foundation/testing.md:91"
+            ],
+            "search_scope": [
+              "openspec/foundation/testing.md"
+            ]
+          }
+        },
+        "dependency_swap": {
+          "value": "no",
+          "evidence": {
+            "locations": [
+              "openspec/foundation/testing.md:54",
+              "openspec/foundation/testing.md:55"
+            ],
+            "search_scope": [
+              "openspec/foundation/testing.md"
+            ]
+          }
+        },
+        "persistent_state": {
+          "value": "no",
+          "evidence": {
+            "locations": [
+              "frontend/src/views/login.vue:188",
+              "frontend/src/views/login.vue:224"
+            ],
+            "search_scope": [
+              "frontend/src/views/login.vue"
+            ]
+          }
+        },
+        "human_choice": {
+          "value": "no",
+          "evidence": {
+            "locations": [
+              "frontend/src/views/login.vue:4",
+              "frontend/src/layout/components/Sidebar/Logo.vue:33",
+              "frontend/src/views/index.vue:68"
+            ],
+            "search_scope": [
+              "frontend/src/views/login.vue",
+              "frontend/src/layout/components/Sidebar/Logo.vue",
+              "frontend/src/views/index.vue"
+            ]
+          }
+        },
+        "guard": {
+          "value": "yes",
+          "evidence": {
+            "locations": [
+              "frontend/src/permission.ts:16",
+              "frontend/src/permission.ts:22",
+              "frontend/src/permission.ts:25"
+            ],
+            "search_scope": [
+              "frontend/src/permission.ts"
+            ]
+          }
+        }
+      },
+      "forbidden_paths": [
+        ".github",
+        ".gitignore",
+        ".storyloop",
+        "acceptance",
+        "backend",
+        "frontend/.env.development",
+        "frontend/.env.production",
+        "frontend/LICENSE",
+        "frontend/index.html",
+        "frontend/package.json",
+        "frontend/pnpm-lock.yaml",
+        "frontend/pnpm-workspace.yaml",
+        "frontend/src/api",
+        "frontend/src/layout/components/Navbar.vue",
+        "frontend/src/router",
+        "frontend/src/store",
+        "frontend/vite",
+        "frontend/vite.config.ts",
+        "infra",
+        "openspec",
+        "reports",
+        "sql"
+      ],
+      "constraints": [
+        {
+          "criterion_id": "A3",
+          "path": "frontend/src/constants/brand.ts",
+          "rule": "全称和短名各定义一次，所有品牌入口引用；使用安全文本插值，不使用 v-html。"
+        },
+        {
+          "criterion_id": "A2",
+          "path": "frontend/src/utils/dynamicTitle.ts",
+          "rule": "动态标题开启且页面名非空时组合页面名与品牌；关闭或无页面名时仅返回品牌全称。"
+        },
+        {
+          "criterion_id": "A4",
+          "path": "frontend/src/permission.ts",
+          "rule": "标题更新覆盖未登录白名单和无标题路由，清除上一个页面标题；保持白名单、认证、重定向和动态路由的既有语义。"
+        },
+        {
+          "criterion_id": "A5",
+          "path": "frontend/src/layout/components/Sidebar/Logo.vue",
+          "rule": "展开显示短名；折叠保留可识别的文字品牌标识，链接的可访问名称包含红魔，沿用主题与动画。"
+        },
+        {
+          "criterion_id": "A7",
+          "path": "frontend/src/views/login.vue",
+          "rule": "初始化及无本地账号回填时账号和口令为空；保留记住账号、清除历史口令和认证处理，不复制现有口令。"
+        },
+        {
+          "criterion_id": "A14",
+          "path": "frontend/src/views/register.vue",
+          "rule": "只替换品牌展示和标题，保留注册表单、验证码、校验、提交行为和上游版权页脚。"
+        },
+        {
+          "criterion_id": "B1",
+          "path": "frontend/src/views/index.vue",
+          "rule": "仅介绍源码已有的供应商档案维护、查询导出及采购单明细、草稿维护、提交、详情和导出能力。"
+        },
+        {
+          "criterion_id": "B2",
+          "path": "frontend/src/views/index.vue",
+          "rule": "移除首页上游推广文字、产品矩阵及推广链接；沿用卡片布局和主题变量。"
+        },
+        {
+          "criterion_id": "B3",
+          "path": "frontend/src/views/index.vue",
+          "rule": "不增加统计请求、虚构数值、厂商参数或商业背书。"
+        },
+        {
+          "criterion_id": "A3",
+          "path": "frontend/src/components/AuthBrandPanel/index.vue",
+          "rule": "展示组件自包含品牌区样式和响应式规则；本次所有新增或修改文件不超过500行、函数不超过50行。"
+        }
+      ],
+      "regression": [
+        "特征化角色先覆盖全部七个 touched 既有文件的不变行为；源码读取使用 Node fs API，禁止 TS 默认导入 ?raw；在旧源码上运行整个 frontend_unit.py 和 frontend_check.py 并通过后锁定。",
+        "验收角色在本轮未实现源码上通过 ruoyi_smoke.py 独立运行 redmagic_brand.spec.ts，保留实际行为 RED；环境错误单独报告，不沿用前轮 GREEN。",
+        "实现角色先为 formatBrandTitle 编写 Vitest：有页面名、空串、缺省输入和动态标题关闭；证明预期 RED 后最小实现并转 GREEN。",
+        "在执行器 scratch 中运行 python3 acceptance/tools/frontend_unit.py 和 python3 acceptance/tools/frontend_check.py；不在源候选启动服务，不安装新依赖。",
+        "使用 scratch 中已有 vue-tsc --noEmit 核对所有七个修改文件及新增品牌模块、展示组件的诊断；确保自动导入声明已生成，不能把检查脚本忽略的上游文件错误算作通过。",
+        "由验收角色维护的清单调用 python3 acceptance/tools/ruoyi_smoke.py acceptance/changes/FEAT-20261021-002/redmagic_brand.spec.ts acceptance/changes/FEAT-20261021-002/redmagic_login_regression.spec.ts，timeout_seconds 至少900，建议2400；验证 A1–A14、B1–B3。",
+        "通过已有系统冒烟清单回归采购单及供应商分类；登录步骤复用既有夹具辅助方式，不复制口令。保留验证码开启与外部第三方认证流程未覆盖的边界。",
+        "审查所有修改文件的行数、函数长度、品牌集中引用和权限守卫控制流；由引擎管理提交、门禁证据与最终闭环。"
+      ],
+      "migration": {
+        "steps": [],
+        "reason": "仅修改前端静态展示、标题计算和空表单默认值；保留既有本地存储键及处理方式，无数据、schema 或持久化格式迁移。"
+      },
+      "dependencies": [],
+      "principle_checks": []
+    }
+  ],
+  "questions": [],
+  "design": "## Context\n本轮提供的事实记录为空。已读取相关底座文档和计划修改的前端源码。登录页579行，注册页523行，重复包含品牌展示和样式；品牌分别来自环境标题与侧栏标题。浏览器标题更新目前位于有 token 的分支，不能覆盖未登录登录/注册路由。合同已批准品牌与范围；本设计不执行实现或验证，也不把先前运行的 GREEN 当成本轮证据。\n\n## Goals\n统一应用加载后的红魔品牌，清空登录默认账号和口令，用真实已有能力替换首页推广；保持认证、权限、动态菜单、主题、布局和上游归属。\n\n## Decisions\n### 集中品牌及标题计算\n- Choice：新增无副作用的品牌模块，导出全称、短名和标题格式化函数。\n- Rationale：让全部入口共享同一来源，并能直接用现有 Vitest 验证开关及空标题分支。\n- Alternatives considered：分别硬编码会重复维护；修改环境变量或静态 HTML 超出范围。\n\n### 共用认证页品牌展示\n- Choice：抽取 AuthBrandPanel，同时迁移两页重复品牌区模板、静态介绍和专属 SCSS，包括移动端断点。表单、页脚和认证逻辑留在页面。\n- Rationale：两页都已超过500行，共用展示组件可以在保留布局的同时满足文件限制。展示内容只介绍供应商、采购单、动态菜单和主题等已有能力。\n- Alternatives considered：只抽登录页仍会留下超限注册页；抽认证表单会扩大行为变更风险。\n\n### 标题更新与权限守卫\n- Choice：useDynamicTitle 委托纯函数；路由守卫在认证分支前通过现有 settingsStore.setTitle 更新当前页面名，缺失时传空串。保留设置开关现有调用链。\n- Rationale：登录、注册及无标题页面都需要刷新标题，且不能沿用上一页标题。只移动标题处理，不改变访问权限。\n- Alternatives considered：在各页面分别写 document.title 容易遗漏路由和开关语义。守卫回调若超过50行，在同文件抽取原有用户信息及动态路由初始化流程，保持错误、返回值、执行顺序和重定向参数不变，不新增业务模块。\n\n### 侧栏文字标识和真实能力首页\n- Choice：侧栏使用短名文字徽标及包含品牌的 aria-label，折叠后仍可识别；首页保留卡片布局，以静态业务能力条目替换产品矩阵与推广操作。\n- Rationale：无需新图片、接口、权限或依赖；不引入未经授权的厂商标志或无权限快捷入口。\n- Alternatives considered：保留旧图标不能满足名称一致性；新增数据看板或业务快捷入口会扩大范围。\n\n## Files\n| 文件 | 操作与职责 |\n|---|---|\n| frontend/src/constants/brand.ts | 新增品牌常量及纯标题函数，公共导出附文档注释 |\n| frontend/src/constants/brand.test.ts | 新增纯逻辑 Vitest，用实际函数返回值验证标题规则 |\n| frontend/src/components/AuthBrandPanel/index.vue | 新增共用品牌展示及专属响应式样式，无认证状态 |\n| frontend/src/views/login.vue | 接入组件和品牌常量，移走展示样式，清空初始值及回填默认值，保留认证流程和署名 |\n| frontend/src/views/register.vue | 接入组件和品牌常量，移走重复展示样式，保留表单及署名 |\n| frontend/src/views/index.vue | 替换 products、capabilityGroups 和相关模板，移除 goTarget 推广操作及失效样式 |\n| frontend/src/layout/components/Sidebar/Logo.vue | 改为品牌文字标识，补充折叠/展开可访问名称，保留路由目标和主题 |\n| frontend/src/settings.ts | 默认网页标题引用品牌全称，其他设置保持原语义 |\n| frontend/src/utils/dynamicTitle.ts | 按现有 settings 状态调用纯标题函数 |\n| frontend/src/permission.ts | 覆盖全部路由的标题刷新；必要时同文件拆分守卫函数以满足长度限制 |\n\n特征化测试由特征化角色规划并写入允许测试路径；受保护验收由验收角色生成。实现只能修改已锁定 characterization.touched 中的既有文件及本方案新增文件。dependencies 为空表示不新增、不替换依赖，继续使用仓库已有版本。\n\n## Data And Interfaces\n| 项目 | 约定 |\n|---|---|\n| BRAND_FULL_NAME | 红魔业务工作台 |\n| BRAND_SHORT_NAME | 红魔 |\n| formatBrandTitle | 动态标题开启且页面名非空：页面名 + 空格连字符空格 + 全称；其余情况仅全称 |\n| AuthBrandPanel | 内部只读展示组件，不接收账号、口令、token 或用户信息 |\n| 登录数据 | 保留 LoginData 形状、现有提交接口、验证码及第三方登录参数；仅改变默认值 |\n| 本地状态 | 保留 username、rememberMe 的现有处理，继续移除历史 password 键，不迁移格式 |\n| 数据表、列、HTTP端点、权限串 | 无新增、无修改；不修改菜单或路由定义 |\n\n## Risks And Trade-Offs\n风险集中在守卫控制流、标题残留、展示样式迁移及空默认值与记住账号的交互。通过特征化、纯函数测试和独立真实浏览器回归分别验证。现有 frontend_check.py 只拦部分路径类型错误，因此另核对所有修改路径的 vue-tsc 诊断。所有运行交给既有 scratch 执行器；环境故障保留原始错误，不改门禁。脚本加载前 HTML 静态标题保持合同明确的底座例外。没有配置原则 ID，因此 principle_checks 为空。\n",
+  "id": "1c395b0abc5c3c1bac5108e62fd326681dbe9b2c2481a1810051ec8d45847625",
+  "status": "DONE",
+  "approval": {
+    "actor": "user",
+    "time": "2026-10-21T10:47:47.474583+00:00",
+    "binding": {
+      "product_digest": "c50eb7977a32f449e60789040ca4d2ae91c6c80f245fc8236742fc168c2bdb71",
+      "source_commit": "bc1817ae1f9f8ef74f20f1796538e1a13778ad42",
+      "scope_digest": "8ce9445904305959be07c18fd8ae0b38135f8426850981323175cfa4eb005468",
+      "suite_digest": "7317b3ab9a97fd6c078a45cecb59e2c083a10672cb766f68bfeadeb5ca83b09e",
+      "policy_digest": "152717bb54cd3949e38cb8aea87616f936d3d21977074283952bc41ba35d827d",
+      "principles_digest": null,
+      "baseline_digest": "17c30e3c8e0700e653d9af1f8711e84de330a83dfdd86c46ca988c1a57896e7d"
+    },
+    "plan_id": "1c395b0abc5c3c1bac5108e62fd326681dbe9b2c2481a1810051ec8d45847625",
+    "option_id": "shared-brand",
+    "selected_option": "shared-brand"
+  }
+}

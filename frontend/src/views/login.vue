@@ -1,24 +1,7 @@
 <template>
   <div class="login">
     <div class="login-shell">
-      <section class="login-brand">
-        <span class="brand-pill">Plus UI Workspace</span>
-        <h1 class="brand-title">企业级后台管理系统</h1>
-        <p class="brand-desc">
-          真正面向企业级的应用框架 组件化 模块化 轻耦合 高扩展 针对企业痛点 业界一流技术栈
-          <br />
-          重写 RuoYi-Vue 所有功能 集成 Sa-Token、Mybatis-Plus、WarmFlow、SpringDoc、Hutool、OSS 定期同步。
-        </p>
-        <div class="brand-highlights">
-          <span v-for="item in highlights" :key="item" class="highlight-chip">{{ item }}</span>
-        </div>
-        <div class="brand-metrics">
-          <article v-for="item in quickStats" :key="item.label" class="metric-card">
-            <strong>{{ item.value }}</strong>
-            <span>{{ item.label }}</span>
-          </article>
-        </div>
-      </section>
+      <AuthBrandPanel />
 
       <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
         <div class="title-box">
@@ -115,28 +98,27 @@
 
 <script setup lang="ts">
 import { to } from 'await-to-js';
+import { ElMessage } from 'element-plus';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { getCodeImg } from '@/api/login';
 import { authRouterUrl } from '@/api/system/social/auth';
 import { LoginData } from '@/api/types';
+import AuthBrandPanel from '@/components/AuthBrandPanel/index.vue';
+import { BRAND_FULL_NAME } from '@/constants/brand';
 import { HttpStatus } from '@/enums/RespEnum';
 import { useUserStore } from '@/store/modules/user';
 
-const title = import.meta.env.VITE_APP_TITLE;
+const title = BRAND_FULL_NAME;
 const currentYear = new Date().getFullYear();
-const quickStats = [
-  { label: '细粒度权限管理', value: '动态权限控制' },
-  { label: '主流技术栈', value: '全栈技术集成' },
-  { label: 'UI样式', value: '卡片式' }
-];
-const highlights = ['技术栈全面升级', '动态菜单', '多主题布局', '深浅色主题'];
 const userStore = useUserStore();
 const router = useRouter();
 const { t } = useI18n();
 
 const loginForm = ref<LoginData>({
-  username: 'admin',
-  password: 'admin123',
+  username: '',
+  password: '',
   rememberMe: false,
   code: '',
   uuid: ''
@@ -226,8 +208,8 @@ const getLoginData = () => {
   const rememberMe = localStorage.getItem('rememberMe');
   localStorage.removeItem('password');
   loginForm.value = {
-    username: username === null ? String(loginForm.value.username) : username,
-    password: username === null ? String(loginForm.value.password) : '',
+    username: username ?? '',
+    password: '',
     rememberMe: rememberMe === 'true'
   } as LoginData;
 };
@@ -269,93 +251,11 @@ onMounted(() => {
   align-items: stretch;
 }
 
-.login-brand,
 .login-form {
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 30px 80px rgba(2, 8, 23, 0.32);
   backdrop-filter: blur(18px);
-}
-
-.login-brand {
-  padding: 42px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #eef4ff;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-    linear-gradient(135deg, rgba(53, 109, 255, 0.32), rgba(15, 23, 42, 0.24));
-}
-
-.brand-pill {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.brand-title {
-  margin: 22px 0 14px;
-  font-size: clamp(34px, 4vw, 52px);
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-}
-
-.brand-desc {
-  margin: 0;
-  max-width: 580px;
-  color: rgba(226, 232, 240, 0.88);
-  font-size: 15px;
-  line-height: 1.8;
-}
-
-.brand-highlights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 28px 0 34px;
-}
-
-.highlight-chip {
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #f8fbff;
-  font-size: 13px;
-}
-
-.brand-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.metric-card {
-  padding: 18px 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  strong {
-    font-size: 24px;
-    color: #fff;
-  }
-
-  span {
-    color: rgba(226, 232, 240, 0.72);
-    font-size: 13px;
-  }
 }
 
 .login-form {
@@ -540,21 +440,9 @@ onMounted(() => {
   .login-shell {
     grid-template-columns: 1fr;
   }
-
-  .login-brand {
-    padding: 28px 24px;
-  }
-
-  .brand-metrics {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 640px) {
-  .login-brand {
-    display: none;
-  }
-
   .login-form {
     padding: 26px 18px 20px;
   }

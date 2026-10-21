@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "id": "FEAT-20261021-002-redmagic-brand",
+      "criteria": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "B1",
+        "B2"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/changes/FEAT-20261021-002/redmagic_brand.spec.ts"
+      ],
+      "timeout_seconds": 2400,
+      "tier": "heavy"
+    },
+    {
+      "id": "FEAT-20261021-002-login-regression",
+      "criteria": [
+        "A8",
+        "A9",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14",
+        "B3"
+      ],
+      "command": [
+        "{python}",
+        "acceptance/tools/ruoyi_smoke.py",
+        "acceptance/changes/FEAT-20261021-002/redmagic_login_regression.spec.ts"
+      ],
+      "timeout_seconds": 2400,
+      "tier": "heavy"
+    }
+  ]
+}
