@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "criteria": [
+    {
+      "story_id": "S1",
+      "id": "A1",
+      "given": "登录页或已登录后的侧栏可见",
+      "when": "查看用户可见的品牌名称",
+      "then": "登录页展示“红魔业务工作台”，侧栏展示“红魔”",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ]
+    },
+    {
+      "story_id": "S1",
+      "id": "A2",
+      "given": "浏览器可以访问登录、注册与首页路由",
+      "when": "在这三个路由之间切换并读取浏览器标题",
+      "then": "登录与注册页标题为“红魔业务工作台”，首页为“首页 - 红魔业务工作台”",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C4"
+      ]
+    },
+    {
+      "story_id": "S1",
+      "id": "A3",
+      "given": "登录、注册、侧栏与首页已呈现",
+      "when": "逐一查看这些入口的品牌文字",
+      "then": "各入口使用一致的红魔名称，不再显示“Plus UI Workspace”等旧品牌推广文案",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ]
+    },
+    {
+      "story_id": "S1",
+      "id": "A4",
+      "given": "浏览器没有登录状态，也没有记住的账号",
+      "when": "访问登录页",
+      "then": "登录表单主标题和浏览器标题都是“红魔业务工作台”，页面不出现“企业级后台管理系统”",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1",
+        "C4"
+      ]
+    },
+    {
+      "story_id": "S1",
+      "id": "A5",
+      "given": "测试用户已登录并进入首页",
+      "when": "把侧栏从展开切换为折叠",
+      "then": "展开时品牌标识文字包含“红魔”，折叠后标识仍然可见，且可访问名称包含“红魔”",
+      "kind": "automated",
+      "row_type": "form_parity",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C3"
+      ]
+    },
+    {
+      "story_id": "S1",
+      "id": "A6",
+      "given": "浏览器没有登录状态",
+      "when": "访问注册页",
+      "then": "注册表单主标题和浏览器标题都是“红魔业务工作台”",
+      "kind": "automated",
+      "row_type": "form_parity",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C2",
+        "C4"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A7",
+      "given": "浏览器没有登录状态，也没有记住的账号",
+      "when": "访问登录页",
+      "then": "账号输入框和口令输入框的值都是空串",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A8",
+      "given": "临时库里有测试夹具账号",
+      "when": "用户在登录页填入该账号和口令后提交",
+      "then": "进入首页，并能从动态菜单打开采购单页面",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1",
+        "C6"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A9",
+      "given": "临时库里有测试夹具账号",
+      "when": "用户提交该账号和一个错误口令",
+      "then": "仍停留在登录页，并显示后端返回的错误提示",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A10",
+      "given": "用户曾勾选记住密码并用测试账号登录成功，之后退出登录",
+      "when": "再次打开登录页",
+      "then": "账号输入框回填该账号，口令输入框为空，记住密码保持勾选",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A11",
+      "given": "浏览器没有登录状态",
+      "when": "访问登录页",
+      "then": "微信、MaxKey、TopIAM、Gitee、GitHub 五个第三方登录入口都可见",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A12",
+      "given": "测试用户已登录并位于首页",
+      "when": "用户退出登录",
+      "then": "回到登录页，再访问首页会被重定向到登录页",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1",
+        "C4"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A13",
+      "given": "后端以 smoke 运行档启动，验证码已关闭",
+      "when": "访问登录页",
+      "then": "登录表单不显示验证码输入框",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1"
+      ]
+    },
+    {
+      "story_id": "S2",
+      "id": "A14",
+      "given": "浏览器没有登录状态",
+      "when": "分别访问登录页和注册页",
+      "then": "两个页面的页脚都包含“Copyright © 2018-<当前年份> 疯狂的狮子Li All Rights Reserved.”",
+      "kind": "automated",
+      "row_type": "regression",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C1",
+        "C2"
+      ]
+    },
+    {
+      "story_id": "S3",
+      "id": "B1",
+      "given": "测试用户已登录",
+      "when": "打开首页",
+      "then": "首页主标题包含“红魔业务工作台”，正文同时介绍“供应商管理”和“采购单管理”",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C5"
+      ]
+    },
+    {
+      "story_id": "S3",
+      "id": "B2",
+      "given": "测试用户已登录",
+      "when": "打开首页",
+      "then": "首页主内容区不出现“RuoYi-Cloud-Plus”“项目矩阵”“查看源码”“更新日志”，也没有指向 gitee.com/dromara、github.com/dromara 或 plus-doc.dromara.org 的入口",
+      "kind": "automated",
+      "row_type": "positive",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C5"
+      ]
+    },
+    {
+      "story_id": "S3",
+      "id": "B3",
+      "given": "测试用户已登录",
+      "when": "打开首页",
+      "then": "首页主内容区不出现“收益”“营收”“利润”“销售额”“成交额”“官方授权”“背书”等统计或宣传字样",
+      "kind": "automated",
+      "row_type": "non_goal",
+      "oracle_class": "auto-heavy",
+      "consumers": [
+        "C5"
+      ]
+    }
+  ]
+}

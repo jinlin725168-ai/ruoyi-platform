@@ -1,3 +1,4 @@
+import { BRAND_FULL_NAME } from '@/constants/brand';
 import { LanguageEnum } from '@/enums/LanguageEnum';
 import { NavTypeEnum } from '@/enums/NavTypeEnum';
 
@@ -5,7 +6,7 @@ const setting: DefaultSettings = {
   /**
    * 网页标题
    */
-  title: import.meta.env.VITE_APP_TITLE,
+  title: BRAND_FULL_NAME,
 
   theme: '#409EFF',
 

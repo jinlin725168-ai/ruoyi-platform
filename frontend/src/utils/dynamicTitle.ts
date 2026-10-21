@@ -1,14 +1,8 @@
-import defaultSettings from '@/settings';
+import { formatBrandTitle } from '@/constants/brand';
 import { useSettingsStore } from '@/store/modules/settings';
 
-/**
- * 动态修改标题
- */
+/** 根据当前页面与设置更新浏览器标题。 */
 export const useDynamicTitle = () => {
   const settingsStore = useSettingsStore();
-  if (settingsStore.dynamicTitle) {
-    document.title = settingsStore.title + ' - ' + import.meta.env.VITE_APP_TITLE;
-  } else {
-    document.title = defaultSettings.title as string;
-  }
+  document.title = formatBrandTitle(settingsStore.title, settingsStore.dynamicTitle);
 };

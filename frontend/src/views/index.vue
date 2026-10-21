@@ -2,27 +2,13 @@
   <div class="home">
     <section class="hero-panel">
       <div class="hero-copy">
-        <h1>RuoYi-Vue-Plus 控制台</h1>
-        <p>
-          企业级后台管理系统 重写 RuoYi-Vue 所有功能 集成 Sa-Token、Mybatis-Plus、WarmFlow、SpringDoc、Hutool、OSS
-          等组件
-        </p>
-        <div class="hero-actions">
-          <el-button type="primary" @click="goTarget('https://gitee.com/dromara/RuoYi-Vue-Plus')">查看源码</el-button>
-          <el-button plain @click="goTarget('https://plus-doc.dromara.org/#/ruoyi-vue-plus/changlog')">
-            更新日志
-          </el-button>
-        </div>
+        <h1>{{ BRAND_FULL_NAME }}</h1>
+        <p>围绕供应商管理和采购单管理开展日常业务，按现有权限使用查询、维护、提交和导出功能。</p>
       </div>
     </section>
-
     <div class="content-grid">
       <section class="section-card">
-        <div class="section-head">
-          <div>
-            <h2>项目矩阵</h2>
-          </div>
-        </div>
+        <div class="section-head"><h2>业务能力</h2></div>
         <div class="product-list">
           <article v-for="product in products" :key="product.name" class="product-card">
             <div class="product-top">
@@ -30,27 +16,15 @@
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.summary }}</p>
               </div>
-              <span class="product-version">{{ product.version }}</span>
             </div>
             <div class="product-tags">
               <el-tag v-for="tag in product.tags" :key="tag" effect="plain">{{ tag }}</el-tag>
             </div>
-            <div class="product-actions">
-              <el-button type="primary" plain @click="goTarget(product.primaryUrl)">
-                {{ product.primaryLabel }}
-              </el-button>
-              <el-button plain @click="goTarget(product.secondaryUrl)">{{ product.secondaryLabel }}</el-button>
-            </div>
           </article>
         </div>
       </section>
-
       <section class="section-card capability-card">
-        <div class="section-head">
-          <div>
-            <h2>能力地图</h2>
-          </div>
-        </div>
+        <div class="section-head"><h2>使用说明</h2></div>
         <div class="capability-groups">
           <article v-for="group in capabilityGroups" :key="group.title" class="capability-group">
             <h3>{{ group.title }}</h3>
@@ -65,47 +39,24 @@
 </template>
 
 <script setup name="Index" lang="ts">
+import { BRAND_FULL_NAME } from '@/constants/brand';
 const products = [
   {
-    name: 'RuoYi-Vue-Plus',
-    version: 'v6.0.0',
-    summary: '面向分布式集群场景的后台管理系统，保持现有业务接口与权限逻辑，适合先完成前端壳升级。',
-    tags: ['Vue 3', 'Element Plus', 'Spring Boot', 'Sa-Token'],
-    primaryLabel: '访问 GitHub',
-    primaryUrl: 'https://github.com/dromara/RuoYi-Vue-Plus',
-    secondaryLabel: '查看更新日志',
-    secondaryUrl: 'https://plus-doc.dromara.org/#/ruoyi-vue-plus/changlog'
+    name: '供应商管理',
+    summary: '维护供应商档案，按编码、名称和分类查询，导出查询结果。',
+    tags: ['档案维护', '分类查询', '导出']
   },
   {
-    name: 'RuoYi-Cloud-Plus',
-    version: 'v6.0.0',
-    summary: '微服务通用权限管理系统，适合更复杂的服务治理场景，也可以沿用同样的前端升级思路。',
-    tags: ['Spring Cloud', 'Gateway', 'Nacos', 'Dubbo'],
-    primaryLabel: '访问 GitHub',
-    primaryUrl: 'https://github.com/dromara/RuoYi-Cloud-Plus',
-    secondaryLabel: '查看更新日志',
-    secondaryUrl: 'https://plus-doc.dromara.org/#/ruoyi-cloud-plus/changlog'
+    name: '采购单管理',
+    summary: '维护采购单明细与草稿，提交采购单，查看详情并导出。',
+    tags: ['明细管理', '草稿维护', '提交与导出']
   }
 ];
-
 const capabilityGroups = [
-  {
-    title: '后端基建',
-    items: ['Spring Boot / Spring Cloud', 'Sa-Token 认证与权限', 'MySQL / Redis', '代码生成器']
-  },
-  {
-    title: '平台能力',
-    items: ['动态菜单与按钮权限', '监控、日志、在线用户', '任务调度与工作流', '文件存储与多云适配']
-  },
-  {
-    title: '前端方向',
-    items: ['UI 卡片化', '主题与布局统一', '通用页面容器规范化', '企业化布局']
-  }
+  { title: '供应商档案', items: ['按供应商编码和名称查找档案', '维护供应商信息和分类'] },
+  { title: '采购单流程', items: ['草稿可修改、删除和提交', '提交后不可再变更', '查看采购单详情与明细'] },
+  { title: '访问与布局', items: ['菜单与操作按已有权限展示', '沿用现有主题和布局设置'] }
 ];
-
-const goTarget = (url: string) => {
-  window.open(url, '__blank');
-};
 </script>
 
 <style lang="scss" scoped>
@@ -154,52 +105,6 @@ const goTarget = (url: string) => {
   }
 }
 
-.hero-badge {
-  display: inline-flex;
-  width: fit-content;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(53, 109, 255, 0.12);
-  color: var(--app-accent-strong);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.hero-stats {
-  display: grid;
-  gap: 12px;
-}
-
-.stat-card {
-  padding: 18px 20px;
-  border-radius: 22px;
-  background: var(--app-elevated-soft-bg);
-  border: 1px solid var(--app-surface-border);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  strong {
-    color: var(--app-text-title);
-    font-size: 24px;
-    letter-spacing: -0.03em;
-  }
-
-  span {
-    color: var(--app-text-muted);
-    font-size: 13px;
-  }
-}
-
 .content-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
@@ -222,14 +127,6 @@ const goTarget = (url: string) => {
     font-size: 26px;
     letter-spacing: -0.03em;
   }
-}
-
-.section-kicker {
-  color: var(--app-text-muted);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .product-list,
@@ -275,27 +172,10 @@ const goTarget = (url: string) => {
   }
 }
 
-.product-version {
-  flex-shrink: 0;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(53, 109, 255, 0.12);
-  color: var(--app-accent-strong);
-  font-size: 12px;
-  font-weight: 700;
-}
-
 .product-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 18px;
-}
-
-.product-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
   margin-top: 18px;
 }
 

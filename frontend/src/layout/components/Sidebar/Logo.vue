@@ -1,14 +1,12 @@
 <template>
   <div class="sidebar-logo-container" :class="{ collapse: collapse }">
     <transition :enter-active-class="animateConfig.logoAnimate.enter" mode="out-in">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo" />
-        <h1 v-else class="sidebar-title">
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/" :aria-label="title">
+        <h1 class="sidebar-title">
           {{ title }}
         </h1>
       </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo" />
+      <router-link v-else key="expand" class="sidebar-logo-link" to="/" :aria-label="title">
         <h1 class="sidebar-title">
           {{ title }}
         </h1>
@@ -18,8 +16,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import animateConfig from '@/animate';
-import logo from '@/assets/logo/logo.png';
+import { BRAND_SHORT_NAME } from '@/constants/brand';
 import { NavTypeEnum } from '@/enums/NavTypeEnum';
 import { useSettingsStore } from '@/store/modules/settings';
 
@@ -30,7 +29,7 @@ defineProps({
   }
 });
 
-const title = import.meta.env.VITE_APP_LOGO_TITLE;
+const title = BRAND_SHORT_NAME;
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 const isTopNav = computed(() => settingsStore.navType === NavTypeEnum.TOP);
