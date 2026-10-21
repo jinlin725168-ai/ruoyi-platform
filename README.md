@@ -19,6 +19,8 @@
 新业务功能统一落在 `backend/ruoyi-modules/ruoyi-biz`（包 `org.dromara.biz`）、
 `frontend/src/views/biz`、`frontend/src/api/biz` 和 `sql/biz`。
 
+前端品牌为“红魔业务工作台”（短名“红魔”），统一维护在 [品牌模块](frontend/src/constants/brand.ts)。品牌行为与范围见 [活规格](openspec/specs/frontend-branding/spec.md)，最终验证结果与未覆盖项见 [公开验收摘要](reports/storyloop/FEAT-20261021-002/report.md)。
+
 ## 上游同步
 
 ```bash

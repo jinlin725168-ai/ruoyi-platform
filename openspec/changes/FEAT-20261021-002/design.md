@@ -107,3 +107,7 @@ Alternatives considered：保留旧图标或新增统计看板。
 - frontend/src/settings.ts：默认标题引用品牌。
 - frontend/src/utils/dynamicTitle.ts：委托标题纯函数。
 - frontend/src/permission.ts：全路由标题刷新及既有初始化流程拆分。
+
+## 最终验收口径
+
+上述实现记录保留了实现阶段的环境阻断，不代表最终验收状态。后续验收已通过；实际执行数、未配置集成层及验证码和外部 OAuth 的验证边界见 [公开验收摘要](../../../reports/storyloop/FEAT-20261021-002/report.md)。
